@@ -3,7 +3,7 @@
 const Maddox = require("../../lib/index"), // require("maddox");
   Controller = require("../testable/modules/test-module/test-module-controller"),
   constants = require("../../lib/constants"),
-  Mocha = require("../../lib/test-frameworks/mocha/mocha"),
+  Mocha = require("../../lib/proxies/mocha-proxy"),
   ProxyClass = require("../testable/proxies/stateless-es6-proxy"),
   ErrorFactory = require("../../lib/plugins/error-factory"),
   random = require("../random");
