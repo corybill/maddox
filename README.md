@@ -20,6 +20,7 @@ The best way to learn is to see it in action.
 
 ### Scenario API
 Maddox uses the philosophy of Scenario testing.  All scenarios use the same base api.
+
 | function                                                                    | definition                                                                                                                                                                | 
 |-----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
 | mockThisFunction (MockId, FuncName, Object)                                 | Declare the function to be mocked from the given Object.                                                                                                                  | 
@@ -34,18 +35,14 @@ Maddox uses the philosophy of Scenario testing.  All scenarios use the same base
 | doesErrorWithCallback (String mockName, String funcName, Any dataToReturn)  | When a given mocked function that exists within the given mock, is called, it will error by returning the given dataToReturn using the callback paradigm (err, response). | 
 | test ()                                                                     | Execute the Scenario Test                                                                                                                                                 | 
 
-The HttpRequestScenario adds to this api.
+
+
+### HttpRequestScenario API
+The HttpRequestScenario exposes extra utility functions on top of the base Scenario API.
+
 | function                                             | definition                                                                                                                                     | 
 |------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------| 
 | withHttpRequest(Array inputParamsIn)                 | Defines the params that will be passed into the entry point. Identical to 'withInputParams'.                                                   | 
 | resShouldBeCalledWith(String funcName, Array params) | Test that the given mocked function within a mocked HTTP Response Object was called with the given params.                                     | 
 | resDoesReturn(String funcName, Any dataToReturn)     | When a given mocked function that exists within a mocked HTTP Response Object, is called, it will return the given dataToReturn synchronously. | 
 | resDoesError(String funcName, Any dataToReturn)      | When a given mocked function that exists within a mocked HTTP Response Object, is called, it will error by throwing the given dataToReturn.    | 
-
-
-Foo Foo
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
