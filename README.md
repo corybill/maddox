@@ -43,3 +43,9 @@ The HttpRequestScenario adds to this api.
 | resDoesError(String funcName, Any dataToReturn)      | When a given mocked function that exists within a mocked HTTP Response Object, is called, it will error by throwing the given dataToReturn.    | 
 
 
+Foo Foo
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
