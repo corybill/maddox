@@ -54,36 +54,6 @@ The HttpRequestScenario exposes extra utility functions on top of the base Scena
 | resShouldBeChainable (String funcName)                        | Sets the return value from this function equal to the response mock.  Most commonly used to allow expresses 'res.status(200).send(result)'.                                                |
 
 ### HttpRequestScenario Example
-
-<pre>
-    new Scenario()
-      .mockThisFunction("ProxyClass", "getFirstName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getMiddleName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getLastName", ProxyClass)
-
-      .withEntryPoint(Controller, "read")
-      .withHttpRequest(httpRequestParams)
-
-      .resShouldBeCalledWith("send", expectedResponse)
-      .resShouldBeCalledWith("status", expectedStatusCode)
-      .resShouldBeChainable("status")
-
-      .shouldBeCalledWith("ProxyClass", "getFirstName", getFirstName1Params)
-      .doesReturnWithPromise("ProxyClass", "getFirstName", getFirstName1Result)
-
-      .shouldBeCalledWith("ProxyClass", "getFirstName", getFirstName2Params)
-      .doesReturnWithPromise("ProxyClass", "getFirstName", getFirstName2Result)
-
-      .shouldBeCalledWith("ProxyClass", "getMiddleName", getMiddleNameParams)
-      .doesReturn("ProxyClass", "getMiddleName", getMiddleNameResult)
-
-      .shouldBeCalledWith("ProxyClass", "getLastName", getLastNameParams)
-      .doesReturnWithCallback("ProxyClass", "getLastName", getLastNameResult)
-
-      .test(done);
-</pre>
-
-### HttpRequestScenario Example With Comments
 <pre>
     new Scenario() // Create a new Scenario
       .mockThisFunction("ProxyClass", "getFirstName", ProxyClass) // Mock ProxyClass.getFirstName
