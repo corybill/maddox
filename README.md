@@ -7,6 +7,7 @@ Maddox allows you to test all of your functional business requirements and test 
 ## Prerequisites
 1. All external dependencies should be wrapped or decorated (See Decorator Design Pattern) within a proxy layer.  See ./spec/testable for an example application.
 2. Tests should enter the application, the same place a user would enter.  For most services, this means the Controller Layer.
+3. All Scenario's are executed asynchronously.  This means that every 'it' block will need to utilize the 'done' function to indicate the test is complete.
 
 ## Recommendations
 1. If at all possible, your proxy layer should utilize a stateless pattern as it is easier to write and debug tests.  See ./spec/testable/proxies for examples.
@@ -51,3 +52,64 @@ The HttpRequestScenario exposes extra utility functions on top of the base Scena
 | resDoesErrorWithPromise (String funcName, Any dataToReturn)   | When a given mocked function that exists within the provided HTTP Response mock, is called, it will error by returning dataToReturn using the Promise A+ protocol's reject function.       | 
 | resDoesErrorWithCallback (String funcName, Any dataToReturn)  | When a given mocked function that exists within the provided HTTP Response mock, is called, it will error by returning the given dataToReturn using the callback paradigm (err, response). |
 | resShouldBeChainable (String funcName)                        | Sets the return value from this function equal to the response mock.  Most commonly used to allow expresses 'res.status(200).send(result)'.                                                |
+
+### HttpRequestScenario Example
+
+<pre>
+    new Scenario()
+      .mockThisFunction("ProxyClass", "getFirstName", ProxyClass)
+      .mockThisFunction("ProxyClass", "getMiddleName", ProxyClass)
+      .mockThisFunction("ProxyClass", "getLastName", ProxyClass)
+
+      .withEntryPoint(Controller, "read")
+      .withHttpRequest(httpRequestParams)
+
+      .resShouldBeCalledWith("send", expectedResponse)
+      .resShouldBeCalledWith("status", expectedStatusCode)
+      .resShouldBeChainable("status")
+
+      .shouldBeCalledWith("ProxyClass", "getFirstName", getFirstName1Params)
+      .doesReturnWithPromise("ProxyClass", "getFirstName", getFirstName1Result)
+
+      .shouldBeCalledWith("ProxyClass", "getFirstName", getFirstName2Params)
+      .doesReturnWithPromise("ProxyClass", "getFirstName", getFirstName2Result)
+
+      .shouldBeCalledWith("ProxyClass", "getMiddleName", getMiddleNameParams)
+      .doesReturn("ProxyClass", "getMiddleName", getMiddleNameResult)
+
+      .shouldBeCalledWith("ProxyClass", "getLastName", getLastNameParams)
+      .doesReturnWithCallback("ProxyClass", "getLastName", getLastNameResult)
+
+      .test(done);
+</pre>
+
+### HttpRequestScenario Example With Comments
+<pre>
+    new Scenario() // Create a new Scenario
+      .mockThisFunction("ProxyClass", "getFirstName", ProxyClass) // Mock ProxyClass.getFirstName
+      .mockThisFunction("ProxyClass", "getMiddleName", ProxyClass) // Mock ProxyClass.getMiddleName
+      .mockThisFunction("ProxyClass", "getLastName", ProxyClass) // Mock ProxyClass.getLastName
+
+      .withEntryPoint(Controller, "read") // Declare Controller.read to be the entry point for the test
+      .withHttpRequest(httpRequestParams) // Use the object 'httpRequestParams' as the input into the Controller
+      // NOTE: The HTTP Response Object is created by Maddox and passed in automatically. 
+
+      .resShouldBeCalledWith("send", expectedResponse) // Test that res.send is called with the same parameters that are defined in 'expectedResponse'
+      .resShouldBeCalledWith("status", expectedStatusCode) // Test that res.status is called with the same parameters that are defined in 'expectedStatusCode'
+      .resShouldBeChainable("status") // Allow Express's expected chainable call res.status().send()
+
+      .shouldBeCalledWith("ProxyClass", "getFirstName", getFirstName1Params) // Test that the first call to ProxyClass.getFirstName is called with the same parameters that are defined in 'getFirstName1Params'
+      .doesReturnWithPromise("ProxyClass", "getFirstName", getFirstName1Result) // When ProxyClass.getFirstName is called for the first time, return 'getFirstName1Result' using Promise A+ protocol
+
+      .shouldBeCalledWith("ProxyClass", "getFirstName", getFirstName2Params) // Test that the second call to ProxyClass.getFirstName is called with the same parameters that are defined in 'getFirstName2Params'
+      .doesReturnWithPromise("ProxyClass", "getFirstName", getFirstName2Result) // When ProxyClass.getFirstName is called for the second time, return 'getFirstName2Result' using Promise A+ protocol
+
+      .shouldBeCalledWith("ProxyClass", "getMiddleName", getMiddleNameParams) // Test that the first call to ProxyClass.getMiddleName is called with the same parameters that are defined in 'getMiddleNameParams'
+      .doesReturn("ProxyClass", "getMiddleName", getMiddleNameResult) // When ProxyClass.getMiddleName is called for the first time, return 'getMiddleNameResult' synchronously
+
+      .shouldBeCalledWith("ProxyClass", "getLastName", getLastNameParams) // Test that the first call to ProxyClass.getLastName is called with the same parameters that are defined in 'getLastNameParams'
+      .doesReturnWithCallback("ProxyClass", "getLastName", getLastNameResult) // When ProxyClass.getLastName is called for the first time, return 'getLastNameResult' using the callback paradigm. i.e. callback(err, result)
+
+      .test(done); // Executes the test.  Up to this point, we have only build out the test context.  No tests are executed until the test function is called.
+      // NOTE: All scenarios are asynchronous. Ensure that that 'done' function is passed in or executed by you.
+</pre>
