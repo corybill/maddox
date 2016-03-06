@@ -1,10 +1,12 @@
 {
   "name": "maddox",
   "version": "1.0.0",
-  "description": "BDD style scenario testing framework for integration and unit testing. ",
+  "description": "BDD style scenario testing framework for integration and unit testing.",
   "main": "lib/scenario.js",
   "scripts": {
-    "test": "_mocha ./spec/unit"
+    "test": "npm run ut && npm run lint",
+    "ut": "_mocha ./spec/unit",
+    "lint": "eslint ./spec/ ./lib"
   },
   "repository": {
     "type": "git",
@@ -30,7 +32,7 @@
   },
   "devDependencies": {
     "chance": "^1.0.1",
-    "eslint": "^2.2.0",
+    "eslint": "^2.3.0",
     "preconditions": "^1.0.8"
   }
 }

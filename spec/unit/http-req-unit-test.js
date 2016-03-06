@@ -4,17 +4,13 @@ const Maddox = require("../../lib/index"), // require("maddox");
   random = require("../random"),
   Controller = require("../testable/modules/test-module/test-module-controller"),
   testConstants = require("../test-constants"),
-  constants = require("../../lib/constants"),
-  ProxyClass = require("../testable/proxies/stateful-factory-proxy"),
-  StatefulSingletonProxy = require("../testable/proxies/stateful-singleton-proxy"),
-  StatelessEs6Proxy = require("../testable/proxies/stateless-es6-proxy"),
-  StatelessPreEs6SingletonProxy = require("../testable/proxies/stateless-pre-es6-singleton-proxy"),
-  StatelessPreEs6StaticProxy = require("../testable/proxies/stateless-pre-es6-static-proxy");
+  ProxyClass = require("../testable/proxies/stateful-factory-proxy");
+//  StatefulSingletonProxy = require("../testable/proxies/stateful-singleton-proxy"),
+//  StatelessEs6Proxy = require("../testable/proxies/stateless-es6-proxy"),
+//  StatelessPreEs6SingletonProxy = require("../testable/proxies/stateless-pre-es6-singleton-proxy"),
+//  StatelessPreEs6StaticProxy = require("../testable/proxies/stateless-pre-es6-static-proxy");
 
-const chai = require("chai");
-
-const expect = chai.expect,
-  Scenario = Maddox.functional.HttpReqScenario;
+const Scenario = Maddox.functional.HttpReqScenario;
 
 describe("When Unit Testing an Express Http Request", function () {
   let testContext;
