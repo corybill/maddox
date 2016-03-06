@@ -1,0 +1,36 @@
+{
+  "name": "maddox",
+  "version": "1.0.0",
+  "description": "BDD style scenario testing framework for integration and unit testing. ",
+  "main": "lib/scenario.js",
+  "scripts": {
+    "test": "_mocha ./spec/unit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/corybill/maddox.git"
+  },
+  "keywords": [
+    "Scenario Testing",
+    "BDD",
+    "Behavior Driven Development",
+    "BDD Unit Testing",
+    "BDD Integration Testing"
+  ],
+  "author": "Cory Parrish",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/corybill/maddox/issues"
+  },
+  "homepage": "https://github.com/corybill/maddox#readme",
+  "dependencies": {
+    "chai": "3.5.0",
+    "mocha": "2.4.5",
+    "sinon": "1.17.3"
+  },
+  "devDependencies": {
+    "chance": "^1.0.1",
+    "eslint": "^2.2.0",
+    "preconditions": "^1.0.8"
+  }
+}
