@@ -21,6 +21,8 @@ describe("When using the error-factory", function () {
     };
   });
 
+  // TODO: Test all error message generation to make sure it is exactly correct.
+
   // DoesErrorCallbackMockName 1021
   it("it should generate correct 'DoesErrorCallbackMockName' error message", function (done) {
     errorContext.setupInput = function () {
