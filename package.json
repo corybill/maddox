@@ -1,6 +1,6 @@
 {
   "name": "maddox",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "BDD style scenario testing framework for integration and unit testing.",
   "main": "lib/scenario.js",
   "scripts": {
