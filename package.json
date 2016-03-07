@@ -5,8 +5,12 @@
   "main": "lib/scenario.js",
   "scripts": {
     "test": "npm run ut && npm run lint",
-    "ut": "_mocha ./spec/unit",
+    "ut": "node ./bin/maddox.js ./spec/unit",
+    "coverage": "./bin/maddox-cov.js",
     "lint": "eslint ./spec/ ./lib"
+  },
+  "bin": {
+    "maddox": "./bin/maddox.js"
   },
   "repository": {
     "type": "git",
@@ -33,6 +37,7 @@
   "devDependencies": {
     "chance": "^1.0.1",
     "eslint": "^2.3.0",
+    "istanbul": "^0.4.2",
     "preconditions": "^1.0.8"
   }
 }
