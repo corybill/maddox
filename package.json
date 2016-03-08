@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "npm run ut && npm run lint",
-    "ut": "env test=true maddox ./spec/unit",
+    "ut": "./node_modules/mocha/bin/_mocha ./spec/unit",
     "perf": "env perf=true env test=false maddox ./spec/unit",
     "uap": "env perf=true test=true maddox ./spec/unit",
     "coverage": "./bin/maddox-cov.js",
@@ -47,6 +47,7 @@
   ],
   "dependencies": {
     "benchmark": "^2.1.0",
+    "bluebird": "^3.3.4",
     "chai": "3.5.0",
     "lodash": "^4.6.1",
     "mocha": "2.4.5",
