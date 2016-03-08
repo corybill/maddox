@@ -1,4 +1,4 @@
-# Maddox
+# Maddox (BETA VERSION)
 ### Behavior Driven Development (DBB) In A Scenario Testing Framework
 Maddox allows you to test all of your functional business requirements and test performance, from end to end without hitting external dependencies.  Perfect for unit testing a service in a Service Oriented Architecture (SOA).
 
