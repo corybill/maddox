@@ -5,7 +5,9 @@
   "main": "lib/scenario.js",
   "scripts": {
     "test": "npm run ut && npm run lint",
-    "ut": "node ./bin/maddox.js ./spec/unit",
+    "ut": "env test=true maddox ./spec/unit",
+    "perf": "env perf=true env test=false maddox ./spec/unit",
+    "uap": "env perf=true test=true maddox ./spec/unit",
     "coverage": "./bin/maddox-cov.js",
     "lint": "eslint ./spec/ ./lib"
   },
@@ -30,7 +32,9 @@
   },
   "homepage": "https://github.com/corybill/maddox#readme",
   "dependencies": {
+    "benchmark": "^2.1.0",
     "chai": "3.5.0",
+    "microtime": "^2.0.0",
     "mocha": "2.4.5",
     "sinon": "1.17.3"
   },
