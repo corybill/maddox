@@ -1,6 +1,7 @@
 # Maddox
 ## BETA VERSION - All contracts can still change.
 
+[![Build Status](https://travis-ci.org/corybill/maddox.svg?branch=master)](https://travis-ci.org/corybill/maddox)
 [![Join the chat at https://gitter.im/corybill/maddox](https://badges.gitter.im/corybill/maddox.svg)](https://gitter.im/corybill/maddox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ### Behavior Driven Development (DBB) In A Scenario Testing Framework
