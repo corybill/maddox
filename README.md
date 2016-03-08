@@ -1,6 +1,8 @@
 # Maddox
 ## BETA VERSION - All contracts can still change.
 
+[![Join the chat at https://gitter.im/corybill/maddox](https://badges.gitter.im/corybill/maddox.svg)](https://gitter.im/corybill/maddox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ### Behavior Driven Development (DBB) In A Scenario Testing Framework
 Maddox allows you to test all of your functional business requirements and test performance, from end to end without hitting external dependencies.  Perfect for unit testing a service in a Service Oriented Architecture (SOA).
 
