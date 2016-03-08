@@ -14,6 +14,9 @@
   "bin": {
     "maddox": "./bin/maddox.js"
   },
+  "engines": {
+    "node": ">=5.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/corybill/maddox.git"
