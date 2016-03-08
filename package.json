@@ -31,6 +31,17 @@
     "url": "https://github.com/corybill/maddox/issues"
   },
   "homepage": "https://github.com/corybill/maddox#readme",
+  "contributors": [
+    {
+      "name": "Kuntal Roy"
+    },
+    {
+      "name": "Meir Rosner"
+    },
+    {
+      "name": "Daniel Kim"
+    }
+  ],
   "dependencies": {
     "benchmark": "^2.1.0",
     "chai": "3.5.0",
