@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "npm run ut && npm run lint",
-    "ut": "./node_modules/mocha/bin/_mocha ./spec/unit",
+    "ut": "node ./bin/maddox ./spec/unit",
     "perf": "env perf=true env test=false maddox ./spec/unit",
     "uap": "env perf=true test=true maddox ./spec/unit",
     "coverage": "./bin/maddox-cov.js",

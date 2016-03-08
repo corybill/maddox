@@ -32,7 +32,6 @@ if (perfVar || testVar) {
 
 const executable = `${envVars}${command}`;
 
-//console.log(`Executing '${executable}'`);
 execSync(executable, {
   stdio: [0, 1, 2]
 });
