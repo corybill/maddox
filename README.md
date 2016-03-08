@@ -1,4 +1,6 @@
-# Maddox (BETA VERSION)
+# Maddox
+## BETA VERSION - All contracts can still change.
+
 ### Behavior Driven Development (DBB) In A Scenario Testing Framework
 Maddox allows you to test all of your functional business requirements and test performance, from end to end without hitting external dependencies.  Perfect for unit testing a service in a Service Oriented Architecture (SOA).
 
@@ -22,34 +24,34 @@ The best way to learn is to see it in action.
 ### Scenario API
 Maddox uses the philosophy of Scenario testing.  All scenarios use the same base api.
 
-| function                                                                    | definition                                                                                                                                                                | 
-|-----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
-| mockThisFunction (String mockName, String funcName, Objectobject)           | Declare the function to be mocked from the given Object.                                                                                                                  | 
-| withEntryPoint (Object entryPointObject, String entryPointFunction)         | Defines where Maddox will execute your test.                                                                                                                              | 
-| withInputParams (Array inputParamsIn)                                       | Defines the params that will be passed into the entry point. Identical to 'withHttpRequest'.                                                                              | 
-| shouldBeCalledWith (String mockName, String funcName, Array params)         | Test that the given mocked function within the given mock was called with the given params.                                                                               | 
-| doesReturn (String mockName, String funcName, Any dataToReturn)             | When a given mocked function that exists within the given mock, is called, it will return the given dataToReturn synchronously.                                           | 
-| doesReturnWithPromise (String mockName, String funcName, Any dataToReturn)  | When a given mocked function that exists within the given mock, is called, it will return the given dataToReturn using the Promise A+ protocol's resolve function.        | 
-| doesReturnWithCallback (String mockName, String funcName, Any dataToReturn) | When a given mocked function that exists within the given mock, is called, it will return the given dataToReturn using the callback paradigm (err, response).             | 
-| doesError (String mockName, String funcName, Any dataToReturn)              | When a given mocked function that exists within the given mock, is called, it will error by throwing the given dataToReturn.                                              | 
-| doesErrorWithPromise (String mockName, String funcName, Any dataToReturn)   | When a given mocked function that exists within the given mock, is called, it will error by returning dataToReturn using the Promise A+ protocol's reject function.       | 
-| doesErrorWithCallback (String mockName, String funcName, Any dataToReturn)  | When a given mocked function that exists within the given mock, is called, it will error by returning the given dataToReturn using the callback paradigm (err, response). | 
-| test ()                                                                     | Execute the Scenario Test                                                                                                                                                 | 
+| function                                                                    | definition                                                                                                                                                                |
+|-----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| mockThisFunction (String mockName, String funcName, Objectobject)           | Declare the function to be mocked from the given Object.                                                                                                                  |
+| withEntryPoint (Object entryPointObject, String entryPointFunction)         | Defines where Maddox will execute your test.                                                                                                                              |
+| withInputParams (Array inputParamsIn)                                       | Defines the params that will be passed into the entry point. Identical to 'withHttpRequest'.                                                                              |
+| shouldBeCalledWith (String mockName, String funcName, Array params)         | Test that the given mocked function within the given mock was called with the given params.                                                                               |
+| doesReturn (String mockName, String funcName, Any dataToReturn)             | When a given mocked function that exists within the given mock, is called, it will return the given dataToReturn synchronously.                                           |
+| doesReturnWithPromise (String mockName, String funcName, Any dataToReturn)  | When a given mocked function that exists within the given mock, is called, it will return the given dataToReturn using the Promise A+ protocol's resolve function.        |
+| doesReturnWithCallback (String mockName, String funcName, Any dataToReturn) | When a given mocked function that exists within the given mock, is called, it will return the given dataToReturn using the callback paradigm (err, response).             |
+| doesError (String mockName, String funcName, Any dataToReturn)              | When a given mocked function that exists within the given mock, is called, it will error by throwing the given dataToReturn.                                              |
+| doesErrorWithPromise (String mockName, String funcName, Any dataToReturn)   | When a given mocked function that exists within the given mock, is called, it will error by returning dataToReturn using the Promise A+ protocol's reject function.       |
+| doesErrorWithCallback (String mockName, String funcName, Any dataToReturn)  | When a given mocked function that exists within the given mock, is called, it will error by returning the given dataToReturn using the callback paradigm (err, response). |
+| test ()                                                                     | Execute the Scenario Test                                                                                                                                                 |
 
 
 
 ### HttpRequestScenario API
 The HttpRequestScenario exposes extra utility functions on top of the base Scenario API.
 
-| function                                                      | definition                                                                                                                                                                                 | 
-|---------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| 
-| withHttpRequest(Array inputParamsIn)                          | Defines the params that will be passed into the entry point. Identical to 'withInputParams'.                                                                                               | 
-| resShouldBeCalledWith(String funcName, Array params)          | Test that the given mocked function within the provided HTTP Response mock, is called with the given params.                                                                               | 
-| resDoesReturn (String funcName, Any dataToReturn)             | When a given mocked function that exists within the provided HTTP Response mock, is called, it will return the given dataToReturn synchronously.                                           | 
-| resDoesReturnWithPromise (String funcName, Any dataToReturn)  | When a given mocked function that exists within the provided HTTP Response mock, is called, it will return the given dataToReturn using the Promise A+ protocol's resolve function.        | 
-| resDoesReturnWithCallback (String funcName, Any dataToReturn) | When a given mocked function that exists within the provided HTTP Response mock, is called, it will return the given dataToReturn using the callback paradigm (err, response).             | 
-| resDoesError (String funcName, Any dataToReturn)              | When a given mocked function that exists within the provided HTTP Response mock, is called, it will error by throwing the given dataToReturn.                                              | 
-| resDoesErrorWithPromise (String funcName, Any dataToReturn)   | When a given mocked function that exists within the provided HTTP Response mock, is called, it will error by returning dataToReturn using the Promise A+ protocol's reject function.       | 
+| function                                                      | definition                                                                                                                                                                                 |
+|---------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| withHttpRequest(Array inputParamsIn)                          | Defines the params that will be passed into the entry point. Identical to 'withInputParams'.                                                                                               |
+| resShouldBeCalledWith(String funcName, Array params)          | Test that the given mocked function within the provided HTTP Response mock, is called with the given params.                                                                               |
+| resDoesReturn (String funcName, Any dataToReturn)             | When a given mocked function that exists within the provided HTTP Response mock, is called, it will return the given dataToReturn synchronously.                                           |
+| resDoesReturnWithPromise (String funcName, Any dataToReturn)  | When a given mocked function that exists within the provided HTTP Response mock, is called, it will return the given dataToReturn using the Promise A+ protocol's resolve function.        |
+| resDoesReturnWithCallback (String funcName, Any dataToReturn) | When a given mocked function that exists within the provided HTTP Response mock, is called, it will return the given dataToReturn using the callback paradigm (err, response).             |
+| resDoesError (String funcName, Any dataToReturn)              | When a given mocked function that exists within the provided HTTP Response mock, is called, it will error by throwing the given dataToReturn.                                              |
+| resDoesErrorWithPromise (String funcName, Any dataToReturn)   | When a given mocked function that exists within the provided HTTP Response mock, is called, it will error by returning dataToReturn using the Promise A+ protocol's reject function.       |
 | resDoesErrorWithCallback (String funcName, Any dataToReturn)  | When a given mocked function that exists within the provided HTTP Response mock, is called, it will error by returning the given dataToReturn using the callback paradigm (err, response). |
 | resShouldBeChainable (String funcName)                        | Sets the return value from this function equal to the response mock.  Most commonly used to allow expresses 'res.status(200).send(result)'.                                                |
 
@@ -62,7 +64,7 @@ The HttpRequestScenario exposes extra utility functions on top of the base Scena
 
       .withEntryPoint(Controller, "read") // Declare Controller.read to be the entry point for the test
       .withHttpRequest(httpRequestParams) // Use the object 'httpRequestParams' as the input into the Controller
-      // NOTE: The HTTP Response Object is created by Maddox and passed in automatically. 
+      // NOTE: The HTTP Response Object is created by Maddox and passed in automatically.
 
       .resShouldBeCalledWith("send", expectedResponse) // Test that res.send is called with the same parameters that are defined in 'expectedResponse'
       .resShouldBeCalledWith("status", expectedStatusCode) // Test that res.status is called with the same parameters that are defined in 'expectedStatusCode'
