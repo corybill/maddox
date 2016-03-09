@@ -187,7 +187,7 @@ describe("When Unit Testing an Express Http Request", function () {
         .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
 
-        .perf(this.title)
+        .perf(this.test.fullTitle())
         .test(done);
     });
 
@@ -553,7 +553,7 @@ describe("When Unit Testing an Express Http Request", function () {
         .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
 
-        .perf(this.title)
+        .perf(this.test.fullTitle())
         .test(done);
     });
 
@@ -915,7 +915,7 @@ describe("When Unit Testing an Express Http Request", function () {
         .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
 
-        .perf(this.title)
+        .perf(this.test.fullTitle())
         .test(done);
     });
 
@@ -1256,7 +1256,7 @@ describe("When Unit Testing an Express Http Request", function () {
         .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
 
-        .perf(this.title)
+        .perf(this.test.fullTitle())
         .test(done);
     });
 
@@ -1597,7 +1597,7 @@ describe("When Unit Testing an Express Http Request", function () {
         .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
 
-        .perf(this.title)
+        .perf(this.test.fullTitle())
         .test(done);
     });
 
