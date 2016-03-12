@@ -52,12 +52,12 @@
     "fs-extra": "^0.26.5",
     "lodash": "^4.6.1",
     "mocha": "2.4.5",
-    "sinon": "1.17.3"
+    "sinon": "1.17.3",
+    "preconditions": "^1.0.8"
   },
   "devDependencies": {
     "chance": "^1.0.1",
     "eslint": "^2.3.0",
-    "istanbul": "^0.4.2",
-    "preconditions": "^1.0.8"
+    "istanbul": "^0.4.2"
   }
 }
