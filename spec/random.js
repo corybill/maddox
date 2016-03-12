@@ -1,10 +1,8 @@
 "use strict";
 
-const Chance = require("chance"),
-  _ = require("lodash");
+const Chance = require("chance");
 
-var contexts = require("./test-constants").contexts;
-var chance = new Chance();
+let chance = new Chance();
 
 module.exports = {
   uniqueId: function () {
@@ -24,12 +22,6 @@ module.exports = {
   },
   sentence: function (len) {
     return chance.sentence({words: len || 5});
-  },
-  context: function () {
-    var contextKeys = _.keys(contexts);
-    var index = chance.integer({min: 0, max: (contextKeys.length - 1)});
-
-    return contexts[contextKeys[index]];
   },
   date: function () {
     return chance.date();
