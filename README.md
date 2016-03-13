@@ -3,6 +3,8 @@
 
 [![Build Status](https://travis-ci.org/corybill/maddox.svg?branch=master)](https://travis-ci.org/corybill/maddox)
 [![Join the chat at https://gitter.im/corybill/maddox](https://badges.gitter.im/corybill/maddox.svg)](https://gitter.im/corybill/maddox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![view on npm](http://img.shields.io/npm/v/maddox.svg)](https://www.npmjs.org/package/maddox)
+[![npm module downloads](http://img.shields.io/npm/dt/maddox.svg)](https://www.npmjs.org/package/maddox)
 
 ### Behavior Driven Development (DBB) In A Scenario Testing Framework
 Maddox allows you to test all of your functional business requirements and test performance, from end to end without hitting external dependencies.  Perfect for unit testing a service in a Service Oriented Architecture (SOA).
