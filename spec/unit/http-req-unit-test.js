@@ -59,7 +59,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .test(done);
     });
@@ -92,7 +92,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .test(done);
     });
@@ -170,7 +170,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("StatefulFactoryProxy", "factory", Maddox.constants.EmptyParameters)
         .doesReturn("StatefulFactoryProxy", "factory", testContext.proxyInstance)
@@ -227,7 +227,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .test(done);
     });
@@ -265,7 +265,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("StatefulFactoryProxy", "factory", Maddox.constants.EmptyParameters)
         .doesReturn("StatefulFactoryProxy", "factory", testContext.proxyInstance)
@@ -309,7 +309,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("StatefulFactoryProxy", "factory", Maddox.constants.EmptyParameters)
         .doesReturn("StatefulFactoryProxy", "factory", testContext.proxyInstance)
@@ -356,7 +356,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("StatefulFactoryProxy", "factory", Maddox.constants.EmptyParameters)
         .doesReturn("StatefulFactoryProxy", "factory", testContext.proxyInstance)
@@ -397,7 +397,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("StatefulFactoryProxy", "factory", Maddox.constants.EmptyParameters)
         .doesReturn("StatefulFactoryProxy", "factory", testContext.proxyInstance)
@@ -447,7 +447,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("StatefulFactoryProxy", "factory", Maddox.constants.EmptyParameters)
         .doesReturn("StatefulFactoryProxy", "factory", testContext.proxyInstance)
@@ -536,7 +536,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
         .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
@@ -593,7 +593,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .test(done);
     });
@@ -631,7 +631,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
         .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
@@ -675,7 +675,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
         .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
@@ -722,7 +722,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
         .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
@@ -763,7 +763,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
         .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
@@ -813,7 +813,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
         .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
@@ -901,7 +901,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -954,7 +954,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .test(done);
     });
@@ -991,7 +991,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -1031,7 +1031,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -1074,7 +1074,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -1111,7 +1111,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -1157,7 +1157,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -1242,7 +1242,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -1295,7 +1295,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .test(done);
     });
@@ -1332,7 +1332,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -1372,7 +1372,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -1415,7 +1415,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -1452,7 +1452,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -1498,7 +1498,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -1583,7 +1583,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -1636,7 +1636,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .test(done);
     });
@@ -1673,7 +1673,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -1713,7 +1713,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -1756,7 +1756,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -1793,7 +1793,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -1839,7 +1839,7 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resShouldBeChainable("status")
+        .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)

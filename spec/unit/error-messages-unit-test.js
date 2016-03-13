@@ -859,7 +859,7 @@ describe("When using the Scenario API,", function () {
 
       .resShouldBeCalledWith("send", testContext.expectedResponse)
       .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-      .resShouldBeChainable("status")
+      .resDoesReturnSelf("status")
 
       .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1Params)
       .doesReturnWithCallback("ProxyClass", "getFirstName", testContext.getFirstName1Result)
@@ -898,7 +898,7 @@ describe("When using the Scenario API,", function () {
 
       .resShouldBeCalledWith("send", testContext.expectedResponse)
       .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-      .resShouldBeChainable("status")
+      .resDoesReturnSelf("status")
 
       .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1Params)
       .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName1Result)
@@ -943,7 +943,7 @@ describe("When using the Scenario API,", function () {
 
       .resShouldBeCalledWith("send", testContext.expectedResponse)
       .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-      .resShouldBeChainable("status")
+      .resDoesReturnSelf("status")
 
       .shouldBeCalledWith("ProxyClass", "getMiddleName", testContext.getMiddleNameParams)
       .doesReturnWithCallback("ProxyClass", "getMiddleName", testContext.getMiddleNameResult)
@@ -982,7 +982,7 @@ describe("When using the Scenario API,", function () {
 
       .resShouldBeCalledWith("send", testContext.expectedResponse)
       .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-      .resShouldBeChainable("status")
+      .resDoesReturnSelf("status")
 
       .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1Params)
       .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName1Result)
@@ -1025,7 +1025,7 @@ describe("When using the Scenario API,", function () {
 
       .resShouldBeCalledWith("send", testContext.expectedResponse)
       .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-      .resShouldBeChainable("status")
+      .resDoesReturnSelf("status")
 
       .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1Params)
       .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName1Result)
@@ -1077,7 +1077,7 @@ describe("When using the Scenario API,", function () {
 
       .resShouldBeCalledWith("send", testContext.expectedResponse)
       .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-      .resShouldBeChainable("status")
+      .resDoesReturnSelf("status")
 
       .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1Params)
       .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName1Result)
@@ -1181,7 +1181,7 @@ describe("When using the Scenario API,", function () {
 
       .resShouldBeCalledWith("send", testContext.expectedResponse)
       .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-      .resShouldBeChainable("status")
+      .resDoesReturnSelf("status")
 
       .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1ParamsExpected)
       .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName1Result)
@@ -1240,7 +1240,7 @@ describe("When using the Scenario API,", function () {
 
       .resShouldBeCalledWith("send", testContext.expectedResponse)
       .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-      .resShouldBeChainable("status")
+      .resDoesReturnSelf("status")
 
       .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1Params)
       .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName1Result)
@@ -1299,7 +1299,7 @@ describe("When using the Scenario API,", function () {
 
       .resShouldBeCalledWith("send", testContext.expectedResponse)
       .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-      .resShouldBeChainable("status")
+      .resDoesReturnSelf("status")
 
       .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1Params)
       .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName1Result)
@@ -1366,7 +1366,7 @@ describe("When using the Scenario API,", function () {
 
       .resShouldBeCalledWith("send", testContext.expectedResponse)
       .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-      .resShouldBeChainable("status")
+      .resDoesReturnSelf("status")
 
       .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1Params)
       .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName1Result)

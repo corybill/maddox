@@ -29,7 +29,7 @@ Maddox uses the philosophy of Scenario testing.  All scenarios use the same base
 
 | function                                                                    | definition                                                                                                                                                                |
 |-----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| mockThisFunction (String mockName, String funcName, Objectobject)           | Declare the function to be mocked from the given Object.                                                                                                                  |
+| mockThisFunction (String mockName, String funcName, Object object)          | Declare the function to be mocked from the given Object.                                                                                                                  |
 | withEntryPoint (Object entryPointObject, String entryPointFunction)         | Defines where Maddox will execute your test.                                                                                                                              |
 | withInputParams (Array inputParamsIn)                                       | Defines the params that will be passed into the entry point. Identical to 'withHttpRequest'.                                                                              |
 | shouldBeCalledWith (String mockName, String funcName, Array params)         | Test that the given mocked function within the given mock was called with the given params.                                                                               |
@@ -56,7 +56,7 @@ The HttpRequestScenario exposes extra utility functions on top of the base Scena
 | resDoesError (String funcName, Any dataToReturn)              | When a given mocked function that exists within the provided HTTP Response mock, is called, it will error by throwing the given dataToReturn.                                              |
 | resDoesErrorWithPromise (String funcName, Any dataToReturn)   | When a given mocked function that exists within the provided HTTP Response mock, is called, it will error by returning dataToReturn using the Promise A+ protocol's reject function.       |
 | resDoesErrorWithCallback (String funcName, Any dataToReturn)  | When a given mocked function that exists within the provided HTTP Response mock, is called, it will error by returning the given dataToReturn using the callback paradigm (err, response). |
-| resShouldBeChainable (String funcName)                        | Sets the return value from this function equal to the response mock.  Most commonly used to allow expresses 'res.status(200).send(result)'.                                                |
+| resDoesReturnSelf (String funcName)                           | Sets the return value from this function equal to the response mock.  Most commonly used to allow expresses 'res.status(200).send(result)'.                                                |
 
 ### HttpRequestScenario Example
 <pre>
@@ -71,7 +71,7 @@ The HttpRequestScenario exposes extra utility functions on top of the base Scena
 
       .resShouldBeCalledWith("send", expectedResponse) // Test that res.send is called with the same parameters that are defined in 'expectedResponse'
       .resShouldBeCalledWith("status", expectedStatusCode) // Test that res.status is called with the same parameters that are defined in 'expectedStatusCode'
-      .resShouldBeChainable("status") // Allow Express's expected chainable call res.status().send()
+      .resDoesReturnSelf("status") // Allow Express's expected chainable call res.status().send()
 
       .shouldBeCalledWith("ProxyClass", "getFirstName", getFirstName1Params) // Test that the first call to ProxyClass.getFirstName is called with the same parameters that are defined in 'getFirstName1Params'
       .doesReturnWithPromise("ProxyClass", "getFirstName", getFirstName1Result) // When ProxyClass.getFirstName is called for the first time, return 'getFirstName1Result' using Promise A+ protocol
