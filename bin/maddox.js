@@ -15,7 +15,7 @@ for (var i = 0; i < process.argv.length; i++) {
     process.argv[i] = "";
   }
   if (item.indexOf("maddox") > -1) {
-    process.argv[i] = __dirname + "/../node_modules/mocha/bin/_mocha";
+    process.argv[i] = "_mocha";
   }
 }
 
