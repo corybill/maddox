@@ -17,7 +17,6 @@ Article / Blog to come.
 2. Tests should enter the application, the same place a user would enter.  For most services, this means the Controller Layer.
 3. All Scenario's are executed asynchronously.  This means that every 'it' block will need to utilize the 'done' function to indicate the test is complete.
 
-
 ## Recommendations
 1. If at all possible, your proxy layer should utilize a stateless pattern as it is easier to write and debug tests.  See ./spec/testable/proxies for examples.
 
