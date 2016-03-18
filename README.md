@@ -1,20 +1,22 @@
 # Maddox
 ## BETA VERSION - All contracts can still change.
 
+### Behavior Driven Development (DBB) In A Scenario Testing Framework
+Maddox allows you to test all of your functional business requirements and test performance, from end to end without hitting external dependencies.  Perfect for unit testing a service in a Service Oriented Architecture (SOA).
+
 [![Build Status](https://travis-ci.org/corybill/maddox.svg?branch=master)](https://travis-ci.org/corybill/maddox)
 [![Join the chat at https://gitter.im/corybill/maddox](https://badges.gitter.im/corybill/maddox.svg)](https://gitter.im/corybill/maddox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![view on npm](http://img.shields.io/npm/v/maddox.svg)](https://www.npmjs.org/package/maddox)
 [![npm module downloads](http://img.shields.io/npm/dt/maddox.svg)](https://www.npmjs.org/package/maddox)
 
-### Behavior Driven Development (DBB) In A Scenario Testing Framework
-Maddox allows you to test all of your functional business requirements and test performance, from end to end without hitting external dependencies.  Perfect for unit testing a service in a Service Oriented Architecture (SOA).
-
 ## Why Should You Use Maddox?
+Article / Blog to come.
 
-## Prerequisites
+## Best Practices
 1. All external dependencies should be wrapped or decorated (See Decorator Design Pattern) within a proxy layer.  See ./spec/testable for an example application.
 2. Tests should enter the application, the same place a user would enter.  For most services, this means the Controller Layer.
 3. All Scenario's are executed asynchronously.  This means that every 'it' block will need to utilize the 'done' function to indicate the test is complete.
+
 
 ## Recommendations
 1. If at all possible, your proxy layer should utilize a stateless pattern as it is easier to write and debug tests.  See ./spec/testable/proxies for examples.
