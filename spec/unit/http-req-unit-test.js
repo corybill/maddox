@@ -1960,5 +1960,9 @@ describe("When Unit Testing an Express Http Request", function () {
           }
         });
     });
+
+    it("it should throw the expected value as the error, when the expecation fails, and the expected value is an error.", function () {
+
+    });
   });
 });
