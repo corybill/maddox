@@ -49,11 +49,12 @@
     "benchmark": "^2.1.0",
     "bluebird": "^3.3.4",
     "chai": "3.5.0",
+    "errr": "^2.0.0",
     "fs-extra": "^0.26.5",
     "lodash": "^4.6.1",
     "mocha": "2.4.5",
-    "sinon": "1.17.3",
-    "preconditions": "^1.0.8"
+    "preconditions": "^1.0.8",
+    "sinon": "1.17.3"
   },
   "devDependencies": {
     "chance": "^1.0.1",
