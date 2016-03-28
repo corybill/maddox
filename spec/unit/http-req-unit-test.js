@@ -10,7 +10,10 @@ const Maddox = require("../../lib/index"), // require("maddox");
   StatelessPreEs6SingletonProxy = require("../testable/proxies/stateless-pre-es6-singleton-proxy"),
   StatelessPreEs6StaticProxy = require("../testable/proxies/stateless-pre-es6-static-proxy");
 
-const Scenario = Maddox.functional.HttpReqScenario;
+const chai = require("chai");
+
+const Scenario = Maddox.functional.HttpReqScenario,
+  expect = chai.expect;
 
 describe("When Unit Testing an Express Http Request", function () {
   let testContext;
@@ -1851,6 +1854,111 @@ describe("When Unit Testing an Express Http Request", function () {
         .doesError("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
 
         .test(done);
+    });
+
+    it("it should add the full object print out of actual and expected when the debug flag is set.", function (done) {
+      testContext.setupGetMiddleName = function () {
+        testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
+
+        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getMiddleNameResult = new Error(testContext.expectedErrorMessage);
+      };
+      testContext.setupExpected = function () {
+        testContext.intentionalWrongResponse = ["SOME WRONG RESPONSE"];
+        testContext.expectedResponse = [testContext.expectedErrorMessage];
+        testContext.expectedStatusCode = [404];
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario()
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalledWith("send", testContext.intentionalWrongResponse)
+        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
+        .resDoesReturnSelf("status")
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+        .doesError("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        .debug()
+        .test(function (response) {
+          try {
+            expect(response.stack.split(`"actual": "${testContext.expectedResponse}"`).length).eql(2);
+            expect(response.stack.split(`"expected": "${testContext.intentionalWrongResponse}"`).length).eql(2);
+            done();
+          } catch (err) {
+            done(err);
+          }
+        });
+    });
+
+    it("it should NOT add the full object print out of actual and expected when the debug flag is NOT set.", function (done) {
+      testContext.setupGetMiddleName = function () {
+        testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
+
+        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getMiddleNameResult = new Error(testContext.expectedErrorMessage);
+      };
+      testContext.setupExpected = function () {
+        testContext.intentionalWrongResponse = ["SOME WRONG RESPONSE"];
+        testContext.expectedResponse = [testContext.expectedErrorMessage];
+        testContext.expectedStatusCode = [404];
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario()
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalledWith("send", testContext.intentionalWrongResponse)
+        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
+        .resDoesReturnSelf("status")
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+        .doesError("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        .test(function (response) {
+          try {
+            expect(response.stack.split(`"actual": "${testContext.expectedResponse}"`).length).eql(1);
+            expect(response.stack.split(`"expected": "${testContext.intentionalWrongResponse}"`).length).eql(1);
+            done();
+          } catch (err) {
+            done(err);
+          }
+        });
     });
   });
 });
