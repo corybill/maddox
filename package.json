@@ -22,11 +22,16 @@
     "url": "git+https://github.com/corybill/maddox.git"
   },
   "keywords": [
+    "StriveNine",
+    "Strive9",
     "Scenario Testing",
     "BDD",
     "Behavior Driven Development",
+    "Business Requirement Driven Development",
+    "BRDD",
     "BDD Unit Testing",
-    "BDD Integration Testing"
+    "BDD Integration Testing",
+    "Mocha"
   ],
   "author": "Cory Parrish",
   "license": "ISC",
@@ -53,7 +58,7 @@
     "fs-extra": "^0.26.5",
     "lodash": "^4.6.1",
     "mocha": "2.4.5",
-    "preconditions": "^1.0.8",
+    "preconditions": "2.0.5",
     "sinon": "1.17.3"
   },
   "devDependencies": {
