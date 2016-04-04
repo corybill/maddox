@@ -2,7 +2,7 @@
 
 const Maddox = require("../../lib/index"), // require("maddox");
   random = require("../random"),
-  Controller = require("../testable/modules/test-module/test-module-controller"),
+  Controller = require("../testable/modules/test-module/from-http-req-controller"),
   testConstants = require("../test-constants"),
   StatefulFactoryProxy = require("../testable/proxies/stateful-factory-proxy"),
   StatefulSingletonProxy = require("../testable/proxies/stateful-singleton-proxy"),
@@ -15,7 +15,7 @@ const chai = require("chai");
 const Scenario = Maddox.functional.HttpReqScenario,
   expect = chai.expect;
 
-describe("When Unit Testing an Express Http Request", function () {
+describe("HttpReqScenario", function () {
   let testContext;
 
   describe("without external dependencies", function () {
@@ -1855,6 +1855,59 @@ describe("When Unit Testing an Express Http Request", function () {
 
         .test(done);
     });
+  });
+
+  describe("and using the debug flag", function () {
+    beforeEach(function () {
+      testContext = {};
+
+      testContext.setupTest = function () {
+        testContext.entryPointObject = Controller;
+        testContext.entryPointFunction = "statelessEs6Proxy";
+        testContext.proxyInstance = StatelessEs6Proxy;
+      };
+
+      testContext.setupHttpRequest = function () {
+        testContext.httpRequest = {
+          params: {
+            personId: "123456789"
+          },
+          query: {
+            homeState: "IL"
+          }
+        };
+
+        testContext.httpRequestParams = [testContext.httpRequest];
+      };
+
+      testContext.setupGetFirstName = function () {
+        testContext.getFirstName1Params = [testContext.httpRequest.params.personId];
+        testContext.getFirstName1Result = random.firstName();
+
+        testContext.getFirstName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
+        testContext.getFirstName2Result = random.firstName();
+      };
+
+      testContext.setupGetMiddleName = function () {
+        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result];
+        testContext.getMiddleNameResult = random.firstName();
+      };
+
+      testContext.setupGetLastName = function () {
+        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameResult = random.lastName();
+      };
+
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = [{
+          personId: testContext.httpRequest.params.personId,
+          homeState: testContext.httpRequest.query.homeState,
+          lastName: testContext.getLastNameResult
+        }];
+
+        testContext.expectedStatusCode = [200];
+      };
+    });
 
     it("it should add the full object print out of actual and expected when the debug flag is set.", function (done) {
       testContext.setupGetMiddleName = function () {
@@ -1959,10 +2012,6 @@ describe("When Unit Testing an Express Http Request", function () {
             done(err);
           }
         });
-    });
-
-    it("it should throw the expected value as the error, when the expecation fails, and the expected value is an error.", function () {
-
     });
   });
 });
