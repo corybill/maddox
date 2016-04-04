@@ -1,7 +1,7 @@
 "use strict";
 
 const Maddox = require("../../lib/index"), // require("maddox");
-  Controller = require("../testable/modules/test-module/test-module-controller"),
+  Controller = require("../testable/modules/test-module/from-http-req-controller"),
   constants = require("../../lib/constants"),
   Mocha = require("../../lib/proxies/mocha-proxy"),
   ProxyClass = require("../testable/proxies/stateless-es6-proxy"),
@@ -13,7 +13,7 @@ const chai = require("chai");
 const expect = chai.expect,
   Scenario = Maddox.functional.HttpReqScenario;
 
-describe("When using the Scenario API,", function () {
+describe("When using the HttpReqScenario,", function () {
   let testContext;
 
   beforeEach(function () {
