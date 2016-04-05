@@ -52,10 +52,11 @@ class Controller {
 
     let proxy = StatefulSingletonProxy.getInstance(), // e.g. Must call mocked function with the flow of code
       firstName = uuid.v4(),
-      middleName = proxy.getMiddleName(urlParams.personId, firstName);
+      middleNameA = proxy.getMiddleName(urlParams.personId, firstName),
+      middleNameB = proxy.getMiddleName(urlParams.personId, middleNameA);
 
     var result = {
-      personId: `${urlParams.personId}_${middleName}`,
+      personId: `${urlParams.personId}_${middleNameB}`,
       homeState: queryParams.homeState
     };
 
@@ -67,10 +68,11 @@ class Controller {
 
     let proxy = StatelessEs6Proxy,
       firstName = uuid.v4(),
-      middleName = proxy.getMiddleName(urlParams.personId, firstName);
+      middleNameA = proxy.getMiddleName(urlParams.personId, firstName),
+      middleNameB = proxy.getMiddleName(urlParams.personId, middleNameA);
 
     var result = {
-      personId: `${urlParams.personId}_${middleName}`,
+      personId: `${urlParams.personId}_${middleNameB}`,
       homeState: queryParams.homeState
     };
 
@@ -82,10 +84,11 @@ class Controller {
 
     let proxy = StatelessPreEs6SingletonProxy,
       firstName = uuid.v4(),
-      middleName = proxy.getMiddleName(urlParams.personId, firstName);
+      middleNameA = proxy.getMiddleName(urlParams.personId, firstName),
+      middleNameB = proxy.getMiddleName(urlParams.personId, middleNameA);
 
     var result = {
-      personId: `${urlParams.personId}_${middleName}`,
+      personId: `${urlParams.personId}_${middleNameB}`,
       homeState: queryParams.homeState
     };
 
@@ -97,10 +100,11 @@ class Controller {
 
     let proxy = StatelessPreEs6StaticProxy,
       firstName = uuid.v4(),
-      middleName = proxy.getMiddleName(urlParams.personId, firstName);
+      middleNameA = proxy.getMiddleName(urlParams.personId, firstName),
+      middleNameB = proxy.getMiddleName(urlParams.personId, middleNameA);
 
     var result = {
-      personId: `${urlParams.personId}_${middleName}`,
+      personId: `${urlParams.personId}_${middleNameB}`,
       homeState: queryParams.homeState
     };
 

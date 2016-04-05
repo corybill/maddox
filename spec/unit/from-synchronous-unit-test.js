@@ -369,7 +369,7 @@ describe("When using FromSynchronousScenario and getting errors", function () {
     });
   });
 
-  describe.skip("and using a stateful singleton proxy", function () {
+  describe("and using a stateful singleton proxy", function () {
     beforeEach(function () {
       testContext = {};
 
@@ -394,23 +394,19 @@ describe("When using FromSynchronousScenario and getting errors", function () {
         testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
         testContext.getFirstNameResult = random.firstName();
 
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = random.firstName();
       };
 
       testContext.setupGetMiddleName = function () {
-        testContext.getMiddleNameParams = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getMiddleNameResult = random.firstName();
-      };
+        testContext.getMiddleName1Params = [testContext.params.personId, testContext.getFirstNameResult];
+        testContext.getMiddleName1Result = random.firstName();
 
-      testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.params.personId, testContext.getFirstNameResult, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = random.lastName();
+        testContext.getMiddleName2Params = [testContext.params.personId, testContext.getMiddleName1Result];
+        testContext.getMiddleName2Result = random.firstName();
       };
 
       testContext.setupExpected = function () {
         testContext.expectedResponse = {
-          personId: `${testContext.params.personId}_${testContext.getMiddleNameResult}`,
+          personId: `${testContext.params.personId}_${testContext.getMiddleName2Result}`,
           homeState: testContext.query.homeState
         };
       };
@@ -425,9 +421,8 @@ describe("When using FromSynchronousScenario and getting errors", function () {
 
       new Scenario()
         .mockThisFunction("StatefulSingletonProxy", "getInstance", StatefulSingletonProxy)
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
@@ -435,11 +430,14 @@ describe("When using FromSynchronousScenario and getting errors", function () {
         .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
         .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesReturn("uuid", "v4", testContext.getFirstNameResult)
 
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName1Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName2Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName2Result)
 
         .perf(this.test.fullTitle())
         .test(function (err, response) {
@@ -455,9 +453,7 @@ describe("When using FromSynchronousScenario and getting errors", function () {
 
     it("it should handle a checked exception.", function (done) {
       testContext.setupInputParams = function () {
-        testContext.params = {
-          personId: "123456789"
-        };
+        testContext.params = {};
         testContext.query = {
           homeState: "IL"
         };
@@ -479,9 +475,8 @@ describe("When using FromSynchronousScenario and getting errors", function () {
 
       new Scenario()
         .mockThisFunction("StatefulSingletonProxy", "getInstance", StatefulSingletonProxy)
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
@@ -503,9 +498,6 @@ describe("When using FromSynchronousScenario and getting errors", function () {
 
         testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
         testContext.getFirstNameResult = new Error(testContext.expectedErrorMessage);
-
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = random.firstName();
       };
       testContext.setupExpected = function () {
         testContext.expectedResponse = testContext.expectedErrorMessage;
@@ -520,9 +512,8 @@ describe("When using FromSynchronousScenario and getting errors", function () {
 
       new Scenario()
         .mockThisFunction("StatefulSingletonProxy", "getInstance", StatefulSingletonProxy)
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
@@ -530,8 +521,8 @@ describe("When using FromSynchronousScenario and getting errors", function () {
         .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
         .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesError("uuid", "v4", testContext.getFirstNameResult)
 
         .test(function (err, response) {
           try {
@@ -545,15 +536,16 @@ describe("When using FromSynchronousScenario and getting errors", function () {
     });
 
     it("it should handle second call to mock throwing an error.", function (done) {
-      testContext.setupGetFirstName = function () {
+      testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
-        testContext.getFirstNameResult = random.firstName();
+        testContext.getMiddleName1Params = [testContext.params.personId, testContext.getFirstNameResult];
+        testContext.getMiddleName1Result = random.firstName();
 
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = new Error(testContext.expectedErrorMessage);
+        testContext.getMiddleName2Params = [testContext.params.personId, testContext.getFirstNameResult];
+        testContext.getMiddleName2Result = new Error(testContext.expectedErrorMessage);
       };
+
       testContext.setupExpected = function () {
         testContext.expectedResponse = testContext.expectedErrorMessage;
         testContext.expectedStatusCode = [404];
@@ -567,9 +559,8 @@ describe("When using FromSynchronousScenario and getting errors", function () {
 
       new Scenario()
         .mockThisFunction("StatefulSingletonProxy", "getInstance", StatefulSingletonProxy)
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
@@ -577,105 +568,14 @@ describe("When using FromSynchronousScenario and getting errors", function () {
         .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
         .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesReturn("uuid", "v4", testContext.getFirstNameResult)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName1Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName1Result)
 
-        .test(function (err, response) {
-          try {
-            expect(err.message).eql(testContext.expectedResponse);
-            expect(response).eql(undefined);
-            done();
-          } catch (testError) {
-            done(testError);
-          }
-        });
-    });
-
-    it("it should handle mock throwing an error with a promise.", function (done) {
-      testContext.setupGetFirstName = function () {
-        testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
-
-        testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
-        testContext.getFirstNameResult = new Error(testContext.expectedErrorMessage);
-
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = random.firstName();
-      };
-      testContext.setupExpected = function () {
-        testContext.expectedResponse = testContext.expectedErrorMessage;
-        testContext.expectedStatusCode = [404];
-      };
-
-      testContext.setupTest();
-      testContext.setupInputParams();
-      testContext.setupGetFirstName();
-      testContext.setupGetMiddleName();
-      testContext.setupExpected();
-
-      new Scenario()
-        .mockThisFunction("StatefulSingletonProxy", "getInstance", StatefulSingletonProxy)
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
-
-        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-        .withInputParams(testContext.inputParams)
-
-        .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
-        .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
-
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .test(function (err, response) {
-          try {
-            expect(err.message).eql(testContext.expectedResponse);
-            expect(response).eql(undefined);
-            done();
-          } catch (testError) {
-            done(testError);
-          }
-        });
-    });
-
-    it("it should handle mock throwing an error with a callback.", function (done) {
-      testContext.setupGetLastName = function () {
-        testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
-
-        testContext.getLastNameParams = [testContext.params.personId, testContext.getFirstNameResult, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = new Error(testContext.expectedErrorMessage);
-      };
-      testContext.setupExpected = function () {
-        testContext.expectedResponse = testContext.expectedErrorMessage;
-        testContext.expectedStatusCode = [404];
-      };
-
-      testContext.setupTest();
-      testContext.setupInputParams();
-      testContext.setupGetFirstName();
-      testContext.setupGetMiddleName();
-      testContext.setupExpected();
-
-      new Scenario()
-        .mockThisFunction("StatefulSingletonProxy", "getInstance", StatefulSingletonProxy)
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
-
-        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-        .withInputParams(testContext.inputParams)
-
-        .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
-        .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
-
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName2Params)
+        .doesError("proxyInstance", "getMiddleName", testContext.getMiddleName2Result)
 
         .test(function (err, response) {
           try {
@@ -689,11 +589,11 @@ describe("When using FromSynchronousScenario and getting errors", function () {
     });
 
     it("it should handle mock throwing an error synchronously.", function (done) {
-      testContext.setupGetMiddleName = function () {
+      testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getMiddleNameParams = [testContext.params.personId, testContext.getFirstNameResult, testContext.getMiddleNameResult];
-        testContext.getMiddleNameResult = new Error(testContext.expectedErrorMessage);
+        testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
+        testContext.getFirstNameResult = new Error(testContext.expectedErrorMessage);
       };
       testContext.setupExpected = function () {
         testContext.expectedResponse = testContext.expectedErrorMessage;
@@ -708,9 +608,8 @@ describe("When using FromSynchronousScenario and getting errors", function () {
 
       new Scenario()
         .mockThisFunction("StatefulSingletonProxy", "getInstance", StatefulSingletonProxy)
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
@@ -718,11 +617,8 @@ describe("When using FromSynchronousScenario and getting errors", function () {
         .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
         .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesError("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesError("uuid", "v4", testContext.getFirstNameResult)
 
         .test(function (err, response) {
           try {
@@ -736,7 +632,7 @@ describe("When using FromSynchronousScenario and getting errors", function () {
     });
   });
 
-  describe.skip("and using a stateless es6 proxy", function () {
+  describe("and using a stateless es6 proxy", function () {
     beforeEach(function () {
       testContext = {};
 
@@ -761,23 +657,19 @@ describe("When using FromSynchronousScenario and getting errors", function () {
         testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
         testContext.getFirstNameResult = random.firstName();
 
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = random.firstName();
       };
 
       testContext.setupGetMiddleName = function () {
-        testContext.getMiddleNameParams = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getMiddleNameResult = random.firstName();
-      };
+        testContext.getMiddleName1Params = [testContext.params.personId, testContext.getFirstNameResult];
+        testContext.getMiddleName1Result = random.firstName();
 
-      testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.params.personId, testContext.getFirstNameResult, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = random.lastName();
+        testContext.getMiddleName2Params = [testContext.params.personId, testContext.getMiddleName1Result];
+        testContext.getMiddleName2Result = random.firstName();
       };
 
       testContext.setupExpected = function () {
         testContext.expectedResponse = {
-          personId: `${testContext.params.personId}_${testContext.getMiddleNameResult}`,
+          personId: `${testContext.params.personId}_${testContext.getMiddleName2Result}`,
           homeState: testContext.query.homeState
         };
       };
@@ -791,24 +683,20 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesReturn("uuid", "v4", testContext.getFirstNameResult)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName1Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName1Result)
 
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
-        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName2Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName2Result)
 
         .perf(this.test.fullTitle())
         .test(function (err, response) {
@@ -824,9 +712,7 @@ describe("When using FromSynchronousScenario and getting errors", function () {
 
     it("it should handle a checked exception.", function (done) {
       testContext.setupInputParams = function () {
-        testContext.params = {
-          personId: "123456789"
-        };
+        testContext.params = {};
         testContext.query = {
           homeState: "IL"
         };
@@ -847,9 +733,8 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
@@ -871,9 +756,6 @@ describe("When using FromSynchronousScenario and getting errors", function () {
 
         testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
         testContext.getFirstNameResult = new Error(testContext.expectedErrorMessage);
-
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = random.firstName();
       };
       testContext.setupExpected = function () {
         testContext.expectedResponse = testContext.expectedErrorMessage;
@@ -887,15 +769,14 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesError("uuid", "v4", testContext.getFirstNameResult)
 
         .test(function (err, response) {
           try {
@@ -909,15 +790,16 @@ describe("When using FromSynchronousScenario and getting errors", function () {
     });
 
     it("it should handle second call to mock throwing an error.", function (done) {
-      testContext.setupGetFirstName = function () {
+      testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
-        testContext.getFirstNameResult = random.firstName();
+        testContext.getMiddleName1Params = [testContext.params.personId, testContext.getFirstNameResult];
+        testContext.getMiddleName1Result = random.firstName();
 
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = new Error(testContext.expectedErrorMessage);
+        testContext.getMiddleName2Params = [testContext.params.personId, testContext.getFirstNameResult];
+        testContext.getMiddleName2Result = new Error(testContext.expectedErrorMessage);
       };
+
       testContext.setupExpected = function () {
         testContext.expectedResponse = testContext.expectedErrorMessage;
         testContext.expectedStatusCode = [404];
@@ -930,110 +812,20 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesReturn("uuid", "v4", testContext.getFirstNameResult)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName1Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName1Result)
 
-        .test(function (err, response) {
-          try {
-            expect(err.message).eql(testContext.expectedResponse);
-            expect(response).eql(undefined);
-            done();
-          } catch (testError) {
-            done(testError);
-          }
-        });
-    });
-
-    it("it should handle mock throwing an error with a promise.", function (done) {
-      testContext.setupGetFirstName = function () {
-        testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
-
-        testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
-        testContext.getFirstNameResult = new Error(testContext.expectedErrorMessage);
-
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = random.firstName();
-      };
-      testContext.setupExpected = function () {
-        testContext.expectedResponse = testContext.expectedErrorMessage;
-        testContext.expectedStatusCode = [404];
-      };
-
-      testContext.setupTest();
-      testContext.setupInputParams();
-      testContext.setupGetFirstName();
-      testContext.setupGetMiddleName();
-      testContext.setupExpected();
-
-      new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
-
-        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-        .withInputParams(testContext.inputParams)
-
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .test(function (err, response) {
-          try {
-            expect(err.message).eql(testContext.expectedResponse);
-            expect(response).eql(undefined);
-            done();
-          } catch (testError) {
-            done(testError);
-          }
-        });
-    });
-
-    it("it should handle mock throwing an error with a callback.", function (done) {
-      testContext.setupGetLastName = function () {
-        testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
-
-        testContext.getLastNameParams = [testContext.params.personId, testContext.getFirstNameResult, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = new Error(testContext.expectedErrorMessage);
-      };
-      testContext.setupExpected = function () {
-        testContext.expectedResponse = testContext.expectedErrorMessage;
-        testContext.expectedStatusCode = [404];
-      };
-
-      testContext.setupTest();
-      testContext.setupInputParams();
-      testContext.setupGetFirstName();
-      testContext.setupGetMiddleName();
-      testContext.setupExpected();
-
-      new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
-
-        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-        .withInputParams(testContext.inputParams)
-
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
-        .doesErrorWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName2Params)
+        .doesError("proxyInstance", "getMiddleName", testContext.getMiddleName2Result)
 
         .test(function (err, response) {
           try {
@@ -1047,11 +839,11 @@ describe("When using FromSynchronousScenario and getting errors", function () {
     });
 
     it("it should handle mock throwing an error synchronously.", function (done) {
-      testContext.setupGetMiddleName = function () {
+      testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getMiddleNameParams = [testContext.params.personId, testContext.getFirstNameResult, testContext.getMiddleNameResult];
-        testContext.getMiddleNameResult = new Error(testContext.expectedErrorMessage);
+        testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
+        testContext.getFirstNameResult = new Error(testContext.expectedErrorMessage);
       };
       testContext.setupExpected = function () {
         testContext.expectedResponse = testContext.expectedErrorMessage;
@@ -1065,21 +857,14 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesError("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesError("uuid", "v4", testContext.getFirstNameResult)
 
         .test(function (err, response) {
           try {
@@ -1093,7 +878,7 @@ describe("When using FromSynchronousScenario and getting errors", function () {
     });
   });
 
-  describe.skip("and using a stateless pre es6 singleton proxy", function () {
+  describe("and using a stateless pre es6 singleton proxy", function () {
     beforeEach(function () {
       testContext = {};
 
@@ -1118,23 +903,19 @@ describe("When using FromSynchronousScenario and getting errors", function () {
         testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
         testContext.getFirstNameResult = random.firstName();
 
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = random.firstName();
       };
 
       testContext.setupGetMiddleName = function () {
-        testContext.getMiddleNameParams = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getMiddleNameResult = random.firstName();
-      };
+        testContext.getMiddleName1Params = [testContext.params.personId, testContext.getFirstNameResult];
+        testContext.getMiddleName1Result = random.firstName();
 
-      testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.params.personId, testContext.getFirstNameResult, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = random.lastName();
+        testContext.getMiddleName2Params = [testContext.params.personId, testContext.getMiddleName1Result];
+        testContext.getMiddleName2Result = random.firstName();
       };
 
       testContext.setupExpected = function () {
         testContext.expectedResponse = {
-          personId: `${testContext.params.personId}_${testContext.getMiddleNameResult}`,
+          personId: `${testContext.params.personId}_${testContext.getMiddleName2Result}`,
           homeState: testContext.query.homeState
         };
       };
@@ -1148,24 +929,20 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesReturn("uuid", "v4", testContext.getFirstNameResult)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName1Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName1Result)
 
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
-        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName2Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName2Result)
 
         .perf(this.test.fullTitle())
         .test(function (err, response) {
@@ -1181,9 +958,7 @@ describe("When using FromSynchronousScenario and getting errors", function () {
 
     it("it should handle a checked exception.", function (done) {
       testContext.setupInputParams = function () {
-        testContext.params = {
-          personId: "123456789"
-        };
+        testContext.params = {};
         testContext.query = {
           homeState: "IL"
         };
@@ -1204,9 +979,8 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
@@ -1228,9 +1002,6 @@ describe("When using FromSynchronousScenario and getting errors", function () {
 
         testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
         testContext.getFirstNameResult = new Error(testContext.expectedErrorMessage);
-
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = random.firstName();
       };
       testContext.setupExpected = function () {
         testContext.expectedResponse = testContext.expectedErrorMessage;
@@ -1244,15 +1015,14 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesError("uuid", "v4", testContext.getFirstNameResult)
 
         .test(function (err, response) {
           try {
@@ -1266,15 +1036,16 @@ describe("When using FromSynchronousScenario and getting errors", function () {
     });
 
     it("it should handle second call to mock throwing an error.", function (done) {
-      testContext.setupGetFirstName = function () {
+      testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
-        testContext.getFirstNameResult = random.firstName();
+        testContext.getMiddleName1Params = [testContext.params.personId, testContext.getFirstNameResult];
+        testContext.getMiddleName1Result = random.firstName();
 
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = new Error(testContext.expectedErrorMessage);
+        testContext.getMiddleName2Params = [testContext.params.personId, testContext.getFirstNameResult];
+        testContext.getMiddleName2Result = new Error(testContext.expectedErrorMessage);
       };
+
       testContext.setupExpected = function () {
         testContext.expectedResponse = testContext.expectedErrorMessage;
         testContext.expectedStatusCode = [404];
@@ -1287,110 +1058,20 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesReturn("uuid", "v4", testContext.getFirstNameResult)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName1Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName1Result)
 
-        .test(function (err, response) {
-          try {
-            expect(err.message).eql(testContext.expectedResponse);
-            expect(response).eql(undefined);
-            done();
-          } catch (testError) {
-            done(testError);
-          }
-        });
-    });
-
-    it("it should handle mock throwing an error with a promise.", function (done) {
-      testContext.setupGetFirstName = function () {
-        testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
-
-        testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
-        testContext.getFirstNameResult = new Error(testContext.expectedErrorMessage);
-
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = random.firstName();
-      };
-      testContext.setupExpected = function () {
-        testContext.expectedResponse = testContext.expectedErrorMessage;
-        testContext.expectedStatusCode = [404];
-      };
-
-      testContext.setupTest();
-      testContext.setupInputParams();
-      testContext.setupGetFirstName();
-      testContext.setupGetMiddleName();
-      testContext.setupExpected();
-
-      new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
-
-        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-        .withInputParams(testContext.inputParams)
-
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .test(function (err, response) {
-          try {
-            expect(err.message).eql(testContext.expectedResponse);
-            expect(response).eql(undefined);
-            done();
-          } catch (testError) {
-            done(testError);
-          }
-        });
-    });
-
-    it("it should handle mock throwing an error with a callback.", function (done) {
-      testContext.setupGetLastName = function () {
-        testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
-
-        testContext.getLastNameParams = [testContext.params.personId, testContext.getFirstNameResult, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = new Error(testContext.expectedErrorMessage);
-      };
-      testContext.setupExpected = function () {
-        testContext.expectedResponse = testContext.expectedErrorMessage;
-        testContext.expectedStatusCode = [404];
-      };
-
-      testContext.setupTest();
-      testContext.setupInputParams();
-      testContext.setupGetFirstName();
-      testContext.setupGetMiddleName();
-      testContext.setupExpected();
-
-      new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
-
-        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-        .withInputParams(testContext.inputParams)
-
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
-        .doesErrorWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName2Params)
+        .doesError("proxyInstance", "getMiddleName", testContext.getMiddleName2Result)
 
         .test(function (err, response) {
           try {
@@ -1404,11 +1085,11 @@ describe("When using FromSynchronousScenario and getting errors", function () {
     });
 
     it("it should handle mock throwing an error synchronously.", function (done) {
-      testContext.setupGetMiddleName = function () {
+      testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getMiddleNameParams = [testContext.params.personId, testContext.getFirstNameResult, testContext.getMiddleNameResult];
-        testContext.getMiddleNameResult = new Error(testContext.expectedErrorMessage);
+        testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
+        testContext.getFirstNameResult = new Error(testContext.expectedErrorMessage);
       };
       testContext.setupExpected = function () {
         testContext.expectedResponse = testContext.expectedErrorMessage;
@@ -1422,21 +1103,14 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesError("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesError("uuid", "v4", testContext.getFirstNameResult)
 
         .test(function (err, response) {
           try {
@@ -1450,7 +1124,7 @@ describe("When using FromSynchronousScenario and getting errors", function () {
     });
   });
 
-  describe.skip("and using a stateless pre es6 static proxy", function () {
+  describe("and using a stateless pre es6 static proxy", function () {
     beforeEach(function () {
       testContext = {};
 
@@ -1475,23 +1149,19 @@ describe("When using FromSynchronousScenario and getting errors", function () {
         testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
         testContext.getFirstNameResult = random.firstName();
 
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = random.firstName();
       };
 
       testContext.setupGetMiddleName = function () {
-        testContext.getMiddleNameParams = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getMiddleNameResult = random.firstName();
-      };
+        testContext.getMiddleName1Params = [testContext.params.personId, testContext.getFirstNameResult];
+        testContext.getMiddleName1Result = random.firstName();
 
-      testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.params.personId, testContext.getFirstNameResult, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = random.lastName();
+        testContext.getMiddleName2Params = [testContext.params.personId, testContext.getMiddleName1Result];
+        testContext.getMiddleName2Result = random.firstName();
       };
 
       testContext.setupExpected = function () {
         testContext.expectedResponse = {
-          personId: `${testContext.params.personId}_${testContext.getMiddleNameResult}`,
+          personId: `${testContext.params.personId}_${testContext.getMiddleName2Result}`,
           homeState: testContext.query.homeState
         };
       };
@@ -1505,24 +1175,20 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesReturn("uuid", "v4", testContext.getFirstNameResult)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName1Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName1Result)
 
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
-        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName2Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName2Result)
 
         .perf(this.test.fullTitle())
         .test(function (err, response) {
@@ -1538,9 +1204,7 @@ describe("When using FromSynchronousScenario and getting errors", function () {
 
     it("it should handle a checked exception.", function (done) {
       testContext.setupInputParams = function () {
-        testContext.params = {
-          personId: "123456789"
-        };
+        testContext.params = {};
         testContext.query = {
           homeState: "IL"
         };
@@ -1561,9 +1225,8 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
@@ -1585,9 +1248,6 @@ describe("When using FromSynchronousScenario and getting errors", function () {
 
         testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
         testContext.getFirstNameResult = new Error(testContext.expectedErrorMessage);
-
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = random.firstName();
       };
       testContext.setupExpected = function () {
         testContext.expectedResponse = testContext.expectedErrorMessage;
@@ -1601,15 +1261,14 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesError("uuid", "v4", testContext.getFirstNameResult)
 
         .test(function (err, response) {
           try {
@@ -1623,15 +1282,16 @@ describe("When using FromSynchronousScenario and getting errors", function () {
     });
 
     it("it should handle second call to mock throwing an error.", function (done) {
-      testContext.setupGetFirstName = function () {
+      testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
-        testContext.getFirstNameResult = random.firstName();
+        testContext.getMiddleName1Params = [testContext.params.personId, testContext.getFirstNameResult];
+        testContext.getMiddleName1Result = random.firstName();
 
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = new Error(testContext.expectedErrorMessage);
+        testContext.getMiddleName2Params = [testContext.params.personId, testContext.getFirstNameResult];
+        testContext.getMiddleName2Result = new Error(testContext.expectedErrorMessage);
       };
+
       testContext.setupExpected = function () {
         testContext.expectedResponse = testContext.expectedErrorMessage;
         testContext.expectedStatusCode = [404];
@@ -1644,110 +1304,20 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesReturn("uuid", "v4", testContext.getFirstNameResult)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName1Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName1Result)
 
-        .test(function (err, response) {
-          try {
-            expect(err.message).eql(testContext.expectedResponse);
-            expect(response).eql(undefined);
-            done();
-          } catch (testError) {
-            done(testError);
-          }
-        });
-    });
-
-    it("it should handle mock throwing an error with a promise.", function (done) {
-      testContext.setupGetFirstName = function () {
-        testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
-
-        testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
-        testContext.getFirstNameResult = new Error(testContext.expectedErrorMessage);
-
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = random.firstName();
-      };
-      testContext.setupExpected = function () {
-        testContext.expectedResponse = testContext.expectedErrorMessage;
-        testContext.expectedStatusCode = [404];
-      };
-
-      testContext.setupTest();
-      testContext.setupInputParams();
-      testContext.setupGetFirstName();
-      testContext.setupGetMiddleName();
-      testContext.setupExpected();
-
-      new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
-
-        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-        .withInputParams(testContext.inputParams)
-
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesErrorWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .test(function (err, response) {
-          try {
-            expect(err.message).eql(testContext.expectedResponse);
-            expect(response).eql(undefined);
-            done();
-          } catch (testError) {
-            done(testError);
-          }
-        });
-    });
-
-    it("it should handle mock throwing an error with a callback.", function (done) {
-      testContext.setupGetLastName = function () {
-        testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
-
-        testContext.getLastNameParams = [testContext.params.personId, testContext.getFirstNameResult, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = new Error(testContext.expectedErrorMessage);
-      };
-      testContext.setupExpected = function () {
-        testContext.expectedResponse = testContext.expectedErrorMessage;
-        testContext.expectedStatusCode = [404];
-      };
-
-      testContext.setupTest();
-      testContext.setupInputParams();
-      testContext.setupGetFirstName();
-      testContext.setupGetMiddleName();
-      testContext.setupExpected();
-
-      new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
-
-        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-        .withInputParams(testContext.inputParams)
-
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
-        .doesErrorWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName2Params)
+        .doesError("proxyInstance", "getMiddleName", testContext.getMiddleName2Result)
 
         .test(function (err, response) {
           try {
@@ -1761,11 +1331,11 @@ describe("When using FromSynchronousScenario and getting errors", function () {
     });
 
     it("it should handle mock throwing an error synchronously.", function (done) {
-      testContext.setupGetMiddleName = function () {
+      testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getMiddleNameParams = [testContext.params.personId, testContext.getFirstNameResult, testContext.getMiddleNameResult];
-        testContext.getMiddleNameResult = new Error(testContext.expectedErrorMessage);
+        testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
+        testContext.getFirstNameResult = new Error(testContext.expectedErrorMessage);
       };
       testContext.setupExpected = function () {
         testContext.expectedResponse = testContext.expectedErrorMessage;
@@ -1779,21 +1349,14 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesError("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesError("uuid", "v4", testContext.getFirstNameResult)
 
         .test(function (err, response) {
           try {
@@ -1807,7 +1370,7 @@ describe("When using FromSynchronousScenario and getting errors", function () {
     });
   });
 
-  describe.skip("and using the debug flag", function () {
+  describe("and using the debug flag", function () {
     beforeEach(function () {
       testContext = {};
 
@@ -1832,33 +1395,32 @@ describe("When using FromSynchronousScenario and getting errors", function () {
         testContext.getFirstNameParams = [Maddox.constants.EmptyParameters];
         testContext.getFirstNameResult = random.firstName();
 
-        testContext.getFirstName2Params = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getFirstNameResult = random.firstName();
       };
 
       testContext.setupGetMiddleName = function () {
-        testContext.getMiddleNameParams = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.getMiddleNameResult = random.firstName();
-      };
+        testContext.getMiddleName1Params = [testContext.params.personId, testContext.getFirstNameResult];
+        testContext.getMiddleName1Result = random.firstName();
 
-      testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.params.personId, testContext.getFirstNameResult, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = random.lastName();
+        testContext.getMiddleName2Params = [testContext.params.personId, testContext.getMiddleName1Result];
+        testContext.getMiddleName2Result = random.firstName();
       };
 
       testContext.setupExpected = function () {
         testContext.expectedResponse = {
-          personId: `${testContext.params.personId}_${testContext.getMiddleNameResult}`,
+          personId: `${testContext.params.personId}_${testContext.getMiddleName2Result}`,
           homeState: testContext.query.homeState
         };
       };
     });
 
-    it("it should pass all tests.", function (done) {
+    it("it should add the full object print out of actual and expected when the debug flag is set.", function (done) {
       testContext.setupGetMiddleName = function () {
-        testContext.correctGetMiddleNameParams = [testContext.params.personId, testContext.getFirstNameResult];
-        testContext.wrongGetMiddleNameParams = [testContext.params.personId, random.uniqueId()];
-        testContext.getMiddleNameResult = random.firstName();
+        testContext.getMiddleName1Params = [testContext.params.personId, testContext.getFirstNameResult];
+        testContext.getMiddleName1Result = random.firstName();
+
+        testContext.correctGetMiddleName2Params = [testContext.params.personId, testContext.getMiddleName1Result];
+        testContext.wrongGetMiddleName2Params = [testContext.params.personId, random.firstName()];
+        testContext.getMiddleName2Result = random.firstName();
       };
 
       testContext.setupTest();
@@ -1868,31 +1430,27 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesReturn("uuid", "v4", testContext.getFirstNameResult)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName1Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName1Result)
 
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.wrongGetMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
-        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.wrongGetMiddleName2Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName2Result)
 
         .debug()
         .test(function (err, response) {
           try {
             expect(response).eql(undefined);
-            expect(err.stack.split(`"actual": "${testContext.correctGetMiddleNameParams[1]}"`).length).eql(2);
-            expect(err.stack.split(`"expected": "${testContext.wrongGetMiddleNameParams[1]}"`).length).eql(2);
+            expect(err.stack.split(`"actual": "${testContext.correctGetMiddleName2Params[1]}"`).length).eql(2);
+            expect(err.stack.split(`"expected": "${testContext.wrongGetMiddleName2Params[1]}"`).length).eql(2);
             done();
           } catch (testError) {
             done(testError);
@@ -1902,15 +1460,12 @@ describe("When using FromSynchronousScenario and getting errors", function () {
 
     it("it should NOT add the full object print out of actual and expected when the debug flag is NOT set.", function (done) {
       testContext.setupGetMiddleName = function () {
-        testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
+        testContext.getMiddleName1Params = [testContext.params.personId, testContext.getFirstNameResult];
+        testContext.getMiddleName1Result = random.firstName();
 
-        testContext.getMiddleNameParams = [testContext.params.personId, testContext.getFirstNameResult, testContext.getMiddleNameResult];
-        testContext.getMiddleNameResult = new Error(testContext.expectedErrorMessage);
-      };
-      testContext.setupExpected = function () {
-        testContext.intentionalWrongResponse = ["SOME WRONG RESPONSE"];
-        testContext.expectedResponse = [testContext.expectedErrorMessage];
-        testContext.expectedStatusCode = [404];
+        testContext.correctGetMiddleName2Params = [testContext.params.personId, testContext.getMiddleName1Result];
+        testContext.wrongGetMiddleName2Params = [testContext.params.personId, random.firstName()];
+        testContext.getMiddleName2Result = random.firstName();
       };
 
       testContext.setupTest();
@@ -1920,29 +1475,29 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       testContext.setupExpected();
 
       new Scenario()
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("uuid", "v4", uuid)
         .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+        .doesReturn("uuid", "v4", testContext.getFirstNameResult)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName1Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName1Result)
 
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.wrongGetMiddleName2Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName2Result)
 
-        .test(function (response) {
+        .test(function (err, response) {
           try {
-            expect(response.stack.split(`"actual": "${testContext.expectedResponse}"`).length).eql(1);
-            expect(response.stack.split(`"expected": "${testContext.intentionalWrongResponse}"`).length).eql(1);
+            expect(response).eql(undefined);
+            expect(err.stack.split(`"actual": "${testContext.correctGetMiddleName2Params[1]}"`).length).eql(1);
+            expect(err.stack.split(`"expected": "${testContext.wrongGetMiddleName2Params[1]}"`).length).eql(1);
             done();
-          } catch (err) {
-            done(err);
+          } catch (testError) {
+            done(testError);
           }
         });
     });
