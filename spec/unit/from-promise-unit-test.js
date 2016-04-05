@@ -2056,7 +2056,7 @@ describe("FromPromiseScenario", function () {
       };
     });
 
-    it("it should pass all tests.", function (done) {
+    it("it should add the full object print out of actual and expected when the debug flag is set.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.correctGetMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result];
         testContext.wrongGetMiddleNameParams = [testContext.httpRequest.params.personId, random.uniqueId()];

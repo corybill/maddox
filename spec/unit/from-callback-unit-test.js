@@ -2056,7 +2056,7 @@ describe("FromCallbackScenario", function () {
       };
     });
 
-    it("it should pass all tests.", function (done) {
+    it("it should add the full object print out of actual and expected when the debug flag is set.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.correctGetMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result];
         testContext.wrongGetMiddleNameParams = [testContext.httpRequest.params.personId, random.uniqueId()];
@@ -2140,13 +2140,14 @@ describe("FromCallbackScenario", function () {
         .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
         .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
 
-        .test(function (response) {
+        .test(function (err, response) {
           try {
-            expect(response.stack.split(`"actual": "${testContext.expectedResponse}"`).length).eql(1);
-            expect(response.stack.split(`"expected": "${testContext.intentionalWrongResponse}"`).length).eql(1);
+            expect(response).eql(undefined);
+            expect(err.stack.split(`"actual": "${testContext.expectedResponse}"`).length).eql(1);
+            expect(err.stack.split(`"expected": "${testContext.intentionalWrongResponse}"`).length).eql(1);
             done();
-          } catch (err) {
-            done(err);
+          } catch (testError) {
+            done(testError);
           }
         });
     });
