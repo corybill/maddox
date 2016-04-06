@@ -4,7 +4,7 @@ const Maddox = require("../../lib/index"), // require("maddox");
   Controller = require("../testable/modules/test-module/from-callback-controller"),
   constants = require("../../lib/constants"),
   Mocha = require("../../lib/proxies/mocha-proxy"),
-  ProxyClass = require("../testable/proxies/stateless-es6-proxy"),
+  StatelessEs6Proxy = require("../testable/proxies/stateless-es6-proxy"),
   ErrorFactory = require("../../lib/plugins/error-factory"),
   random = require("../random");
 
@@ -22,9 +22,10 @@ describe("When using the FromCallbackScenario,", function () {
     testContext.setupTest = function () {
       testContext.entryPointObject = Controller;
       testContext.entryPointFunction = "statelessEs6Proxy";
+      testContext.proxyInstance = StatelessEs6Proxy;
     };
 
-    testContext.setupHttpRequest = function () {
+    testContext.setupInputParams = function () {
       testContext.inputParams = {
         params: {
           personId: random.uniqueId()
@@ -34,7 +35,7 @@ describe("When using the FromCallbackScenario,", function () {
         }
       };
 
-      testContext.inputParamsParams = [testContext.inputParams];
+      testContext.inputParamsArray = [testContext.inputParams];
     };
 
     testContext.setupGetFirstName = function () {
@@ -72,7 +73,7 @@ describe("When using the FromCallbackScenario,", function () {
     }
   });
 
-  // HttpRequestArray 1001
+  // InputParamsArray 1000
   it("it should throw when withInputParams is given a parameter that is not of type Array.", function () {
     testContext.setupInputParams = function () {
       testContext.inputParams = "Some type that is not of type Array.";
@@ -87,7 +88,7 @@ describe("When using the FromCallbackScenario,", function () {
 
     try {
       new Scenario()
-        .withInputParams(testContext.inputParamsParams);
+        .withInputParams(testContext.inputParamsArray);
 
     } catch (err) {
       expect(err.message).eql(testContext.expectedErrorMessage);
@@ -838,11 +839,11 @@ describe("When using the FromCallbackScenario,", function () {
   // MissingCallback 3000
   it("it should throw when last parameter is not callback, when using '*WithCallback' and actually expecting a promise.", function (done) {
     testContext.setupErrorMessage = function () {
-      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.MissingCallback, ["ProxyClass", "getFirstName"]);
+      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.MissingCallback, ["proxyInstance", "getFirstName"]);
     };
 
     testContext.setupTest();
-    testContext.setupHttpRequest();
+    testContext.setupInputParams();
     testContext.setupGetFirstName();
     testContext.setupGetMiddleName();
     testContext.setupGetLastName();
@@ -850,15 +851,15 @@ describe("When using the FromCallbackScenario,", function () {
     testContext.setupErrorMessage();
 
     new Scenario()
-      .mockThisFunction("ProxyClass", "getFirstName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getMiddleName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getLastName", ProxyClass)
+      .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
       .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-      .withInputParams(testContext.inputParamsParams)
+      .withInputParams(testContext.inputParamsArray)
 
-      .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1Params)
-      .doesReturnWithCallback("ProxyClass", "getFirstName", testContext.getFirstName1Result)
+      .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+      .doesReturnWithCallback("proxyInstance", "getFirstName", testContext.getFirstName1Result)
 
       .test(function (err) {
         try {
@@ -873,11 +874,11 @@ describe("When using the FromCallbackScenario,", function () {
   // MissingCallback 3000
   it("it should throw when last parameter is not callback, when using '*WithCallback' and actually expecting a synchronous call.", function (done) {
     testContext.setupErrorMessage = function () {
-      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.MissingCallback, ["ProxyClass", "getMiddleName"]);
+      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.MissingCallback, ["proxyInstance", "getMiddleName"]);
     };
 
     testContext.setupTest();
-    testContext.setupHttpRequest();
+    testContext.setupInputParams();
     testContext.setupGetFirstName();
     testContext.setupGetMiddleName();
     testContext.setupGetLastName();
@@ -885,21 +886,21 @@ describe("When using the FromCallbackScenario,", function () {
     testContext.setupErrorMessage();
 
     new Scenario()
-      .mockThisFunction("ProxyClass", "getFirstName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getMiddleName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getLastName", ProxyClass)
+      .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
       .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-      .withInputParams(testContext.inputParamsParams)
+      .withInputParams(testContext.inputParamsArray)
 
-      .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1Params)
-      .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName1Result)
+      .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+      .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
 
-      .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName2Params)
-      .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName2Result)
+      .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+      .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
 
-      .shouldBeCalledWith("ProxyClass", "getMiddleName", testContext.getMiddleNameParams)
-      .doesReturnWithCallback("ProxyClass", "getMiddleName", testContext.getMiddleNameResult)
+      .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+      .doesReturnWithCallback("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
 
       .test(function (err) {
         try {
@@ -914,11 +915,11 @@ describe("When using the FromCallbackScenario,", function () {
   // MissingMockedData 3001
   it("it should throw when first call to mock was not defined in test.", function (done) {
     testContext.setupErrorMessage = function () {
-      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.MissingMockedData, ["first", "ProxyClass", "getFirstName"]);
+      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.MissingMockedData, ["first", "proxyInstance", "getFirstName"]);
     };
 
     testContext.setupTest();
-    testContext.setupHttpRequest();
+    testContext.setupInputParams();
     testContext.setupGetFirstName();
     testContext.setupGetMiddleName();
     testContext.setupGetLastName();
@@ -926,15 +927,15 @@ describe("When using the FromCallbackScenario,", function () {
     testContext.setupErrorMessage();
 
     new Scenario()
-      .mockThisFunction("ProxyClass", "getFirstName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getMiddleName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getLastName", ProxyClass)
+      .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
       .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-      .withInputParams(testContext.inputParamsParams)
+      .withInputParams(testContext.inputParamsArray)
 
-      .shouldBeCalledWith("ProxyClass", "getMiddleName", testContext.getMiddleNameParams)
-      .doesReturnWithCallback("ProxyClass", "getMiddleName", testContext.getMiddleNameResult)
+      .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+      .doesReturnWithCallback("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
 
       .test(function (err) {
         try {
@@ -949,11 +950,11 @@ describe("When using the FromCallbackScenario,", function () {
   // MissingMockedData 3001
   it("it should throw when second call to mock was not defined in test.", function (done) {
     testContext.setupErrorMessage = function () {
-      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.MissingMockedData, ["second", "ProxyClass", "getFirstName"]);
+      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.MissingMockedData, ["second", "proxyInstance", "getFirstName"]);
     };
 
     testContext.setupTest();
-    testContext.setupHttpRequest();
+    testContext.setupInputParams();
     testContext.setupGetFirstName();
     testContext.setupGetMiddleName();
     testContext.setupGetLastName();
@@ -961,18 +962,18 @@ describe("When using the FromCallbackScenario,", function () {
     testContext.setupErrorMessage();
 
     new Scenario()
-      .mockThisFunction("ProxyClass", "getFirstName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getMiddleName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getLastName", ProxyClass)
+      .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
       .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-      .withInputParams(testContext.inputParamsParams)
+      .withInputParams(testContext.inputParamsArray)
 
-      .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1Params)
-      .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName1Result)
+      .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+      .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
 
-      .shouldBeCalledWith("ProxyClass", "getMiddleName", testContext.getMiddleNameParams)
-      .doesReturnWithCallback("ProxyClass", "getMiddleName", testContext.getMiddleNameResult)
+      .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+      .doesReturnWithCallback("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
 
       .test(function (err) {
         try {
@@ -987,11 +988,11 @@ describe("When using the FromCallbackScenario,", function () {
   // MockCalledWrongNumberOfTimes 3002
   it("it should throw when a mock is never called but the test expected it to be called.", function (done) {
     testContext.setupErrorMessage = function () {
-      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.MockCalledWrongNumberOfTimes, ["ProxyClass", "dummyFunction", 1, 0]);
+      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.MockCalledWrongNumberOfTimes, ["proxyInstance", "dummyFunction", 1, 0]);
     };
 
     testContext.setupTest();
-    testContext.setupHttpRequest();
+    testContext.setupInputParams();
     testContext.setupGetFirstName();
     testContext.setupGetMiddleName();
     testContext.setupGetLastName();
@@ -999,28 +1000,28 @@ describe("When using the FromCallbackScenario,", function () {
     testContext.setupErrorMessage();
 
     new Scenario()
-      .mockThisFunction("ProxyClass", "getFirstName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getMiddleName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getLastName", ProxyClass)
-      .mockThisFunction("ProxyClass", "dummyFunction", ProxyClass)
+      .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "dummyFunction", testContext.proxyInstance)
 
       .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-      .withInputParams(testContext.inputParamsParams)
+      .withInputParams(testContext.inputParamsArray)
 
-      .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1Params)
-      .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName1Result)
+      .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+      .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
 
-      .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName2Params)
-      .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName2Result)
+      .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+      .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
 
-      .shouldBeCalledWith("ProxyClass", "getMiddleName", testContext.getMiddleNameParams)
-      .doesReturn("ProxyClass", "getMiddleName", testContext.getMiddleNameResult)
+      .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+      .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
 
-      .shouldBeCalledWith("ProxyClass", "getLastName", testContext.getLastNameParams)
-      .doesReturnWithCallback("ProxyClass", "getLastName", testContext.getLastNameResult)
+      .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
+      .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
 
-      .shouldBeCalledWith("ProxyClass", "dummyFunction", testContext.getFirstName1Params)
-      .doesReturnWithPromise("ProxyClass", "dummyFunction", testContext.getFirstName1Result)
+      .shouldBeCalledWith("proxyInstance", "dummyFunction", testContext.getFirstName1Params)
+      .doesReturnWithPromise("proxyInstance", "dummyFunction", testContext.getFirstName1Result)
 
       .test(function (err) {
         try {
@@ -1036,11 +1037,11 @@ describe("When using the FromCallbackScenario,", function () {
   // MockCalledWrongNumberOfTimes 3002
   it("should throw when mock is called LESS times than expected in the test.", function (done) {
     testContext.setupErrorMessage = function () {
-      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.MockCalledWrongNumberOfTimes, ["ProxyClass", "getFirstName", 3, 2]);
+      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.MockCalledWrongNumberOfTimes, ["proxyInstance", "getFirstName", 3, 2]);
     };
 
     testContext.setupTest();
-    testContext.setupHttpRequest();
+    testContext.setupInputParams();
     testContext.setupGetFirstName();
     testContext.setupGetMiddleName();
     testContext.setupGetLastName();
@@ -1048,27 +1049,27 @@ describe("When using the FromCallbackScenario,", function () {
     testContext.setupErrorMessage();
 
     new Scenario()
-      .mockThisFunction("ProxyClass", "getFirstName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getMiddleName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getLastName", ProxyClass)
+      .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
       .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-      .withInputParams(testContext.inputParamsParams)
+      .withInputParams(testContext.inputParamsArray)
 
-      .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1Params)
-      .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName1Result)
+      .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+      .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
 
-      .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName2Params)
-      .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName2Result)
+      .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+      .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
 
-      .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName2Params)
-      .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName2Result)
+      .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+      .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
 
-      .shouldBeCalledWith("ProxyClass", "getMiddleName", testContext.getMiddleNameParams)
-      .doesReturn("ProxyClass", "getMiddleName", testContext.getMiddleNameResult)
+      .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+      .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
 
-      .shouldBeCalledWith("ProxyClass", "getLastName", testContext.getLastNameParams)
-      .doesReturnWithCallback("ProxyClass", "getLastName", testContext.getLastNameResult)
+      .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
+      .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
 
       .test(function (err) {
         try {
@@ -1092,12 +1093,12 @@ describe("When using the FromCallbackScenario,", function () {
       testContext.getFirstName2Result = random.firstName();
     };
     testContext.setupErrorMessage = function () {
-      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.ComparisonShouldEqual, ["first", "ProxyClass", "getFirstName", "first"]) +
+      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.ComparisonShouldEqual, ["first", "proxyInstance", "getFirstName", "first"]) +
         `: expected '${testContext.inputParams.params.personId}' to deeply equal '${testContext.wrongParamValue}'`;
     };
 
     testContext.setupTest();
-    testContext.setupHttpRequest();
+    testContext.setupInputParams();
     testContext.setupGetFirstName();
     testContext.setupGetMiddleName();
     testContext.setupGetLastName();
@@ -1105,24 +1106,24 @@ describe("When using the FromCallbackScenario,", function () {
     testContext.setupErrorMessage();
 
     new Scenario()
-      .mockThisFunction("ProxyClass", "getFirstName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getMiddleName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getLastName", ProxyClass)
+      .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
       .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-      .withInputParams(testContext.inputParamsParams)
+      .withInputParams(testContext.inputParamsArray)
 
-      .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1ParamsExpected)
-      .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName1Result)
+      .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1ParamsExpected)
+      .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
 
-      .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName2Params)
-      .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName2Result)
+      .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+      .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
 
-      .shouldBeCalledWith("ProxyClass", "getMiddleName", testContext.getMiddleNameParams)
-      .doesReturn("ProxyClass", "getMiddleName", testContext.getMiddleNameResult)
+      .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+      .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
 
-      .shouldBeCalledWith("ProxyClass", "getLastName", testContext.getLastNameParams)
-      .doesReturnWithCallback("ProxyClass", "getLastName", testContext.getLastNameResult)
+      .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
+      .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
 
       .test(function (err) {
         try {
@@ -1147,12 +1148,12 @@ describe("When using the FromCallbackScenario,", function () {
       testContext.getFirstName2Result = random.firstName();
     };
     testContext.setupErrorMessage = function () {
-      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.ComparisonShouldEqual, ["first", "ProxyClass", "getFirstName", "second"]) +
+      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.ComparisonShouldEqual, ["first", "proxyInstance", "getFirstName", "second"]) +
         `: expected '${testContext.inputParams.params.personId}' to deeply equal '${testContext.wrongParamValue}'`;
     };
 
     testContext.setupTest();
-    testContext.setupHttpRequest();
+    testContext.setupInputParams();
     testContext.setupGetFirstName();
     testContext.setupGetMiddleName();
     testContext.setupGetLastName();
@@ -1160,24 +1161,24 @@ describe("When using the FromCallbackScenario,", function () {
     testContext.setupErrorMessage();
 
     new Scenario()
-      .mockThisFunction("ProxyClass", "getFirstName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getMiddleName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getLastName", ProxyClass)
+      .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
       .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-      .withInputParams(testContext.inputParamsParams)
+      .withInputParams(testContext.inputParamsArray)
 
-      .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1Params)
-      .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName1Result)
+      .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+      .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
 
-      .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName2ParamsExpected)
-      .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName2Result)
+      .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2ParamsExpected)
+      .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
 
-      .shouldBeCalledWith("ProxyClass", "getMiddleName", testContext.getMiddleNameParams)
-      .doesReturn("ProxyClass", "getMiddleName", testContext.getMiddleNameResult)
+      .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+      .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
 
-      .shouldBeCalledWith("ProxyClass", "getLastName", testContext.getLastNameParams)
-      .doesReturnWithCallback("ProxyClass", "getLastName", testContext.getLastNameResult)
+      .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
+      .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
 
       .test(function (err) {
         try {
@@ -1202,12 +1203,12 @@ describe("When using the FromCallbackScenario,", function () {
       testContext.getFirstName2Result = random.firstName();
     };
     testContext.setupErrorMessage = function () {
-      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.ComparisonShouldEqual, ["second", "ProxyClass", "getFirstName", "second"]) +
+      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.ComparisonShouldEqual, ["second", "proxyInstance", "getFirstName", "second"]) +
         `: expected '${testContext.getFirstName1Result}' to deeply equal '${testContext.wrongParamValue}'`;
     };
 
     testContext.setupTest();
-    testContext.setupHttpRequest();
+    testContext.setupInputParams();
     testContext.setupGetFirstName();
     testContext.setupGetMiddleName();
     testContext.setupGetLastName();
@@ -1215,24 +1216,24 @@ describe("When using the FromCallbackScenario,", function () {
     testContext.setupErrorMessage();
 
     new Scenario()
-      .mockThisFunction("ProxyClass", "getFirstName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getMiddleName", ProxyClass)
-      .mockThisFunction("ProxyClass", "getLastName", ProxyClass)
+      .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+      .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
 
       .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-      .withInputParams(testContext.inputParamsParams)
+      .withInputParams(testContext.inputParamsArray)
 
-      .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName1Params)
-      .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName1Result)
+      .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+      .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
 
-      .shouldBeCalledWith("ProxyClass", "getFirstName", testContext.getFirstName2ParamsExpected)
-      .doesReturnWithPromise("ProxyClass", "getFirstName", testContext.getFirstName2Result)
+      .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2ParamsExpected)
+      .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
 
-      .shouldBeCalledWith("ProxyClass", "getMiddleName", testContext.getMiddleNameParams)
-      .doesReturn("ProxyClass", "getMiddleName", testContext.getMiddleNameResult)
+      .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+      .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
 
-      .shouldBeCalledWith("ProxyClass", "getLastName", testContext.getLastNameParams)
-      .doesReturnWithCallback("ProxyClass", "getLastName", testContext.getLastNameResult)
+      .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
+      .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
 
       .test(function (err) {
         try {
