@@ -1,6 +1,6 @@
 {
   "name": "maddox",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "BDD style Scenario Unit Testing to test functionality and performance.",
   "main": "lib/index.js",
   "scripts": {
