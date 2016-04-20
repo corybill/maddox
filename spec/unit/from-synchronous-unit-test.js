@@ -439,6 +439,7 @@ describe("When using FromSynchronousScenario and getting errors", function () {
         .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName2Params)
         .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName2Result)
 
+        .debug()
         .perf(this.test.fullTitle())
         .test(function (err, response) {
           try {

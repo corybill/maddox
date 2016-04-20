@@ -194,6 +194,46 @@ describe("HttpReqScenario", function () {
         .test(done);
     });
 
+    it("it should pass all tests.", function (done) {
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario()
+        .mockThisFunction("StatefulFactoryProxy", "factory", StatefulFactoryProxy)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalledWith("send", testContext.expectedResponse)
+        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
+        .resDoesReturnSelf("status")
+
+        .shouldBeCalledWith("StatefulFactoryProxy", "factory", Maddox.constants.EmptyParameters)
+        .doesReturn("StatefulFactoryProxy", "factory", testContext.proxyInstance)
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
+        .perf(this.test.fullTitle())
+        .test(done);
+    });
+
     it("it should handle a checked exception.", function (done) {
       testContext.setupHttpRequest = function () {
         testContext.httpRequest = {
