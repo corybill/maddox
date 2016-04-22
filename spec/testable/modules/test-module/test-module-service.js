@@ -187,6 +187,58 @@ class Service {
       });
     });
   }
+
+  static executeShouldAlwaysDoesAlways(urlParams, queryParams) {
+    return new Promise(function (resolve) {
+      preconditions.shouldBeDefined(urlParams.personId, testConstants.MissingPersonIdParam);
+
+      var result = {
+        personId: urlParams.personId,
+        homeState: queryParams.homeState
+      };
+
+      let proxy = StatelessEs6Proxy;
+
+      let promise1 = proxy.getFirstName(urlParams.personId, queryParams.homeState),
+        promise2 = proxy.getFirstName(urlParams.personId, queryParams.homeState),
+        promise3 = proxy.getFirstName(urlParams.personId, queryParams.homeState);
+
+      Promise.all([promise1, promise2, promise3]).then(function (firstNames) {
+        let middleName1 = proxy.getMiddleName(urlParams.personId, firstNames[0]),
+          middleName2 = proxy.getMiddleName(urlParams.personId, firstNames[1]),
+          middleName3 = proxy.getMiddleName(urlParams.personId, firstNames[2]);
+
+        function callback3(err, lastName) {
+          if (err) {
+            throw err;
+          } else {
+            result.lastName3 = lastName;
+            resolve(result);
+          }
+        }
+
+        function callback2(err, lastName) {
+          if (err) {
+            throw err;
+          } else {
+            result.lastName2 = lastName;
+            proxy.getLastName(urlParams.personId, firstNames[2], middleName3, callback3);
+          }
+        }
+
+        function callback1(err, lastName) {
+          if (err) {
+            throw err;
+          } else {
+            result.lastName1 = lastName;
+            proxy.getLastName(urlParams.personId, firstNames[1], middleName2, callback2);
+          }
+        }
+
+        proxy.getLastName(urlParams.personId, firstNames[0], middleName1, callback1);
+      });
+    });
+  }
 }
 
 module.exports = Service;

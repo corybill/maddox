@@ -2054,4 +2054,306 @@ describe("When using a Scenario", function () {
         });
     });
   });
+
+  describe("and using shouldAlways / doesAlways", function () {
+    beforeEach(function () {
+      testContext = {};
+
+      testContext.setupTest = function () {
+        testContext.entryPointObject = Controller;
+        testContext.entryPointFunction = "shouldAlwaysDoesAlways";
+        testContext.proxyInstance = StatelessEs6Proxy;
+      };
+
+      testContext.setupHttpRequest = function () {
+        testContext.httpRequest = {
+          params: {
+            personId: "123456789"
+          },
+          query: {
+            homeState: "IL"
+          }
+        };
+
+        testContext.httpRequestParams = [testContext.httpRequest];
+      };
+
+      testContext.setupGetFirstName = function () {
+        testContext.getFirstNameParams = [testContext.httpRequest.params.personId, testContext.httpRequest.query.homeState];
+        testContext.getFirstName1Result = random.firstName();
+        testContext.getFirstName2Result = random.firstName();
+        testContext.getFirstName3Result = random.firstName();
+      };
+
+      testContext.setupGetMiddleName = function () {
+        testContext.getMiddleName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
+        testContext.getMiddleName1Result = random.firstName();
+
+        testContext.getMiddleName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName2Result];
+        testContext.getMiddleName2Result = random.firstName();
+
+        testContext.getMiddleName3Params = [testContext.httpRequest.params.personId, testContext.getFirstName3Result];
+        testContext.getMiddleName3Result = random.firstName();
+      };
+
+      testContext.setupGetLastName = function () {
+        testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName1Result = random.lastName();
+
+        testContext.getLastName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleName2Result];
+        testContext.getLastName2Result = random.lastName();
+
+        testContext.getLastName3Params = [testContext.httpRequest.params.personId, testContext.getFirstName3Result, testContext.getMiddleName3Result];
+        testContext.getLastName3Result = random.lastName();
+      };
+
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = [{
+          personId: testContext.httpRequest.params.personId,
+          homeState: testContext.httpRequest.query.homeState,
+          lastName1: testContext.getLastName1Result,
+          lastName2: testContext.getLastName2Result,
+          lastName3: testContext.getLastName3Result
+        }];
+
+        testContext.expectedStatusCode = [200];
+      };
+    });
+
+    it("should process when using shouldAlways for some proxy calls, but not using doesAlways for any proxy calls.", function (done) {
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario()
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalledWith("send", testContext.expectedResponse)
+        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
+        .resDoesReturnSelf("status")
+
+        .shouldAlwaysBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName3Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName1Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName2Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName2Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName3Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName3Result)
+
+        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastName1Params)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastName2Params)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastName2Result)
+
+        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastName3Params)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastName3Result)
+
+        .test(done);
+    });
+
+    it("should process when using shouldAlways for some proxy calls, and using doesAlways for some proxy calls.", function (done) {
+      testContext.setupGetMiddleName = function () {
+        testContext.getMiddleName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
+        testContext.getMiddleName1Result = random.firstName();
+
+        testContext.getMiddleName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
+        testContext.getMiddleName2Result = random.firstName();
+
+        testContext.getMiddleName3Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
+        testContext.getMiddleName3Result = random.firstName();
+      };
+
+      testContext.setupGetLastName = function () {
+        testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName1Result = random.lastName();
+
+        testContext.getLastName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName2Result];
+        testContext.getLastName2Result = random.lastName();
+
+        testContext.getLastName3Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName3Result];
+        testContext.getLastName3Result = random.lastName();
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario()
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalledWith("send", testContext.expectedResponse)
+        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
+        .resDoesReturnSelf("status")
+
+        .shouldAlwaysBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
+        .doesAlwaysReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName1Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName2Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName2Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName3Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName3Result)
+
+        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastName1Params)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastName2Params)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastName2Result)
+
+        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastName3Params)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastName3Result)
+
+        .test(done);
+    });
+
+    it("should process when using shouldAlways for some proxy calls, and using doesAlways for all proxy calls.", function (done) {
+      testContext.setupGetMiddleName = function () {
+        testContext.getMiddleName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
+        testContext.getMiddleName1Result = random.firstName();
+
+        testContext.getMiddleName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
+        testContext.getMiddleName2Result = random.firstName();
+
+        testContext.getMiddleName3Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
+        testContext.getMiddleName3Result = random.firstName();
+      };
+
+      testContext.setupGetLastName = function () {
+        testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName1Result = random.lastName();
+
+        testContext.getLastName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName2Result = random.lastName();
+
+        testContext.getLastName3Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName3Result = random.lastName();
+      };
+
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = [{
+          personId: testContext.httpRequest.params.personId,
+          homeState: testContext.httpRequest.query.homeState,
+          lastName1: testContext.getLastName1Result,
+          lastName2: testContext.getLastName1Result,
+          lastName3: testContext.getLastName1Result
+        }];
+
+        testContext.expectedStatusCode = [200];
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario()
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalledWith("send", testContext.expectedResponse)
+        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
+        .resDoesReturnSelf("status")
+
+        .shouldAlwaysBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
+        .doesAlwaysReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName1Params)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName2Params)
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName3Params)
+        .doesAlwaysReturn("proxyInstance", "getMiddleName", testContext.getMiddleName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastName1Params)
+        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastName2Params)
+        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastName3Params)
+        .doesAlwaysReturnWithCallback("proxyInstance", "getLastName", testContext.getLastName1Result)
+
+        .test(done);
+    });
+
+    it("should process when using shouldAlways for all proxy calls, and using doesAlways for all proxy calls.", function (done) {
+      testContext.setupGetMiddleName = function () {
+        testContext.getMiddleName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
+        testContext.getMiddleName1Result = random.firstName();
+      };
+
+      testContext.setupGetLastName = function () {
+        testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName1Result = random.lastName();
+      };
+
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = [{
+          personId: testContext.httpRequest.params.personId,
+          homeState: testContext.httpRequest.query.homeState,
+          lastName1: testContext.getLastName1Result,
+          lastName2: testContext.getLastName1Result,
+          lastName3: testContext.getLastName1Result
+        }];
+
+        testContext.expectedStatusCode = [200];
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario()
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalledWith("send", testContext.expectedResponse)
+        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
+        .resDoesReturnSelf("status")
+
+        .shouldAlwaysBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstNameParams)
+        .doesAlwaysReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldAlwaysBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName1Params)
+        .doesAlwaysReturn("proxyInstance", "getMiddleName", testContext.getMiddleName1Result)
+
+        .shouldAlwaysBeCalledWith("proxyInstance", "getLastName", testContext.getLastName1Params)
+        .doesAlwaysReturnWithCallback("proxyInstance", "getLastName", testContext.getLastName1Result)
+
+        .test(done);
+    });
+  });
 });
