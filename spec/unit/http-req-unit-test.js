@@ -6,8 +6,6 @@ const Maddox = require("../../lib/index"), // require("maddox");
   testConstants = require("../test-constants"),
   StatefulSingletonProxy = require("../testable/proxies/stateful-singleton-proxy");
 
-const chai = require("chai");
-
 const Scenario = Maddox.functional.HttpReqScenario;
 
 describe("When using the HttpReqScenario", function () {
