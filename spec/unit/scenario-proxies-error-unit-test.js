@@ -1516,7 +1516,7 @@ describe("When using a Scenario and getting errors", function () {
     };
 
     testContext.setupErrorMessage = function () {
-      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.ComparisonShouldEqual, ["first", "__ResponseMock__", "send", "first"]) +
+      testContext.expectedErrorMessage = ErrorFactory.build(constants.errorMessages.ComparisonShouldEqual, ["first", "HttpResponseMock", "send", "first"]) +
         ": expected { Object (personId, homeState, ...) } to deeply equal { Object (personId, homeState, ...) }";
     };
 
@@ -1593,7 +1593,7 @@ describe("When using a Scenario and getting errors", function () {
     };
 
     testContext.setupErrorMessage = function () {
-      testContext.expectedErrorMessage = "Maddox Runtime Error (3004): Expected the first call to __ResponseMock__.send to have 1 param(s), but it was actually called with 0 param(s).";
+      testContext.expectedErrorMessage = "Maddox Runtime Error (3004): Expected the first call to HttpResponseMock.send to have 1 param(s), but it was actually called with 0 param(s).";
     };
 
     testContext.setupTest();
