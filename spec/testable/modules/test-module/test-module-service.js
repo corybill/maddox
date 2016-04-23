@@ -190,8 +190,6 @@ class Service {
 
   static executeShouldAlwaysDoesAlways(urlParams, queryParams) {
     return new Promise(function (resolve) {
-      preconditions.shouldBeDefined(urlParams.personId, testConstants.MissingPersonIdParam);
-
       var result = {
         personId: urlParams.personId,
         homeState: queryParams.homeState
@@ -204,6 +202,7 @@ class Service {
         promise3 = proxy.getFirstName(urlParams.personId, queryParams.homeState);
 
       Promise.all([promise1, promise2, promise3]).then(function (firstNames) {
+
         let middleName1 = proxy.getMiddleName(urlParams.personId, firstNames[0]),
           middleName2 = proxy.getMiddleName(urlParams.personId, firstNames[1]),
           middleName3 = proxy.getMiddleName(urlParams.personId, firstNames[2]);
@@ -237,6 +236,19 @@ class Service {
 
         proxy.getLastName(urlParams.personId, firstNames[0], middleName1, callback1);
       });
+    });
+  }
+
+  static executeEmptyActual() {
+    return new Promise(function (resolve) {
+      var result = {};
+
+      let proxy = StatelessEs6Proxy;
+
+      proxy.getFirstName().then(function () {
+        resolve(result);
+      });
+
     });
   }
 }

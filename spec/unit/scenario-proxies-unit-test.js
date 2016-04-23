@@ -3,6 +3,7 @@
 const Maddox = require("../../lib/index"), // require("maddox");
   random = require("../random"),
   Controller = require("../testable/modules/test-module/from-http-req-controller"),
+  SpecialScenariosController = require("../testable/modules/test-module/special-scenarios-controller"),
   testConstants = require("../test-constants"),
   StatefulFactoryProxy = require("../testable/proxies/stateful-factory-proxy"),
   StatefulSingletonProxy = require("../testable/proxies/stateful-singleton-proxy"),
@@ -2060,7 +2061,7 @@ describe("When using a Scenario", function () {
       testContext = {};
 
       testContext.setupTest = function () {
-        testContext.entryPointObject = Controller;
+        testContext.entryPointObject = SpecialScenariosController;
         testContext.entryPointFunction = "shouldAlwaysDoesAlways";
         testContext.proxyInstance = StatelessEs6Proxy;
       };
