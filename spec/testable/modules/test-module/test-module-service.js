@@ -241,12 +241,13 @@ class Service {
 
   static executeEmptyActual() {
     return new Promise(function (resolve) {
-      var result = {};
-
       let proxy = StatelessEs6Proxy;
 
       proxy.getFirstName().then(function () {
-        resolve(result);
+        proxy.getMiddleName();
+        proxy.getLastName(undefined, undefined, undefined, function () {
+          resolve();
+        });
       });
 
     });

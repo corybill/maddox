@@ -71,7 +71,7 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
       .withInputParams(testContext.inputParams)
 
-      .shouldBeCalledWith("uuid", "v4", testContext.getFirstNameParams)
+      .shouldBeCalledWith("uuid", "v4", Maddox.constants.EmptyParameters)
       .doesReturn("uuid", "v4", testContext.getFirstNameResult)
 
       .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName1Params)
