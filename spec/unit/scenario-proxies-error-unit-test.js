@@ -9,10 +9,7 @@ const Maddox = require("../../lib/index"), // require("maddox");
   StatelessEs6Proxy = require("../testable/proxies/stateless-es6-proxy"),
   random = require("../random");
 
-const chai = require("chai");
-
-const expect = chai.expect,
-  Scenario = Maddox.functional.HttpReqScenario,
+const Scenario = Maddox.functional.HttpReqScenario,
   FromPromiseScenario = Maddox.functional.FromPromiseScenario,
   FromCallbackScenario = Maddox.functional.FromCallbackScenario,
   FromSynchronousScenario = Maddox.functional.FromSynchronousScenario;
@@ -1940,7 +1937,7 @@ describe("When using a Scenario and getting errors", function () {
         "  ]";
 
       Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
-      expect(err.stack.split(possibleFinisherFunctions).length).eql(2);
+      Maddox.compare.shouldEqual({actual: err.stack.split(possibleFinisherFunctions).length, expected: 2});
     }
 
   });
@@ -1983,7 +1980,7 @@ describe("When using a Scenario and getting errors", function () {
         "  ]";
 
       Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
-      expect(err.stack.split(possibleFinisherFunctions).length).eql(2);
+      Maddox.compare.shouldEqual({actual: err.stack.split(possibleFinisherFunctions).length, expected: 2});
     }
 
   });

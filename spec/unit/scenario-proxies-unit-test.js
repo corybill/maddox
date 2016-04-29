@@ -11,10 +11,7 @@ const Maddox = require("../../lib/index"), // require("maddox");
   StatelessPreEs6SingletonProxy = require("../testable/proxies/stateless-pre-es6-singleton-proxy"),
   StatelessPreEs6StaticProxy = require("../testable/proxies/stateless-pre-es6-static-proxy");
 
-const chai = require("chai");
-
-const Scenario = Maddox.functional.HttpReqScenario,
-  expect = chai.expect;
+const Scenario = Maddox.functional.HttpReqScenario;
 
 describe("When using a Scenario", function () {
   let testContext;
@@ -1900,13 +1897,16 @@ describe("When using a Scenario", function () {
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.intentionalWrongResponse = ["SOME WRONG RESPONSE"];
+        testContext.expectedStatusCode = [404];
 
-        testContext.expectedStatusCode = [200];
+        let debugParams = {
+          actual: testContext.expectedErrorMessage,
+          expected: testContext.intentionalWrongResponse[0],
+          usingShouldAlways: false
+        };
+
+        testContext.expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
       };
     });
 
@@ -1916,11 +1916,6 @@ describe("When using a Scenario", function () {
 
         testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
         testContext.getMiddleNameResult = new Error(testContext.expectedErrorMessage);
-      };
-      testContext.setupExpected = function () {
-        testContext.intentionalWrongResponse = ["SOME WRONG RESPONSE"];
-        testContext.expectedResponse = [testContext.expectedErrorMessage];
-        testContext.expectedStatusCode = [404];
       };
 
       testContext.setupTest();
@@ -1953,8 +1948,7 @@ describe("When using a Scenario", function () {
 
         .test(function (response) {
           try {
-            expect(response.stack.split(`"actual": "${testContext.expectedResponse}"`).length).eql(2);
-            expect(response.stack.split(`"expected": "${testContext.intentionalWrongResponse}"`).length).eql(2);
+            Maddox.compare.shouldEqual({actual: response.stack.split(testContext.expectedResponse).length, expected: 2});
             done();
           } catch (err) {
             done(err);
@@ -1968,11 +1962,6 @@ describe("When using a Scenario", function () {
 
         testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
         testContext.getMiddleNameResult = new Error(testContext.expectedErrorMessage);
-      };
-      testContext.setupExpected = function () {
-        testContext.intentionalWrongResponse = ["SOME WRONG RESPONSE"];
-        testContext.expectedResponse = [testContext.expectedErrorMessage];
-        testContext.expectedStatusCode = [404];
       };
 
       testContext.setupTest();
@@ -2006,8 +1995,7 @@ describe("When using a Scenario", function () {
         .noDebug()
         .test(function (response) {
           try {
-            expect(response.stack.split(`"actual": "${testContext.expectedResponse}"`).length).eql(1);
-            expect(response.stack.split(`"expected": "${testContext.intentionalWrongResponse}"`).length).eql(1);
+            Maddox.compare.shouldEqual({actual: response.stack.split(testContext.expectedResponse).length, expected: 1});
             done();
           } catch (err) {
             done(err);
