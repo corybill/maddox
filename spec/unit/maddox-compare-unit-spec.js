@@ -193,4 +193,13 @@ describe("When statically comparing two items", function () {
         }
       });
   });
+
+  it("it should throw when using Maddox's shouldBeUnreachable function", function () {
+    try {
+      Maddox.compare.shouldBeUnreachable();
+      expect("shouldBeUnreachable should throw an error making it impossible to reach this code").eql(undefined);
+    } catch (err) {
+      expect(err.message).eql("It should be impossible to reach this code.: expected false to deeply equal true");
+    }
+  });
 });
