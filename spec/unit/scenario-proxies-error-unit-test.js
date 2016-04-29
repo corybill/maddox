@@ -6,7 +6,6 @@ const Maddox = require("../../lib/index"), // require("maddox");
   FromPromiseController = require("../testable/modules/test-module/from-promise-controller"),
   FromSynchronousController = require("../testable/modules/test-module/from-synchronous-controller"),
   SpecialScenariosController = require("../testable/modules/test-module/special-scenarios-controller"),
-  Mocha = require("../../lib/proxies/mocha-proxy"),
   StatelessEs6Proxy = require("../testable/proxies/stateless-es6-proxy"),
   random = require("../random");
 
@@ -57,24 +56,18 @@ describe("When using a Scenario and getting errors", function () {
 
     testContext.setupGetLastName = function () {
       testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
-      testContext.getLastNameResult = random.lastName();
+      testContext.getLastNameResult = [undefined, random.lastName()];
     };
 
     testContext.setupExpected = function () {
       testContext.expectedResponse = [{
         personId: testContext.httpRequest.params.personId,
         homeState: testContext.httpRequest.query.homeState,
-        lastName: testContext.getLastNameResult
+        lastName: testContext.getLastNameResult[1]
       }];
 
       testContext.expectedStatusCode = [200];
     };
-  });
-
-  afterEach(function () {
-    if (Mocha.shouldEqual.isSinonProxy) {
-      Mocha.shouldEqual.restore();
-    }
   });
 
   // 4003, 4004
@@ -96,7 +89,7 @@ describe("When using a Scenario and getting errors", function () {
         .withInputParams(testContext.inputParamsArray);
 
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
 
   });
@@ -119,7 +112,7 @@ describe("When using a Scenario and getting errors", function () {
         .withHttpRequest(testContext.httpRequestParams);
 
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
 
   });
@@ -134,11 +127,11 @@ describe("When using a Scenario and getting errors", function () {
 
     try {
       new Scenario()
-        .mockThisFunction({}, "shouldEqual", Mocha);
+        .mockThisFunction({}, "getFirstName", StatelessEs6Proxy);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -152,11 +145,11 @@ describe("When using a Scenario and getting errors", function () {
 
     try {
       new Scenario()
-        .mockThisFunction("Mocha", function () {}, Mocha);
+        .mockThisFunction("StatelessEs6Proxy", function () {}, StatelessEs6Proxy);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -175,11 +168,11 @@ describe("When using a Scenario and getting errors", function () {
 
     try {
       new Scenario()
-        .mockThisFunction("Mocha", "shouldEqual", testContext.stringInput);
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", testContext.stringInput);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -201,9 +194,9 @@ describe("When using a Scenario and getting errors", function () {
       new Scenario()
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -225,9 +218,9 @@ describe("When using a Scenario and getting errors", function () {
       new Scenario()
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -249,9 +242,9 @@ describe("When using a Scenario and getting errors", function () {
       new Scenario()
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -265,12 +258,12 @@ describe("When using a Scenario and getting errors", function () {
 
     try {
       new Scenario()
-        .mockThisFunction("Mocha", "shouldEqual", Mocha)
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .shouldBeCalledWith({}, "shouldEqual", []);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -284,12 +277,12 @@ describe("When using a Scenario and getting errors", function () {
 
     try {
       new Scenario()
-        .mockThisFunction("Mocha", "shouldEqual", Mocha)
-        .shouldBeCalledWith("Mocha", function () {}, []);
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
+        .shouldBeCalledWith("StatelessEs6Proxy", function () {}, []);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -308,12 +301,12 @@ describe("When using a Scenario and getting errors", function () {
 
     try {
       new Scenario()
-        .mockThisFunction("Mocha", "shouldEqual", Mocha)
-        .shouldBeCalledWith("Mocha", "shouldEqual", testContext.shouldBeCalledWithInput);
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
+        .shouldBeCalledWith("StatelessEs6Proxy", "getFirstName", testContext.shouldBeCalledWithInput);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -329,9 +322,9 @@ describe("When using a Scenario and getting errors", function () {
       new Scenario()
         .doesReturn({}, "shouldEqual", {});
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -345,11 +338,11 @@ describe("When using a Scenario and getting errors", function () {
 
     try {
       new Scenario()
-        .doesReturn("Mocha", function () {}, {});
+        .doesReturn("StatelessEs6Proxy", function () {}, {});
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -365,9 +358,9 @@ describe("When using a Scenario and getting errors", function () {
       new Scenario()
         .doesReturnWithPromise({}, "shouldEqual", {});
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -381,11 +374,11 @@ describe("When using a Scenario and getting errors", function () {
 
     try {
       new Scenario()
-        .doesReturnWithPromise("Mocha", function () {}, {});
+        .doesReturnWithPromise("StatelessEs6Proxy", function () {}, {});
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -401,9 +394,9 @@ describe("When using a Scenario and getting errors", function () {
       new Scenario()
         .doesReturnWithCallback({}, "shouldEqual", {});
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -417,11 +410,11 @@ describe("When using a Scenario and getting errors", function () {
 
     try {
       new Scenario()
-        .doesReturnWithCallback("Mocha", function () {}, {});
+        .doesReturnWithCallback("StatelessEs6Proxy", function () {}, {});
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -437,9 +430,9 @@ describe("When using a Scenario and getting errors", function () {
       new Scenario()
         .doesError({}, "shouldEqual", {});
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -453,11 +446,11 @@ describe("When using a Scenario and getting errors", function () {
 
     try {
       new Scenario()
-        .doesError("Mocha", function () {}, {});
+        .doesError("StatelessEs6Proxy", function () {}, {});
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -473,9 +466,9 @@ describe("When using a Scenario and getting errors", function () {
       new Scenario()
         .doesErrorWithPromise({}, "shouldEqual", {});
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -489,11 +482,11 @@ describe("When using a Scenario and getting errors", function () {
 
     try {
       new Scenario()
-        .doesErrorWithPromise("Mocha", function () {}, {});
+        .doesErrorWithPromise("StatelessEs6Proxy", function () {}, {});
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -509,9 +502,9 @@ describe("When using a Scenario and getting errors", function () {
       new Scenario()
         .doesErrorWithCallback({}, "shouldEqual", {});
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -525,11 +518,11 @@ describe("When using a Scenario and getting errors", function () {
 
     try {
       new Scenario()
-        .doesErrorWithCallback("Mocha", function () {}, {});
+        .doesErrorWithCallback("StatelessEs6Proxy", function () {}, {});
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -544,9 +537,9 @@ describe("When using a Scenario and getting errors", function () {
     try {
       new Scenario().test();
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -566,9 +559,9 @@ describe("When using a Scenario and getting errors", function () {
     try {
       new FromCallbackScenario().test();
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -588,9 +581,9 @@ describe("When using a Scenario and getting errors", function () {
     try {
       new FromPromiseScenario().test();
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -610,9 +603,9 @@ describe("When using a Scenario and getting errors", function () {
     try {
       new FromSynchronousScenario().test();
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -627,9 +620,9 @@ describe("When using a Scenario and getting errors", function () {
     try {
       new Scenario().test(function () {});
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -649,9 +642,9 @@ describe("When using a Scenario and getting errors", function () {
     try {
       new FromCallbackScenario().test(function () {});
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -671,9 +664,9 @@ describe("When using a Scenario and getting errors", function () {
     try {
       new FromPromiseScenario().test(function () {});
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -693,18 +686,126 @@ describe("When using a Scenario and getting errors", function () {
     try {
       new FromSynchronousScenario().test(function () {});
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+    }
+  });
+
+  // DoesReturnCallbackDataToReturn 1025
+  it("it should throw when the third parameter in doesReturnWithCallback is not of type Array.", function () {
+    testContext.setupErrorMessage = function () {
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (1025): When calling 'doesReturnWithCallback', the third parameter must be of type Array containing the callback's parameters.";
+    };
+
+    testContext.setupErrorMessage();
+
+    try {
+      new Scenario()
+        .doesReturnWithCallback("StatelessEs6Proxy", "getFirstName", "foo");
+
+      Maddox.compare.shouldBeUnreachable();
+    } catch (err) {
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+    }
+  });
+
+  // DoesAlwaysReturnCallbackDataToReturn 1026
+  it("it should throw when the third parameter in doesAlwaysReturnWithCallback is not of type Array.", function () {
+    testContext.setupErrorMessage = function () {
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (1026): When calling 'doesAlwaysReturnWithCallback', the third parameter must be of type Array containing the callback's parameters.";
+    };
+
+    testContext.setupErrorMessage();
+
+    try {
+      new Scenario()
+        .doesAlwaysReturnWithCallback("StatelessEs6Proxy", "getFirstName", "foo");
+
+      Maddox.compare.shouldBeUnreachable();
+    } catch (err) {
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+    }
+  });
+
+  // DoesErrorCallbackDataToReturn 1027
+  it("it should throw when the third parameter in doesErrorWithCallback is not of type Array.", function () {
+    testContext.setupErrorMessage = function () {
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (1027): When calling 'doesErrorWithCallback', the third parameter must be of type Array containing the callback's parameters.";
+    };
+
+    testContext.setupErrorMessage();
+
+    try {
+      new Scenario()
+        .doesErrorWithCallback("StatelessEs6Proxy", "getFirstName", "foo");
+
+      Maddox.compare.shouldBeUnreachable();
+    } catch (err) {
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+    }
+  });
+
+  // MissingMockThisFunction 2000  && NOT DoesReturnCallbackDataToReturn 1025
+  it("it should ignore when the third parameter in doesReturnWithCallback is an empty object and it should throw because the function wasn't mocked.", function () {
+    testContext.setupErrorMessage = function () {
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.getFirstName, using 'mockThisFunction' before declaring return values.";
+    };
+
+    testContext.setupErrorMessage();
+
+    try {
+      new Scenario()
+        .doesReturnWithCallback("StatelessEs6Proxy", "getFirstName", Maddox.constants.EmptyParameters);
+
+      Maddox.compare.shouldBeUnreachable();
+    } catch (err) {
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+    }
+  });
+
+  // MissingMockThisFunction 2000  && NOT DoesAlwaysReturnCallbackDataToReturn 1026
+  it("it should ignore when the third parameter in doesAlwaysReturnWithCallback is an empty object and it should throw because the function wasn't mocked.", function () {
+    testContext.setupErrorMessage = function () {
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.getFirstName, using 'mockThisFunction' before declaring return values.";
+    };
+
+    testContext.setupErrorMessage();
+
+    try {
+      new Scenario()
+        .doesAlwaysReturnWithCallback("StatelessEs6Proxy", "getFirstName", Maddox.constants.EmptyParameters);
+
+      Maddox.compare.shouldBeUnreachable();
+    } catch (err) {
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+    }
+  });
+
+  // MissingMockThisFunction 2000  && NOT DoesErrorCallbackDataToReturn 1027
+  it("it should ignore when the third parameter in doesErrorWithCallback is an empty object and it should throw because the function wasn't mocked.", function () {
+    testContext.setupErrorMessage = function () {
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.getFirstName, using 'mockThisFunction' before declaring return values.";
+    };
+
+    testContext.setupErrorMessage();
+
+    try {
+      new Scenario()
+        .doesErrorWithCallback("StatelessEs6Proxy", "getFirstName", Maddox.constants.EmptyParameters);
+
+      Maddox.compare.shouldBeUnreachable();
+    } catch (err) {
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
   // MissingMockThisFunction 2000
   it("it should throw when shouldBeCalledWith is given a mock that has yet to be initialized.", function () {
     testContext.setupErrorMessage = function () {
-      testContext.mockName = "Mocha";
+      testContext.mockName = "StatelessEs6Proxy";
       testContext.funcName = "someNotMockedFunction";
-      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock Mocha.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
     };
 
     testContext.setupErrorMessage();
@@ -713,39 +814,39 @@ describe("When using a Scenario and getting errors", function () {
       new Scenario()
         .shouldBeCalledWith(testContext.mockName, testContext.funcName, Maddox.constants.EmptyParameters);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
   // MissingMockThisFunction 2000
   it("it should throw when shouldBeCalledWith is given a mocked function that has yet to be initialized.", function () {
     testContext.setupErrorMessage = function () {
-      testContext.mockName = "Mocha";
+      testContext.mockName = "StatelessEs6Proxy";
       testContext.funcName = "someNotMockedFunction";
-      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock Mocha.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
     };
 
     testContext.setupErrorMessage();
 
     try {
       new Scenario()
-        .mockThisFunction("Mocha", "shouldEqual", Mocha)
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .shouldBeCalledWith(testContext.mockName, testContext.funcName, Maddox.constants.EmptyParameters);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
   // MissingMockThisFunction 2000
   it("it should throw when doesReturn is given a mock that has yet to be initialized.", function () {
     testContext.setupErrorMessage = function () {
-      testContext.mockName = "Mocha";
+      testContext.mockName = "StatelessEs6Proxy";
       testContext.funcName = "someNotMockedFunction";
-      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock Mocha.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
     };
 
     testContext.setupErrorMessage();
@@ -754,39 +855,39 @@ describe("When using a Scenario and getting errors", function () {
       new Scenario()
         .doesReturn(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
   // MissingMockThisFunction 2000
   it("it should throw when doesReturn is given a mocked function that has yet to be initialized.", function () {
     testContext.setupErrorMessage = function () {
-      testContext.mockName = "Mocha";
+      testContext.mockName = "StatelessEs6Proxy";
       testContext.funcName = "someNotMockedFunction";
-      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock Mocha.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
     };
 
     testContext.setupErrorMessage();
 
     try {
       new Scenario()
-        .mockThisFunction("Mocha", "shouldEqual", Mocha)
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .doesReturn(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
   // MissingMockThisFunction 2000
   it("it should throw when doesReturnWithPromise is given a mock that has yet to be initialized.", function () {
     testContext.setupErrorMessage = function () {
-      testContext.mockName = "Mocha";
+      testContext.mockName = "StatelessEs6Proxy";
       testContext.funcName = "someNotMockedFunction";
-      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock Mocha.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
     };
 
     testContext.setupErrorMessage();
@@ -795,80 +896,80 @@ describe("When using a Scenario and getting errors", function () {
       new Scenario()
         .doesReturnWithPromise(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
   // MissingMockThisFunction 2000
   it("it should throw when doesReturnWithPromise is given a mocked function that has yet to be initialized.", function () {
     testContext.setupErrorMessage = function () {
-      testContext.mockName = "Mocha";
+      testContext.mockName = "StatelessEs6Proxy";
       testContext.funcName = "someNotMockedFunction";
-      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock Mocha.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
     };
 
     testContext.setupErrorMessage();
 
     try {
       new Scenario()
-        .mockThisFunction("Mocha", "shouldEqual", Mocha)
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .doesReturnWithPromise(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
   // MissingMockThisFunction 2000
   it("it should throw when doesReturnWithCallback is given a mock that has yet to be initialized.", function () {
     testContext.setupErrorMessage = function () {
-      testContext.mockName = "Mocha";
+      testContext.mockName = "StatelessEs6Proxy";
       testContext.funcName = "someNotMockedFunction";
-      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock Mocha.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
     };
 
     testContext.setupErrorMessage();
 
     try {
       new Scenario()
-        .doesReturnWithCallback(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
+        .doesReturnWithCallback(testContext.mockName, testContext.funcName, Maddox.constants.EmptyParameters);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
   // MissingMockThisFunction 2000
   it("it should throw when doesReturnWithCallback is given a mocked function that has yet to be initialized.", function () {
     testContext.setupErrorMessage = function () {
-      testContext.mockName = "Mocha";
+      testContext.mockName = "StatelessEs6Proxy";
       testContext.funcName = "someNotMockedFunction";
-      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock Mocha.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
     };
 
     testContext.setupErrorMessage();
 
     try {
       new Scenario()
-        .mockThisFunction("Mocha", "shouldEqual", Mocha)
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .doesReturnWithCallback(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
   // MissingMockThisFunction 2000
   it("it should throw when doesError is given a mock that has yet to be initialized.", function () {
     testContext.setupErrorMessage = function () {
-      testContext.mockName = "Mocha";
+      testContext.mockName = "StatelessEs6Proxy";
       testContext.funcName = "someNotMockedFunction";
-      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock Mocha.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
     };
 
     testContext.setupErrorMessage();
@@ -877,39 +978,39 @@ describe("When using a Scenario and getting errors", function () {
       new Scenario()
         .doesError(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
   // MissingMockThisFunction 2000
   it("it should throw when doesError is given a mocked function that has yet to be initialized.", function () {
     testContext.setupErrorMessage = function () {
-      testContext.mockName = "Mocha";
+      testContext.mockName = "StatelessEs6Proxy";
       testContext.funcName = "someNotMockedFunction";
-      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock Mocha.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
     };
 
     testContext.setupErrorMessage();
 
     try {
       new Scenario()
-        .mockThisFunction("Mocha", "shouldEqual", Mocha)
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .doesError(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
   // MissingMockThisFunction 2000
   it("it should throw when doesErrorWithPromise is given a mock that has yet to be initialized.", function () {
     testContext.setupErrorMessage = function () {
-      testContext.mockName = "Mocha";
+      testContext.mockName = "StatelessEs6Proxy";
       testContext.funcName = "someNotMockedFunction";
-      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock Mocha.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
     };
 
     testContext.setupErrorMessage();
@@ -918,71 +1019,71 @@ describe("When using a Scenario and getting errors", function () {
       new Scenario()
         .doesErrorWithPromise(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
   // MissingMockThisFunction 2000
   it("it should throw when doesErrorWithPromise is given a mocked function that has yet to be initialized.", function () {
     testContext.setupErrorMessage = function () {
-      testContext.mockName = "Mocha";
+      testContext.mockName = "StatelessEs6Proxy";
       testContext.funcName = "someNotMockedFunction";
-      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock Mocha.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
     };
 
     testContext.setupErrorMessage();
 
     try {
       new Scenario()
-        .mockThisFunction("Mocha", "shouldEqual", Mocha)
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .doesErrorWithPromise(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
   // MissingMockThisFunction 2000
   it("it should throw when doesErrorWithCallback is given a mock that has yet to be initialized.", function () {
     testContext.setupErrorMessage = function () {
-      testContext.mockName = "Mocha";
+      testContext.mockName = "StatelessEs6Proxy";
       testContext.funcName = "someNotMockedFunction";
-      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock Mocha.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
     };
 
     testContext.setupErrorMessage();
 
     try {
       new Scenario()
-        .doesErrorWithCallback(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
+        .doesErrorWithCallback(testContext.mockName, testContext.funcName, Maddox.constants.EmptyParameters);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
   // MissingMockThisFunction 2000
   it("it should throw when 'doesErrorWithCallback' is given a mocked function that has yet to be initialized.", function () {
     testContext.setupErrorMessage = function () {
-      testContext.mockName = "Mocha";
+      testContext.mockName = "StatelessEs6Proxy";
       testContext.funcName = "someNotMockedFunction";
-      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock Mocha.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
     };
 
     testContext.setupErrorMessage();
 
     try {
       new Scenario()
-        .mockThisFunction("Mocha", "shouldEqual", Mocha)
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .doesErrorWithCallback(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -990,9 +1091,9 @@ describe("When using a Scenario and getting errors", function () {
   it("it should throw when 'mockThisFunction' is given a function to mock doesn't exist in the given object.", function () {
 
     testContext.setupErrorMessage = function () {
-      testContext.mockName = "Mocha";
+      testContext.mockName = "StatelessEs6Proxy";
       testContext.funcName = random.word();
-      testContext.expectedErrorMessage = `Maddox Scenario Build Error (2001): Function ${testContext.funcName} does not exist in mock Mocha.`;
+      testContext.expectedErrorMessage = `Maddox Scenario Build Error (2001): Function ${testContext.funcName} does not exist in mock StatelessEs6Proxy.`;
     };
 
     testContext.setupTest();
@@ -1000,20 +1101,20 @@ describe("When using a Scenario and getting errors", function () {
 
     try {
       new Scenario()
-        .mockThisFunction(testContext.mockName, testContext.funcName, Mocha);
+        .mockThisFunction(testContext.mockName, testContext.funcName, StatelessEs6Proxy);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
   // MockAlreadyExists 2002
   it("it should throw when the same function is mocked more than once.", function () {
     testContext.setupErrorMessage = function () {
-      testContext.mockName = "Mocha";
-      testContext.funcName = "shouldEqual";
-      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2002): Attempted to mock Mocha.shouldEqual, but it was already mocked.";
+      testContext.mockName = "StatelessEs6Proxy";
+      testContext.funcName = "getFirstName";
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (2002): Attempted to mock StatelessEs6Proxy.getFirstName, but it was already mocked.";
     };
 
     testContext.setupTest();
@@ -1021,12 +1122,12 @@ describe("When using a Scenario and getting errors", function () {
 
     try {
       new Scenario()
-        .mockThisFunction(testContext.mockName, testContext.funcName, Mocha)
-        .mockThisFunction(testContext.mockName, testContext.funcName, Mocha);
+        .mockThisFunction(testContext.mockName, testContext.funcName, StatelessEs6Proxy)
+        .mockThisFunction(testContext.mockName, testContext.funcName, StatelessEs6Proxy);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -1057,11 +1158,11 @@ describe("When using a Scenario and getting errors", function () {
       .resDoesReturnSelf("status")
 
       .shouldBeCalledWith("StatelessEs6Proxy", "getFirstName", testContext.getFirstName1Params)
-      .doesReturnWithCallback("StatelessEs6Proxy", "getFirstName", testContext.getFirstName1Result)
+      .doesReturnWithCallback("StatelessEs6Proxy", "getFirstName", [testContext.getFirstName1Result])
 
       .test(function (err) {
         try {
-          expect(err.message).eql(testContext.expectedErrorMessage);
+          Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
           done();
         } catch (testError) {
           done(testError);
@@ -1102,11 +1203,11 @@ describe("When using a Scenario and getting errors", function () {
       .doesReturnWithPromise("StatelessEs6Proxy", "getFirstName", testContext.getFirstName2Result)
 
       .shouldBeCalledWith("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameParams)
-      .doesReturnWithCallback("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameResult)
+      .doesReturnWithCallback("StatelessEs6Proxy", "getMiddleName", [testContext.getMiddleNameResult])
 
       .test(function (err) {
         try {
-          expect(err.message).eql(testContext.expectedErrorMessage);
+          Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
           done();
         } catch (testError) {
           done(testError);
@@ -1140,12 +1241,12 @@ describe("When using a Scenario and getting errors", function () {
       .resShouldBeCalledWith("status", testContext.expectedStatusCode)
       .resDoesReturnSelf("status")
 
-      .shouldBeCalledWith("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameParams)
-      .doesReturnWithCallback("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameResult)
+      .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
+      .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
 
       .test(function (err) {
         try {
-          expect(err.message).eql(testContext.expectedErrorMessage);
+          Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
           done();
         } catch (testError) {
           done(testError);
@@ -1183,11 +1284,11 @@ describe("When using a Scenario and getting errors", function () {
       .doesReturnWithPromise("StatelessEs6Proxy", "getFirstName", testContext.getFirstName1Result)
 
       .shouldBeCalledWith("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameParams)
-      .doesReturnWithCallback("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameResult)
+      .doesReturn("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameResult)
 
       .test(function (err) {
         try {
-          expect(err.message).eql(testContext.expectedErrorMessage);
+          Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
           done();
         } catch (testError) {
           done(testError);
@@ -1240,7 +1341,7 @@ describe("When using a Scenario and getting errors", function () {
       .test(function (err) {
         try {
 
-          expect(err.message).eql(testContext.expectedErrorMessage);
+          Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
           done();
         } catch (testError) {
           done(testError);
@@ -1291,7 +1392,7 @@ describe("When using a Scenario and getting errors", function () {
 
       .test(function (err) {
         try {
-          expect(err.message).eql(testContext.expectedErrorMessage);
+          Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
           done();
         } catch (testError) {
           done(testError);
@@ -1348,7 +1449,7 @@ describe("When using a Scenario and getting errors", function () {
 
       .test(function (err) {
         try {
-          expect(err.message).eql(testContext.expectedErrorMessage);
+          Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
           done();
         } catch (testError) {
           done(testError);
@@ -1406,7 +1507,7 @@ describe("When using a Scenario and getting errors", function () {
 
       .test(function (err) {
         try {
-          expect(err.message).eql(testContext.expectedErrorMessage);
+          Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
           done();
         } catch (testError) {
           done(testError);
@@ -1464,7 +1565,7 @@ describe("When using a Scenario and getting errors", function () {
 
       .test(function (err) {
         try {
-          expect(err.message).eql(testContext.expectedErrorMessage);
+          Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
           done();
         } catch (testError) {
           done(testError);
@@ -1480,7 +1581,7 @@ describe("When using a Scenario and getting errors", function () {
       testContext.actualResponse = [{
         personId: testContext.httpRequest.params.personId,
         homeState: testContext.httpRequest.query.homeState,
-        lastName: testContext.getLastNameResult
+        lastName: testContext.getLastNameResult[1]
       }];
 
       testContext.expectedResponse = [{
@@ -1530,7 +1631,7 @@ describe("When using a Scenario and getting errors", function () {
 
       .test(function (err) {
         try {
-          expect(err.message).eql(testContext.expectedErrorMessage);
+          Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
           done();
         } catch (testError) {
           done(testError);
@@ -1557,7 +1658,7 @@ describe("When using a Scenario and getting errors", function () {
 
     testContext.setupGetLastName = function () {
       testContext.getLastNameParams = [];
-      testContext.getLastNameResult = random.lastName();
+      testContext.getLastNameResult = [undefined, random.lastName()];
     };
 
     testContext.setupExpected = function () {
@@ -1603,7 +1704,7 @@ describe("When using a Scenario and getting errors", function () {
 
       .test(function (err) {
         try {
-          expect(err.message).eql(testContext.expectedErrorMessage);
+          Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
           done();
         } catch (testError) {
           done(testError);
@@ -1632,7 +1733,7 @@ describe("When using a Scenario and getting errors", function () {
 
     testContext.setupGetLastName = function () {
       testContext.getLastNameParams = [];
-      testContext.getLastNameResult = random.lastName();
+      testContext.getLastNameResult = [undefined, random.lastName()];
     };
 
     testContext.setupExpected = function () {
@@ -1676,7 +1777,7 @@ describe("When using a Scenario and getting errors", function () {
 
       .test(function (err) {
         try {
-          expect(err.message).eql(testContext.expectedErrorMessage);
+          Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
           done();
         } catch (testError) {
           done(testError);
@@ -1705,7 +1806,7 @@ describe("When using a Scenario and getting errors", function () {
 
     testContext.setupGetLastName = function () {
       testContext.getLastNameParams = [];
-      testContext.getLastNameResult = random.lastName();
+      testContext.getLastNameResult = [undefined, random.lastName()];
     };
 
     testContext.setupExpected = function () {
@@ -1749,7 +1850,7 @@ describe("When using a Scenario and getting errors", function () {
 
       .test(function (err) {
         try {
-          expect(err.message).eql(testContext.expectedErrorMessage);
+          Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
           done();
         } catch (testError) {
           done(testError);
@@ -1767,12 +1868,12 @@ describe("When using a Scenario and getting errors", function () {
 
     try {
       new Scenario()
-        .mockThisFunction("Mocha", "shouldEqual", Mocha)
-        .resShouldBeCalledWith("Mocha", function () {}, []);
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
+        .resShouldBeCalledWith("StatelessEs6Proxy", function () {}, []);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -1791,12 +1892,12 @@ describe("When using a Scenario and getting errors", function () {
 
     try {
       new Scenario()
-        .mockThisFunction("Mocha", "shouldEqual", Mocha)
-        .resShouldBeCalledWith("Mocha", "shouldEqual", testContext.shouldBeCalledWithInput);
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
+        .resShouldBeCalledWith("StatelessEs6Proxy", "getFirstName", testContext.shouldBeCalledWithInput);
 
-      expect("Should not reach this line of code.").eql(undefined);
+      Maddox.compare.shouldBeUnreachable();
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
   });
 
@@ -1838,7 +1939,7 @@ describe("When using a Scenario and getting errors", function () {
         "    \"end\"\n" +
         "  ]";
 
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
       expect(err.stack.split(possibleFinisherFunctions).length).eql(2);
     }
 
@@ -1881,7 +1982,7 @@ describe("When using a Scenario and getting errors", function () {
         "    \"end\"\n" +
         "  ]";
 
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
       expect(err.stack.split(possibleFinisherFunctions).length).eql(2);
     }
 
@@ -1912,7 +2013,7 @@ describe("When using a Scenario and getting errors", function () {
 
         .test(function () {});
     } catch (err) {
-      expect(err.message).eql(testContext.expectedErrorMessage);
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
     }
 
   });

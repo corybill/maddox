@@ -6,10 +6,7 @@ const Maddox = require("../../lib/index"), // require("maddox");
   testConstants = require("../test-constants"),
   StatelessEs6Proxy = require("../testable/proxies/stateless-es6-proxy");
 
-const chai = require("chai");
-
-const Scenario = Maddox.functional.FromCallbackScenario,
-  expect = chai.expect;
+const Scenario = Maddox.functional.FromCallbackScenario;
 
 describe("FromCallbackScenario", function () {
   let testContext;
@@ -51,14 +48,14 @@ describe("FromCallbackScenario", function () {
 
     testContext.setupGetLastName = function () {
       testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
-      testContext.getLastNameResult = random.lastName();
+      testContext.getLastNameResult = [undefined, random.lastName()];
     };
 
     testContext.setupExpected = function () {
       testContext.expectedResponse = {
         personId: testContext.httpRequest.params.personId,
         homeState: testContext.httpRequest.query.homeState,
-        lastName: testContext.getLastNameResult
+        lastName: testContext.getLastNameResult[1]
       };
 
       testContext.expectedStatusCode = [200];
@@ -96,8 +93,8 @@ describe("FromCallbackScenario", function () {
       .perf(this.test.fullTitle())
       .test(function (err, response) {
         try {
-          expect(err).eql(undefined);
-          expect(response).eql(testContext.expectedResponse);
+          Maddox.compare.shouldEqual({actual: err, expected: undefined});
+          Maddox.compare.shouldEqual({actual: response, expected: testContext.expectedResponse});
           done();
         } catch (testError) {
           done(testError);
@@ -140,8 +137,8 @@ describe("FromCallbackScenario", function () {
 
       .test(function (err, response) {
         try {
-          expect(err.message).eql(testContext.expectedResponse);
-          expect(response).eql(undefined);
+          Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedResponse});
+          Maddox.compare.shouldEqual({actual: response, expected: undefined});
           done();
         } catch (testError) {
           done(testError);

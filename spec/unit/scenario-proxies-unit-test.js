@@ -141,58 +141,18 @@ describe("When using a Scenario", function () {
 
       testContext.setupGetLastName = function () {
         testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = random.lastName();
+        testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
         testContext.expectedResponse = [{
           personId: testContext.httpRequest.params.personId,
           homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult
+          lastName: testContext.getLastNameResult[1]
         }];
 
         testContext.expectedStatusCode = [200];
       };
-    });
-
-    it("it should pass all tests.", function (done) {
-      testContext.setupTest();
-      testContext.setupHttpRequest();
-      testContext.setupGetFirstName();
-      testContext.setupGetMiddleName();
-      testContext.setupGetLastName();
-      testContext.setupExpected();
-
-      new Scenario()
-        .mockThisFunction("StatefulFactoryProxy", "factory", StatefulFactoryProxy)
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
-
-        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-        .withHttpRequest(testContext.httpRequestParams)
-
-        .resShouldBeCalledWith("send", testContext.expectedResponse)
-        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resDoesReturnSelf("status")
-
-        .shouldBeCalledWith("StatefulFactoryProxy", "factory", Maddox.constants.EmptyParameters)
-        .doesReturn("StatefulFactoryProxy", "factory", testContext.proxyInstance)
-
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
-
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
-
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
-
-        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
-        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
-
-        .perf(this.test.fullTitle())
-        .test(done);
     });
 
     it("it should pass all tests.", function (done) {
@@ -416,7 +376,7 @@ describe("When using a Scenario", function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
         testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = new Error(testContext.expectedErrorMessage);
+        testContext.getLastNameResult = [new Error(testContext.expectedErrorMessage)];
       };
       testContext.setupExpected = function () {
         testContext.expectedResponse = [testContext.expectedErrorMessage];
@@ -547,14 +507,14 @@ describe("When using a Scenario", function () {
 
       testContext.setupGetLastName = function () {
         testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = random.lastName();
+        testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
         testContext.expectedResponse = [{
           personId: testContext.httpRequest.params.personId,
           homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult
+          lastName: testContext.getLastNameResult[1]
         }];
 
         testContext.expectedStatusCode = [200];
@@ -782,7 +742,7 @@ describe("When using a Scenario", function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
         testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = new Error(testContext.expectedErrorMessage);
+        testContext.getLastNameResult = [new Error(testContext.expectedErrorMessage)];
       };
       testContext.setupExpected = function () {
         testContext.expectedResponse = [testContext.expectedErrorMessage];
@@ -913,14 +873,14 @@ describe("When using a Scenario", function () {
 
       testContext.setupGetLastName = function () {
         testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = random.lastName();
+        testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
         testContext.expectedResponse = [{
           personId: testContext.httpRequest.params.personId,
           homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult
+          lastName: testContext.getLastNameResult[1]
         }];
 
         testContext.expectedStatusCode = [200];
@@ -1131,7 +1091,7 @@ describe("When using a Scenario", function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
         testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = new Error(testContext.expectedErrorMessage);
+        testContext.getLastNameResult = [new Error(testContext.expectedErrorMessage)];
       };
       testContext.setupExpected = function () {
         testContext.expectedResponse = [testContext.expectedErrorMessage];
@@ -1254,14 +1214,14 @@ describe("When using a Scenario", function () {
 
       testContext.setupGetLastName = function () {
         testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = random.lastName();
+        testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
         testContext.expectedResponse = [{
           personId: testContext.httpRequest.params.personId,
           homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult
+          lastName: testContext.getLastNameResult[1]
         }];
 
         testContext.expectedStatusCode = [200];
@@ -1472,7 +1432,7 @@ describe("When using a Scenario", function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
         testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = new Error(testContext.expectedErrorMessage);
+        testContext.getLastNameResult = [new Error(testContext.expectedErrorMessage)];
       };
       testContext.setupExpected = function () {
         testContext.expectedResponse = [testContext.expectedErrorMessage];
@@ -1595,14 +1555,14 @@ describe("When using a Scenario", function () {
 
       testContext.setupGetLastName = function () {
         testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = random.lastName();
+        testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
         testContext.expectedResponse = [{
           personId: testContext.httpRequest.params.personId,
           homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult
+          lastName: testContext.getLastNameResult[1]
         }];
 
         testContext.expectedStatusCode = [200];
@@ -1813,7 +1773,7 @@ describe("When using a Scenario", function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
         testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = new Error(testContext.expectedErrorMessage);
+        testContext.getLastNameResult = [new Error(testContext.expectedErrorMessage)];
       };
       testContext.setupExpected = function () {
         testContext.expectedResponse = [testContext.expectedErrorMessage];
@@ -1898,7 +1858,7 @@ describe("When using a Scenario", function () {
     });
   });
 
-  describe("and using the debug flag", function () {
+  describe("and using the noDebug flag", function () {
     beforeEach(function () {
       testContext = {};
 
@@ -1936,14 +1896,14 @@ describe("When using a Scenario", function () {
 
       testContext.setupGetLastName = function () {
         testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
-        testContext.getLastNameResult = random.lastName();
+        testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
         testContext.expectedResponse = [{
           personId: testContext.httpRequest.params.personId,
           homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult
+          lastName: testContext.getLastNameResult[1]
         }];
 
         testContext.expectedStatusCode = [200];
@@ -2099,29 +2059,29 @@ describe("When using a Scenario", function () {
 
       testContext.setupGetLastName = function () {
         testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
-        testContext.getLastName1Result = random.lastName();
+        testContext.getLastName1Result = [undefined, random.lastName()];
 
         testContext.getLastName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleName2Result];
-        testContext.getLastName2Result = random.lastName();
+        testContext.getLastName2Result = [undefined, random.lastName()];
 
         testContext.getLastName3Params = [testContext.httpRequest.params.personId, testContext.getFirstName3Result, testContext.getMiddleName3Result];
-        testContext.getLastName3Result = random.lastName();
+        testContext.getLastName3Result = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
         testContext.expectedResponse = [{
           personId: testContext.httpRequest.params.personId,
           homeState: testContext.httpRequest.query.homeState,
-          lastName1: testContext.getLastName1Result,
-          lastName2: testContext.getLastName2Result,
-          lastName3: testContext.getLastName3Result
+          lastName1: testContext.getLastName1Result[1],
+          lastName2: testContext.getLastName2Result[1],
+          lastName3: testContext.getLastName3Result[1]
         }];
 
         testContext.expectedStatusCode = [200];
       };
     });
 
-    it("should process when using shouldAlways for some proxy calls, but not using doesAlways for any proxy calls.", function (done) {
+    it("it should process when using shouldAlways for some proxy calls, but not using doesAlways for any proxy calls.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -2167,7 +2127,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("should process when using shouldAlways for some proxy calls, and using doesAlways for some proxy calls.", function (done) {
+    it("it should process when using shouldAlways for some proxy calls, and using doesAlways for some proxy calls.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.getMiddleName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
         testContext.getMiddleName1Result = random.firstName();
@@ -2181,13 +2141,13 @@ describe("When using a Scenario", function () {
 
       testContext.setupGetLastName = function () {
         testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
-        testContext.getLastName1Result = random.lastName();
+        testContext.getLastName1Result = [undefined, random.lastName()];
 
         testContext.getLastName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName2Result];
-        testContext.getLastName2Result = random.lastName();
+        testContext.getLastName2Result = [undefined, random.lastName()];
 
         testContext.getLastName3Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName3Result];
-        testContext.getLastName3Result = random.lastName();
+        testContext.getLastName3Result = [undefined, random.lastName()];
       };
 
       testContext.setupTest();
@@ -2233,7 +2193,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("should process when using shouldAlways for some proxy calls, and using doesAlways for all proxy calls.", function (done) {
+    it("it should process when using shouldAlways for some proxy calls, and using doesAlways for all proxy calls.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.getMiddleName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
         testContext.getMiddleName1Result = random.firstName();
@@ -2247,22 +2207,22 @@ describe("When using a Scenario", function () {
 
       testContext.setupGetLastName = function () {
         testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
-        testContext.getLastName1Result = random.lastName();
+        testContext.getLastName1Result = [undefined, random.lastName()];
 
         testContext.getLastName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
-        testContext.getLastName2Result = random.lastName();
+        testContext.getLastName2Result = [undefined, random.lastName()];
 
         testContext.getLastName3Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
-        testContext.getLastName3Result = random.lastName();
+        testContext.getLastName3Result = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
         testContext.expectedResponse = [{
           personId: testContext.httpRequest.params.personId,
           homeState: testContext.httpRequest.query.homeState,
-          lastName1: testContext.getLastName1Result,
-          lastName2: testContext.getLastName1Result,
-          lastName3: testContext.getLastName1Result
+          lastName1: testContext.getLastName1Result[1],
+          lastName2: testContext.getLastName1Result[1],
+          lastName3: testContext.getLastName1Result[1]
         }];
 
         testContext.expectedStatusCode = [200];
@@ -2303,7 +2263,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("should process when using shouldAlways for all proxy calls, and using doesAlways for all proxy calls.", function (done) {
+    it("it should process when using shouldAlways for all proxy calls, and using doesAlways for all proxy calls.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.getMiddleName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
         testContext.getMiddleName1Result = random.firstName();
@@ -2311,16 +2271,16 @@ describe("When using a Scenario", function () {
 
       testContext.setupGetLastName = function () {
         testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
-        testContext.getLastName1Result = random.lastName();
+        testContext.getLastName1Result = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
         testContext.expectedResponse = [{
           personId: testContext.httpRequest.params.personId,
           homeState: testContext.httpRequest.query.homeState,
-          lastName1: testContext.getLastName1Result,
-          lastName2: testContext.getLastName1Result,
-          lastName3: testContext.getLastName1Result
+          lastName1: testContext.getLastName1Result[1],
+          lastName2: testContext.getLastName1Result[1],
+          lastName3: testContext.getLastName1Result[1]
         }];
 
         testContext.expectedStatusCode = [200];

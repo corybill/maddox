@@ -6,11 +6,9 @@ const Maddox = require("../../lib/index"), // require("maddox");
   testConstants = require("../test-constants"),
   StatelessEs6Proxy = require("../testable/proxies/stateless-es6-proxy");
 
-const chai = require("chai"),
-  uuid = require("node-uuid");
+const uuid = require("node-uuid");
 
-const Scenario = Maddox.functional.FromSynchronousScenario,
-  expect = chai.expect;
+const Scenario = Maddox.functional.FromSynchronousScenario;
 
 describe("When using FromSynchronousScenario and getting errors", function () {
   let testContext;
@@ -83,8 +81,8 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       .perf(this.test.fullTitle())
       .test(function (err, response) {
         try {
-          expect(err).eql(undefined);
-          expect(response).eql(testContext.expectedResponse);
+          Maddox.compare.shouldEqual({actual: err, expected: undefined});
+          Maddox.compare.shouldEqual({actual: response, expected: testContext.expectedResponse});
           done();
         } catch (testError) {
           done(testError);
@@ -123,8 +121,8 @@ describe("When using FromSynchronousScenario and getting errors", function () {
 
       .test(function (err, response) {
         try {
-          expect(err.message).eql(testContext.expectedResponse);
-          expect(response).eql(undefined);
+          Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedResponse});
+          Maddox.compare.shouldEqual({actual: response, expected: undefined});
           done();
         } catch (testError) {
           done(testError);

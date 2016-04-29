@@ -48,14 +48,14 @@ describe("When using the HttpReqScenario", function () {
 
     testContext.setupGetLastName = function () {
       testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
-      testContext.getLastNameResult = random.lastName();
+      testContext.getLastNameResult = [undefined, random.lastName()];
     };
 
     testContext.setupExpected = function () {
       testContext.expectedResponse = [{
         personId: testContext.httpRequest.params.personId,
         homeState: testContext.httpRequest.query.homeState,
-        lastName: testContext.getLastNameResult
+        lastName: testContext.getLastNameResult[1]
       }];
 
       testContext.expectedStatusCode = [200];
