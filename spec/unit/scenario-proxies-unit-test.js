@@ -1950,7 +1950,7 @@ describe("When using a Scenario", function () {
       };
     });
 
-    it("it should add the full object print out of actual and expected when the debug flag is set.", function (done) {
+    it("it should add the full object print out of actual and expected when the noDebug flag is NOT set.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -1991,7 +1991,6 @@ describe("When using a Scenario", function () {
         .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
         .doesError("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
 
-        .debug()
         .test(function (response) {
           try {
             expect(response.stack.split(`"actual": "${testContext.expectedResponse}"`).length).eql(2);
@@ -2003,7 +2002,7 @@ describe("When using a Scenario", function () {
         });
     });
 
-    it("it should NOT add the full object print out of actual and expected when the debug flag is NOT set.", function (done) {
+    it("it should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -2044,6 +2043,7 @@ describe("When using a Scenario", function () {
         .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
         .doesError("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
 
+        .noDebug()
         .test(function (response) {
           try {
             expect(response.stack.split(`"actual": "${testContext.expectedResponse}"`).length).eql(1);
