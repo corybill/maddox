@@ -51,22 +51,22 @@
     }
   ],
   "dependencies": {
-    "benchmark": "^2.1.0",
-    "bluebird": "^3.3.4",
+    "benchmark": "2.1.0",
+    "bluebird": "3.3.4",
     "chai": "3.5.0",
-    "errr": "^2.0.2",
-    "fs-extra": "^0.26.5",
-    "lodash": "^4.6.1",
+    "errr": "2.1.1",
+    "fs-extra": "0.26.5",
+    "lodash": "4.6.1",
     "mocha": "2.4.5",
-    "preconditions": "^2.0.8",
+    "preconditions": "2.0.8",
     "sinon": "1.17.3"
   },
   "devDependencies": {
-    "chance": "^1.0.1",
-    "eslint": "^2.3.0",
+    "chance": "1.0.1",
+    "eslint": "2.3.0",
     "fs": "0.0.2",
-    "istanbul": "^0.4.2",
-    "node-uuid": "^1.4.7",
-    "semver": "^5.1.0"
+    "istanbul": "0.4.2",
+    "node-uuid": "1.4.7",
+    "semver": "5.1.0"
   }
 }
