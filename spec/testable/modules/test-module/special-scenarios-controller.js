@@ -23,6 +23,16 @@ class Controller {
 
     });
   }
+
+  static modifyingContext(req, res) {
+    Service.executeModifiyingContext().then(function (context) {
+      res.status(200).send(context);
+
+    }).catch(function (err) {
+      res.status(404).send(err.message);
+
+    });
+  }
 }
 
 module.exports = Controller;

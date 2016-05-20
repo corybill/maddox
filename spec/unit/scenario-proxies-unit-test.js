@@ -97,51 +97,6 @@ describe("When using a Scenario", function () {
 
         .test(done);
     });
-
-    it("it should test the mock inputParams with the state that they were called in", function (done) {
-      const newInputParams = [];
-      const newExpectedResponse = {foo: "b"};
-      const newTestContext = {};
-      const newTestMock = {};
-      const newTestMockParams = [{foo: "a"}];
-      const newTestMockResponse = [{foo: "a"}];
-
-      newTestMock.newTestFunction = function (input, callback) {
-        return callback(input);
-      };
-      newTestContext.entryPointObject = {};
-      newTestContext.entryPointObject.entryPointFunction = function (callback) {
-        const dynamicInput = {foo: "a"};
-
-        newTestMock.newTestFunction(dynamicInput, function (input) {
-          return input;
-        });
-        dynamicInput.foo = "b";
-        return callback(undefined, dynamicInput);
-      };
-
-      const NewScenario = Maddox.functional.FromCallbackScenario;
-
-      new NewScenario()
-        .mockThisFunction("newTestMock", "newTestFunction", newTestMock)
-
-        .withEntryPoint(newTestContext.entryPointObject, "entryPointFunction")
-        .withInputParams(newInputParams)
-
-        .shouldBeCalledWith("newTestMock", "newTestFunction", newTestMockParams)
-        .doesReturnWithCallback("newTestMock", "newTestFunction", newTestMockResponse)
-
-        .test(function (err, response) {
-          try {
-            Maddox.compare.shouldEqual({actual: err, expected: undefined});
-            Maddox.compare.shouldEqual({actual: response, expected: newExpectedResponse});
-            done();
-          } catch (testError) {
-            done(testError);
-          }
-        });
-    });
-
   });
 
   describe("and using a stateful factory proxy", function () {
@@ -2345,6 +2300,73 @@ describe("When using a Scenario", function () {
 
         .shouldAlwaysBeCalledWith("proxyInstance", "getLastName", testContext.getLastName1Params)
         .doesAlwaysReturnWithCallback("proxyInstance", "getLastName", testContext.getLastName1Result)
+
+        .test(done);
+    });
+  });
+
+  describe("and changing the state of a shouldBeCalledWith through out the code", function () {
+    beforeEach(function () {
+      testContext = {};
+
+      testContext.setupTest = function () {
+        testContext.entryPointObject = SpecialScenariosController;
+        testContext.entryPointFunction = "modifyingContext";
+        testContext.proxyInstance = StatelessEs6Proxy;
+      };
+
+      testContext.setupHttpRequest = function () {
+        testContext.httpRequest = {};
+        testContext.httpRequestParams = [testContext.httpRequest];
+      };
+
+      testContext.setupGetFirstName = function () {
+        testContext.getFirstName1Params = [{
+          someValue1: "first"
+        }];
+        testContext.getFirstName2Params = [{
+          someValue1: "first",
+          someValue2: "second"
+        }];
+        testContext.getFirstName3Params = [{
+          someValue1: "first",
+          someValue2: "second",
+          someValue3: "third"
+        }];
+        testContext.getFirstNameResult = random.firstName();
+      };
+
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = [{
+          someValue1: "first",
+          someValue2: "second",
+          someValue3: "third"
+        }];
+
+        testContext.expectedStatusCode = [200];
+      };
+    });
+
+    it("it should test the mock inputParams with the state that they were called with.", function (done) {
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupExpected();
+
+      new Scenario()
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalledWith("send", testContext.expectedResponse)
+        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
+        .resDoesReturnSelf("status")
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName3Params)
+        .doesAlwaysReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstNameResult)
 
         .test(done);
     });

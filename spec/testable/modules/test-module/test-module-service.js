@@ -252,6 +252,26 @@ class Service {
 
     });
   }
+
+  static executeModifiyingContext() {
+    return new Promise(function (resolve) {
+      let proxy = StatelessEs6Proxy,
+        context = {
+          someValue1: "first"
+        };
+
+      proxy.getFirstName(context).then(function () {
+        context.someValue2 = "second";
+        return proxy.getFirstName(context);
+      }).then(function () {
+        context.someValue3 = "third";
+        return proxy.getFirstName(context);
+      }).then(function () {
+        resolve(context);
+      });
+
+    });
+  }
 }
 
 module.exports = Service;
