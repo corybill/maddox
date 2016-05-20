@@ -194,6 +194,114 @@ describe("When statically comparing two items", function () {
       });
   });
 
+  it("it should pass when shouldBeTruthy comparison is given true value.", function () {
+    try {
+      Maddox.compare.shouldBeTruthy({value: true});
+      expect("I should be here.").to.be.ok; // eslint-disable-line
+    } catch (err) {
+      Maddox.compare.shouldBeUnreachable();
+    }
+  });
+
+  it("it should pass when shouldBeTruthy comparison is given a defined value.", function () {
+    try {
+      Maddox.compare.shouldBeTruthy({value: "SomeDefinedValue"});
+      expect("I should be here.").to.be.ok; // eslint-disable-line
+    } catch (err) {
+      Maddox.compare.shouldBeUnreachable();
+    }
+  });
+
+  it("it should throw when shouldBeTruthy comparison is given a false value.", function () {
+    try {
+      Maddox.compare.shouldBeTruthy({value: false});
+      Maddox.compare.shouldBeUnreachable();
+    } catch (err) {
+      Maddox.compare.shouldEqual({actual: err.message, expected: "expected false to be truthy"});
+    }
+  });
+
+  it("it should throw when shouldBeTruthy comparison is given an undefined value.", function () {
+    try {
+      Maddox.compare.shouldBeTruthy({value: undefined});
+      Maddox.compare.shouldBeUnreachable();
+    } catch (err) {
+      Maddox.compare.shouldEqual({actual: err.message, expected: "expected undefined to be truthy"});
+    }
+  });
+
+  it("it should pass when shouldBeFalsey comparison is given false value.", function () {
+    try {
+      Maddox.compare.shouldBeFalsey({value: false});
+      expect("I should be here.").to.be.ok; // eslint-disable-line
+    } catch (err) {
+      Maddox.compare.shouldBeUnreachable();
+    }
+  });
+
+  it("it should pass when shouldBeFalsey comparison is given an undefined value.", function () {
+    try {
+      Maddox.compare.shouldBeFalsey({value: undefined});
+      expect("I should be here.").to.be.ok; // eslint-disable-line
+    } catch (err) {
+      Maddox.compare.shouldBeUnreachable();
+    }
+  });
+
+  it("it should throw when shouldBeFalsey comparison is given a true value.", function () {
+    try {
+      Maddox.compare.shouldBeFalsey({value: true});
+      Maddox.compare.shouldBeUnreachable();
+    } catch (err) {
+      Maddox.compare.shouldEqual({actual: err.message, expected: "expected true to be falsy"});
+    }
+  });
+
+  it("it should throw when shouldBeFalsey comparison is given a defined value.", function () {
+    try {
+      Maddox.compare.shouldBeFalsey({value: "SomeDefinedValue"});
+      Maddox.compare.shouldBeUnreachable();
+    } catch (err) {
+      Maddox.compare.shouldEqual({actual: err.message, expected: "expected 'SomeDefinedValue' to be falsy"});
+    }
+  });
+
+  it("it should pass when shouldBeFalsy comparison is given false value.", function () {
+    try {
+      Maddox.compare.shouldBeFalsy({value: false});
+      expect("I should be here.").to.be.ok; // eslint-disable-line
+    } catch (err) {
+      Maddox.compare.shouldBeUnreachable();
+    }
+  });
+
+  it("it should pass when shouldBeFalsy comparison is given an undefined value.", function () {
+    try {
+      Maddox.compare.shouldBeFalsy({value: undefined});
+      expect("I should be here.").to.be.ok; // eslint-disable-line
+    } catch (err) {
+      Maddox.compare.shouldBeUnreachable();
+    }
+  });
+
+  it("it should throw when shouldBeFalsy comparison is given a true value.", function () {
+    try {
+      Maddox.compare.shouldBeFalsy({value: true});
+      Maddox.compare.shouldBeUnreachable();
+    } catch (err) {
+      Maddox.compare.shouldEqual({actual: err.message, expected: "expected true to be falsy"});
+    }
+  });
+
+  it("it should throw when shouldBeFalsy comparison is given a defined value.", function () {
+    try {
+      Maddox.compare.shouldBeFalsy({value: "SomeDefinedValue"});
+      Maddox.compare.shouldBeUnreachable();
+    } catch (err) {
+      Maddox.compare.shouldEqual({actual: err.message, expected: "expected 'SomeDefinedValue' to be falsy"});
+    }
+  });
+
   it("it should throw when using Maddox's shouldBeUnreachable function", function () {
     try {
       Maddox.compare.shouldBeUnreachable();
