@@ -98,6 +98,50 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
+    it("it should test the mock inputParams with the state that they were called in", function (done) {
+      const newInputParams = [];
+      const newExpectedResponse = {foo: "b"};
+      const newTestContext = {};
+      const newTestMock = {};
+      const newTestMockParams = [{foo: "a"}];
+      const newTestMockResponse = [{foo: "a"}];
+
+      newTestMock.newTestFunction = function (input, callback) {
+        return callback(input);
+      };
+      newTestContext.entryPointObject = {};
+      newTestContext.entryPointObject.entryPointFunction = function (callback) {
+        const dynamicInput = {foo: "a"};
+
+        newTestMock.newTestFunction(dynamicInput, function (input) {
+          return input;
+        });
+        dynamicInput.foo = "b";
+        return callback(undefined, dynamicInput);
+      };
+
+      const NewScenario = Maddox.functional.FromCallbackScenario;
+
+      new NewScenario()
+        .mockThisFunction("newTestMock", "newTestFunction", newTestMock)
+
+        .withEntryPoint(newTestContext.entryPointObject, "entryPointFunction")
+        .withInputParams(newInputParams)
+
+        .shouldBeCalledWith("newTestMock", "newTestFunction", newTestMockParams)
+        .doesReturnWithCallback("newTestMock", "newTestFunction", newTestMockResponse)
+
+        .test(function (err, response) {
+          try {
+            Maddox.compare.shouldEqual({actual: err, expected: undefined});
+            Maddox.compare.shouldEqual({actual: response, expected: newExpectedResponse});
+            done();
+          } catch (testError) {
+            done(testError);
+          }
+        });
+    });
+
   });
 
   describe("and using a stateful factory proxy", function () {
