@@ -1591,7 +1591,7 @@ describe("When using a Scenario and getting errors", function () {
     };
 
     testContext.setupErrorMessage = function () {
-      testContext.expectedErrorMessage = "Maddox Comparison Error (3003): Failed expectation for the first param in mock HttpResponseMock.send, the first time the mock was called ::::: expected { Object (personId, homeState, ...) } to deeply equal { Object (personId, homeState, ...) }";
+      testContext.expectedErrorMessage = "Maddox Comparison Error (3003): Failed expectation for the first param in mock HttpResponseMock.send (i.e. res.send), the first time the mock was called ::::: expected { Object (personId, homeState, ...) } to deeply equal { Object (personId, homeState, ...) }";
     };
 
     testContext.setupTest();
