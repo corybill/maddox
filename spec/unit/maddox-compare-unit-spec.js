@@ -63,7 +63,8 @@ describe("When statically comparing two items", function () {
     testContext.setupExpected = function () {
       let debugParams = {
         actual: testContext.lhs,
-        expected: testContext.rhs
+        expected: testContext.rhs,
+        usingShouldAlways: "undefined"
       };
 
       testContext.expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
