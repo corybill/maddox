@@ -2372,7 +2372,7 @@ describe("When using a Scenario", function () {
     });
   });
 
-  describe.only("and using shouldAlwaysIgnore", function () {
+  describe("and using shouldAlwaysIgnore", function () {
     beforeEach(function () {
       testContext = {};
 
