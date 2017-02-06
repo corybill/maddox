@@ -1901,8 +1901,7 @@ describe("When using a Scenario", function () {
 
         let debugParams = {
           actual: testContext.expectedErrorMessage,
-          expected: testContext.intentionalWrongResponse[0],
-          usingShouldAlways: false
+          expected: testContext.intentionalWrongResponse[0]
         };
 
         testContext.expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);

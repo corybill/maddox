@@ -4,311 +4,590 @@ const Maddox = require("../../lib/index"),
   chai = require("chai"),
   random = require("../random");
 
-const Scenario = Maddox.functional.FromSynchronousScenario,
-  expect = chai.expect;
+const expect = chai.expect;
 
-describe("When statically comparing two items", function () {
+describe("When statically comparing two items using", function () {
   let testContext;
 
-  beforeEach(function () {
-    testContext = {};
+  describe("equal", () => {
+    beforeEach(function () {
+      testContext = {};
 
-    testContext.setupValues = function () {
-      testContext.field1 = random.uniqueId();
-      testContext.field2 = random.uniqueId();
-      testContext.field3 = random.uniqueId();
-      testContext.field4 = random.uniqueId();
-      testContext.message = random.uniqueId();
-    };
-    testContext.setupLhs = function () {
-      testContext.lhs = {
-        field1: testContext.field2,
-        field2: testContext.field2,
-        array1: [testContext.field3, testContext.field4]
+      testContext.setupValues = function () {
+        testContext.field1 = random.uniqueId();
+        testContext.field2 = random.uniqueId();
+        testContext.field3 = random.uniqueId();
+        testContext.field4 = random.uniqueId();
+        testContext.message = random.uniqueId();
       };
-    };
-    testContext.setupRhs = function () {
-      testContext.rhs = {
-        field1: testContext.field2,
-        field2: testContext.field2,
-        array1: [testContext.field3, testContext.field4]
+      testContext.setupLhs = function () {
+        testContext.lhs = {
+          field1: testContext.field2,
+          field2: testContext.field2,
+          array1: [testContext.field3, testContext.field4]
+        };
       };
-    };
-    testContext.setupTest = function () {
-      testContext.inputParams = {
-        actual: testContext.lhs,
-        expected: testContext.rhs,
-        message: testContext.message
+      testContext.setupRhs = function () {
+        testContext.rhs = {
+          field1: testContext.field2,
+          field2: testContext.field2,
+          array1: [testContext.field3, testContext.field4]
+        };
       };
-      testContext.entryPointObject = {
-        run: function () {
-          Maddox.compare.shouldEqual(testContext.inputParams);
-        }
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = `${testContext.message}: expected { Object (field1, field2, ...) } to deeply equal { Object (field1, field2, ...) }`;
       };
-      testContext.entryPointFunction = "run";
-    };
-    testContext.setupExpected = function () {
-      testContext.expectedResponse = `${testContext.message}: expected { Object (field1, field2, ...) } to deeply equal { Object (field1, field2, ...) }`;
-    };
-  });
+    });
 
-  it("it should add the full object print out of actual and expected when the noDebug flag is NOT set.", function (done) {
-    testContext.setupRhs = function () {
-      testContext.rhs = {
-        field1: testContext.field2,
-        field2: testContext.field2,
-        array1: [testContext.field4, testContext.field3]
+    it("it should add the full object print out of actual and expected when the noDebug flag is NOT set.", function () {
+      try {
+        Maddox.compare.equal(true, false, undefined, {noDebug: false});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        const debugParams = {
+          actual: true,
+          expected: false
+        };
+
+        const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+
+        expect(err.stack.split(expectedResponse).length).eql(2);
+      }
+    });
+
+    it("it should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function () {
+      try {
+        Maddox.compare.equal(true, false, undefined, {noDebug: true});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        const debugParams = {
+          actual: true,
+          expected: false
+        };
+
+        const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+
+        expect(err.stack.split(expectedResponse).length).eql(1);
+      }
+    });
+
+    it("it should throw when the items DO NOT equal", function (done) {
+      testContext.setupRhs = function () {
+        testContext.rhs = {
+          field1: testContext.field2,
+          field2: testContext.field2,
+          array1: [testContext.field4, testContext.field3]
+        };
       };
-    };
-    testContext.setupExpected = function () {
-      let debugParams = {
-        actual: testContext.lhs,
-        expected: testContext.rhs,
-        usingShouldAlways: "undefined"
-      };
 
-      testContext.expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
-    };
+      testContext.setupValues();
+      testContext.setupLhs();
+      testContext.setupRhs();
+      testContext.setupExpected();
 
-    testContext.setupValues();
-    testContext.setupLhs();
-    testContext.setupRhs();
-    testContext.setupTest();
-    testContext.setupExpected();
-
-    new Scenario()
-      .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-      .withInputParams(Maddox.constants.EmptyParameters)
-
-      .test(function (err, response) {
+      try {
+        Maddox.compare.equal(testContext.lhs, testContext.rhs);
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
         try {
-          expect(err.stack.split(testContext.expectedResponse).length).eql(2);
-          expect(response).eql(undefined);
+          expect(err.message).to.be.ok; // eslint-disable-line
           done();
         } catch (mochaErr) {
           done(mochaErr);
         }
-      });
+      }
+    });
+
+    it("it should pass when the items DO equal", function () {
+      testContext.setupValues();
+      testContext.setupLhs();
+      testContext.setupRhs();
+      testContext.setupExpected();
+
+      try {
+        Maddox.compare.equal(testContext.lhs, testContext.rhs);
+        expect("I should be here.").to.be.ok; // eslint-disable-line
+      } catch (err) {
+        Maddox.compare.shouldBeUnreachable();
+      }
+    });
   });
 
-  it("it should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function (done) {
-    testContext.setupRhs = function () {
-      testContext.rhs = {
-        field1: testContext.field2,
-        field2: testContext.field2,
-        array1: [testContext.field4, testContext.field3]
+  describe("shouldBeEqual", () => {
+    beforeEach(function () {
+      testContext = {};
+
+      testContext.setupValues = function () {
+        testContext.field1 = random.uniqueId();
+        testContext.field2 = random.uniqueId();
+        testContext.field3 = random.uniqueId();
+        testContext.field4 = random.uniqueId();
+        testContext.message = random.uniqueId();
       };
-    };
-    testContext.setupTest = function () {
-      testContext.inputParams = {
-        actual: testContext.lhs,
-        expected: testContext.rhs,
-        message: testContext.message,
-        noDebug: true
+      testContext.setupLhs = function () {
+        testContext.lhs = {
+          field1: testContext.field2,
+          field2: testContext.field2,
+          array1: [testContext.field3, testContext.field4]
+        };
       };
-      testContext.entryPointObject = {
-        run: function () {
-          Maddox.compare.shouldEqual(testContext.inputParams);
-        }
+      testContext.setupRhs = function () {
+        testContext.rhs = {
+          field1: testContext.field2,
+          field2: testContext.field2,
+          array1: [testContext.field3, testContext.field4]
+        };
       };
-      testContext.entryPointFunction = "run";
-    };
-    testContext.setupExpected = function () {
-      let debugParams = {
-        actual: testContext.lhs,
-        expected: testContext.rhs
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = `${testContext.message}: expected { Object (field1, field2, ...) } to deeply equal { Object (field1, field2, ...) }`;
+      };
+    });
+
+    it("it should add the full object print out of actual and expected when the noDebug flag is NOT set.", function () {
+      try {
+        Maddox.compare.shouldEqual({actual: true, expected: false, noDebug: false});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        const debugParams = {
+          actual: true,
+          expected: false
+        };
+
+        const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+
+        expect(err.stack.split(expectedResponse).length).eql(2);
+      }
+    });
+
+    it("it should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function () {
+      try {
+        Maddox.compare.shouldEqual({actual: true, expected: false, noDebug: true});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        const debugParams = {
+          actual: true,
+          expected: false
+        };
+
+        const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+
+        expect(err.stack.split(expectedResponse).length).eql(1);
+      }
+    });
+
+    it("it should throw when the items DO NOT equal", function (done) {
+      testContext.setupRhs = function () {
+        testContext.rhs = {
+          field1: testContext.field2,
+          field2: testContext.field2,
+          array1: [testContext.field4, testContext.field3]
+        };
       };
 
-      testContext.expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
-    };
+      testContext.setupValues();
+      testContext.setupLhs();
+      testContext.setupRhs();
+      testContext.setupExpected();
 
-    testContext.setupValues();
-    testContext.setupLhs();
-    testContext.setupRhs();
-    testContext.setupTest();
-    testContext.setupExpected();
-
-    new Scenario()
-      .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-      .withInputParams(Maddox.constants.EmptyParameters)
-
-      .test(function (err, response) {
+      try {
+        Maddox.compare.shouldEqual({actual: testContext.lhs, expected: testContext.rhs});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
         try {
-          expect(err.stack.split(testContext.expectedResponse).length).eql(1);
-          expect(response).eql(undefined);
+          expect(err.message).to.be.ok; // eslint-disable-line
           done();
         } catch (mochaErr) {
           done(mochaErr);
         }
-      });
+      }
+    });
+
+    it("it should pass when the items DO equal", function () {
+      testContext.setupValues();
+      testContext.setupLhs();
+      testContext.setupRhs();
+      testContext.setupExpected();
+
+      try {
+        Maddox.compare.shouldEqual({actual: testContext.lhs, expected: testContext.rhs});
+        expect("I should be here.").to.be.ok; // eslint-disable-line
+      } catch (err) {
+        Maddox.compare.shouldBeUnreachable();
+      }
+    });
   });
 
-  it("it should throw when the items DO NOT equal", function (done) {
-    testContext.setupRhs = function () {
-      testContext.rhs = {
-        field1: testContext.field2,
-        field2: testContext.field2,
-        array1: [testContext.field4, testContext.field3]
-      };
-    };
+  describe("truthy", () => {
 
-    testContext.setupValues();
-    testContext.setupLhs();
-    testContext.setupRhs();
-    testContext.setupTest();
-    testContext.setupExpected();
+    it("it should add the full object print out of actual and expected when the noDebug flag is NOT set.", function () {
+      try {
+        Maddox.compare.truthy(false, undefined, {noDebug: false});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        const debugParams = {
+          actual: false,
+          expected: "Some Truthy Value."
+        };
 
-    new Scenario()
-      .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-      .withInputParams(Maddox.constants.EmptyParameters)
+        const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
 
-      .test(function (err, response) {
-        try {
-          expect(err.message).eql(testContext.expectedResponse);
-          expect(response).eql(undefined);
-          done();
-        } catch (mochaErr) {
-          done(mochaErr);
-        }
-      });
+        expect(err.stack.split(expectedResponse).length).eql(2);
+      }
+    });
+
+    it("it should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function () {
+      try {
+        Maddox.compare.truthy(false, undefined, {noDebug: true});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        const debugParams = {
+          actual: false,
+          expected: "Some Truthy Value."
+        };
+
+        const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+
+        expect(err.stack.split(expectedResponse).length).eql(1);
+      }
+    });
+
+    it("it should pass when shouldBeTruthy comparison is given true value.", function () {
+      try {
+        Maddox.compare.truthy(true);
+        expect("I should be here.").to.be.ok; // eslint-disable-line
+      } catch (err) {
+        Maddox.compare.shouldBeUnreachable();
+      }
+    });
+
+    it("it should pass when shouldBeTruthy comparison is given a defined value.", function () {
+      try {
+        Maddox.compare.truthy("SomeDefinedValue");
+        expect("I should be here.").to.be.ok; // eslint-disable-line
+      } catch (err) {
+        Maddox.compare.shouldBeUnreachable();
+      }
+    });
+
+    it("it should throw when shouldBeTruthy comparison is given a false value.", function () {
+      try {
+        Maddox.compare.truthy(false);
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        expect(err).to.be.ok; // eslint-disable-line
+      }
+    });
+
+    it("it should throw when shouldBeTruthy comparison is given an undefined value.", function () {
+      try {
+        Maddox.compare.truthy(undefined);
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        expect(err).to.be.ok; // eslint-disable-line
+      }
+    });
   });
 
-  it("it should pass when the items DO equal", function (done) {
-    testContext.setupValues();
-    testContext.setupLhs();
-    testContext.setupRhs();
-    testContext.setupTest();
-    testContext.setupExpected();
+  describe("falsey", () => {
+    it("it should add the full object print out of actual and expected when the noDebug flag is NOT set.", function () {
+      try {
+        Maddox.compare.falsey(true, undefined, {noDebug: false});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        const debugParams = {
+          actual: true,
+          expected: "Some Falsey Value."
+        };
 
-    new Scenario()
-      .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
-      .withInputParams(Maddox.constants.EmptyParameters)
+        const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
 
-      .test(function (err, response) {
-        try {
-          expect(err).eql(undefined);
-          expect(response).eql(undefined);
-          done();
-        } catch (mochaErr) {
-          done(mochaErr);
-        }
-      });
+        expect(err.stack.split(expectedResponse).length).eql(2);
+      }
+    });
+
+    it("it should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function () {
+      try {
+        Maddox.compare.falsey(true, undefined, {noDebug: true});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        const debugParams = {
+          actual: true,
+          expected: "Some Falsey Value."
+        };
+
+        const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+
+        expect(err.stack.split(expectedResponse).length).eql(1);
+      }
+    });
+
+    it("it should pass when shouldBeFalsy comparison is given false value.", function () {
+      try {
+        Maddox.compare.falsey(false);
+        expect("I should be here.").to.be.ok; // eslint-disable-line
+      } catch (err) {
+        Maddox.compare.shouldBeUnreachable();
+      }
+    });
+
+    it("it should pass when shouldBeFalsy comparison is given an undefined value.", function () {
+      try {
+        Maddox.compare.falsey(undefined);
+        expect("I should be here.").to.be.ok; // eslint-disable-line
+      } catch (err) {
+        Maddox.compare.shouldBeUnreachable();
+      }
+    });
+
+    it("it should throw when shouldBeFalsy comparison is given a true value.", function () {
+      try {
+        Maddox.compare.falsey(true);
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        expect(err).to.be.ok // eslint-disable-line
+      }
+    });
+
+    it("it should throw when shouldBeFalsy comparison is given a defined value.", function () {
+      try {
+        Maddox.compare.falsey("SomeDefinedValue");
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        expect(err).to.be.ok // eslint-disable-line
+      }
+    });
   });
 
-  it("it should pass when shouldBeTruthy comparison is given true value.", function () {
-    try {
-      Maddox.compare.shouldBeTruthy({value: true});
-      expect("I should be here.").to.be.ok; // eslint-disable-line
-    } catch (err) {
-      Maddox.compare.shouldBeUnreachable();
-    }
+  describe("shouldBeTruthy", () => {
+    it("it should add the full object print out of actual and expected when the noDebug flag is NOT set.", function () {
+      try {
+        Maddox.compare.shouldBeTruthy({value: false, noDebug: false});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        const debugParams = {
+          actual: false,
+          expected: "Some Truthy Value."
+        };
+
+        const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+
+        expect(err.stack.split(expectedResponse).length).eql(2);
+      }
+    });
+
+    it("it should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function () {
+      try {
+        Maddox.compare.shouldBeTruthy({value: false, noDebug: true});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        const debugParams = {
+          actual: false,
+          expected: "Some Truthy Value."
+        };
+
+        const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+
+        expect(err.stack.split(expectedResponse).length).eql(1);
+      }
+    });
+
+    it("it should pass when shouldBeTruthy comparison is given true value.", function () {
+      try {
+        Maddox.compare.shouldBeTruthy({value: true});
+        expect("I should be here.").to.be.ok; // eslint-disable-line
+      } catch (err) {
+        Maddox.compare.shouldBeUnreachable();
+      }
+    });
+
+    it("it should pass when shouldBeTruthy comparison is given a defined value.", function () {
+      try {
+        Maddox.compare.shouldBeTruthy({value: "SomeDefinedValue"});
+        expect("I should be here.").to.be.ok; // eslint-disable-line
+      } catch (err) {
+        Maddox.compare.shouldBeUnreachable();
+      }
+    });
+
+    it("it should throw when shouldBeTruthy comparison is given a false value.", function () {
+      try {
+        Maddox.compare.shouldBeTruthy({value: false});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        expect(err).to.be.ok // eslint-disable-line
+      }
+    });
+
+    it("it should throw when shouldBeTruthy comparison is given an undefined value.", function () {
+      try {
+        Maddox.compare.shouldBeTruthy({value: undefined});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        expect(err).to.be.ok // eslint-disable-line
+      }
+    });
   });
 
-  it("it should pass when shouldBeTruthy comparison is given a defined value.", function () {
-    try {
-      Maddox.compare.shouldBeTruthy({value: "SomeDefinedValue"});
-      expect("I should be here.").to.be.ok; // eslint-disable-line
-    } catch (err) {
-      Maddox.compare.shouldBeUnreachable();
-    }
+  describe("shouldBeFalsey", () => {
+    it("it should add the full object print out of actual and expected when the noDebug flag is NOT set.", function () {
+      try {
+        Maddox.compare.shouldBeFalsey({value: true, noDebug: false});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        const debugParams = {
+          actual: true,
+          expected: "Some Falsey Value."
+        };
+
+        const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+
+        expect(err.stack.split(expectedResponse).length).eql(2);
+      }
+    });
+
+    it("it should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function () {
+      try {
+        Maddox.compare.shouldBeFalsey({value: true, noDebug: true});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        const debugParams = {
+          actual: true,
+          expected: "Some Falsey Value."
+        };
+
+        const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+
+        expect(err.stack.split(expectedResponse).length).eql(1);
+      }
+    });
+
+    it("it should pass when shouldBeFalsy comparison is given false value.", function () {
+      try {
+        Maddox.compare.shouldBeFalsey({value: false});
+        expect("I should be here.").to.be.ok; // eslint-disable-line
+      } catch (err) {
+        Maddox.compare.shouldBeUnreachable();
+      }
+    });
+
+    it("it should pass when shouldBeFalsy comparison is given an undefined value.", function () {
+      try {
+        Maddox.compare.shouldBeFalsey({value: undefined});
+        expect("I should be here.").to.be.ok; // eslint-disable-line
+      } catch (err) {
+        Maddox.compare.shouldBeUnreachable();
+      }
+    });
+
+    it("it should throw when shouldBeFalsy comparison is given a true value.", function () {
+      try {
+        Maddox.compare.shouldBeFalsey({value: true});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        expect(err).to.be.ok // eslint-disable-line
+      }
+    });
+
+    it("it should throw when shouldBeFalsy comparison is given a defined value.", function () {
+      try {
+        Maddox.compare.shouldBeFalsey({value: "SomeDefinedValue"});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        expect(err).to.be.ok // eslint-disable-line
+      }
+    });
   });
 
-  it("it should throw when shouldBeTruthy comparison is given a false value.", function () {
-    try {
-      Maddox.compare.shouldBeTruthy({value: false});
-      Maddox.compare.shouldBeUnreachable();
-    } catch (err) {
-      Maddox.compare.shouldEqual({actual: err.message, expected: "expected false to be truthy"});
-    }
+  describe("shouldBeFalsy", () => {
+
+    it("it should add the full object print out of actual and expected when the noDebug flag is NOT set.", function () {
+      try {
+        Maddox.compare.shouldBeFalsy({value: true, noDebug: false});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        const debugParams = {
+          actual: true,
+          expected: "Some Falsey Value."
+        };
+
+        const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+
+        expect(err.stack.split(expectedResponse).length).eql(2);
+      }
+    });
+
+    it("it should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function () {
+      try {
+        Maddox.compare.shouldBeFalsy({value: true, noDebug: true});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        const debugParams = {
+          actual: true,
+          expected: "Some Falsey Value."
+        };
+
+        const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+
+        expect(err.stack.split(expectedResponse).length).eql(1);
+      }
+    });
+
+    it("it should pass when shouldBeFalsy comparison is given false value.", function () {
+      try {
+        Maddox.compare.shouldBeFalsy({value: false});
+        expect("I should be here.").to.be.ok; // eslint-disable-line
+      } catch (err) {
+        Maddox.compare.shouldBeUnreachable();
+      }
+    });
+
+    it("it should pass when shouldBeFalsy comparison is given an undefined value.", function () {
+      try {
+        Maddox.compare.shouldBeFalsy({value: undefined});
+        expect("I should be here.").to.be.ok; // eslint-disable-line
+      } catch (err) {
+        Maddox.compare.shouldBeUnreachable();
+      }
+    });
+
+    it("it should throw when shouldBeFalsy comparison is given a true value.", function () {
+      try {
+        Maddox.compare.shouldBeFalsy({value: true});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        expect(err).to.be.ok // eslint-disable-line
+      }
+    });
+
+    it("it should throw when shouldBeFalsy comparison is given a defined value.", function () {
+      try {
+        Maddox.compare.shouldBeFalsy({value: "SomeDefinedValue"});
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        expect(err).to.be.ok // eslint-disable-line
+      }
+    });
   });
 
-  it("it should throw when shouldBeTruthy comparison is given an undefined value.", function () {
-    try {
-      Maddox.compare.shouldBeTruthy({value: undefined});
-      Maddox.compare.shouldBeUnreachable();
-    } catch (err) {
-      Maddox.compare.shouldEqual({actual: err.message, expected: "expected undefined to be truthy"});
-    }
-  });
+  describe("shouldBeUnreachable", () => {
+    it("it should throw when using Maddox's shouldBeUnreachable function", function () {
+      try {
+        Maddox.compare.shouldBeUnreachable();
+        expect("shouldBeUnreachable should throw an error making it impossible to reach this code").eql(undefined);
+      } catch (err) {
+        expect(err.message).eql("It should be impossible to reach this code.: expected false to deeply equal true");
+      }
+    });
 
-  it("it should pass when shouldBeFalsey comparison is given false value.", function () {
-    try {
-      Maddox.compare.shouldBeFalsey({value: false});
-      expect("I should be here.").to.be.ok; // eslint-disable-line
-    } catch (err) {
-      Maddox.compare.shouldBeUnreachable();
-    }
-  });
+    it("it should throw when using Maddox's shouldBeUnreachable function with the provided message.", function () {
+      const message = random.uniqueId();
 
-  it("it should pass when shouldBeFalsey comparison is given an undefined value.", function () {
-    try {
-      Maddox.compare.shouldBeFalsey({value: undefined});
-      expect("I should be here.").to.be.ok; // eslint-disable-line
-    } catch (err) {
-      Maddox.compare.shouldBeUnreachable();
-    }
-  });
-
-  it("it should throw when shouldBeFalsey comparison is given a true value.", function () {
-    try {
-      Maddox.compare.shouldBeFalsey({value: true});
-      Maddox.compare.shouldBeUnreachable();
-    } catch (err) {
-      Maddox.compare.shouldEqual({actual: err.message, expected: "expected true to be falsy"});
-    }
-  });
-
-  it("it should throw when shouldBeFalsey comparison is given a defined value.", function () {
-    try {
-      Maddox.compare.shouldBeFalsey({value: "SomeDefinedValue"});
-      Maddox.compare.shouldBeUnreachable();
-    } catch (err) {
-      Maddox.compare.shouldEqual({actual: err.message, expected: "expected 'SomeDefinedValue' to be falsy"});
-    }
-  });
-
-  it("it should pass when shouldBeFalsy comparison is given false value.", function () {
-    try {
-      Maddox.compare.shouldBeFalsy({value: false});
-      expect("I should be here.").to.be.ok; // eslint-disable-line
-    } catch (err) {
-      Maddox.compare.shouldBeUnreachable();
-    }
-  });
-
-  it("it should pass when shouldBeFalsy comparison is given an undefined value.", function () {
-    try {
-      Maddox.compare.shouldBeFalsy({value: undefined});
-      expect("I should be here.").to.be.ok; // eslint-disable-line
-    } catch (err) {
-      Maddox.compare.shouldBeUnreachable();
-    }
-  });
-
-  it("it should throw when shouldBeFalsy comparison is given a true value.", function () {
-    try {
-      Maddox.compare.shouldBeFalsy({value: true});
-      Maddox.compare.shouldBeUnreachable();
-    } catch (err) {
-      Maddox.compare.shouldEqual({actual: err.message, expected: "expected true to be falsy"});
-    }
-  });
-
-  it("it should throw when shouldBeFalsy comparison is given a defined value.", function () {
-    try {
-      Maddox.compare.shouldBeFalsy({value: "SomeDefinedValue"});
-      Maddox.compare.shouldBeUnreachable();
-    } catch (err) {
-      Maddox.compare.shouldEqual({actual: err.message, expected: "expected 'SomeDefinedValue' to be falsy"});
-    }
-  });
-
-  it("it should throw when using Maddox's shouldBeUnreachable function", function () {
-    try {
-      Maddox.compare.shouldBeUnreachable();
-      expect("shouldBeUnreachable should throw an error making it impossible to reach this code").eql(undefined);
-    } catch (err) {
-      expect(err.message).eql("It should be impossible to reach this code.: expected false to deeply equal true");
-    }
+      try {
+        Maddox.compare.shouldBeUnreachable(message);
+        expect("shouldBeUnreachable should throw an error making it impossible to reach this code").eql(undefined);
+      } catch (err) {
+        expect(err.message).eql(`${message}: expected false to deeply equal true`);
+      }
+    });
   });
 });
