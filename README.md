@@ -18,7 +18,7 @@ Architecture (SOA) environment.
 [![npm module downloads](http://img.shields.io/npm/dt/maddox.svg)](https://www.npmjs.org/package/maddox)
 
 ## Why Should You Use Maddox?
-Article / Blog to come.
+https://maddox.readme.io/docs/i-should-be-using-maddox-because
 
 ## Best Practices
 1. All external dependencies should be wrapped or decorated (See Decorator Design Pattern) within a proxy layer.  See ./spec/testable for an example application.
