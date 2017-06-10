@@ -46,7 +46,7 @@ class PrepareArguments {
   static next(state) {
     const ArgumentParser = ArgParse.ArgumentParser;
     const parser = new ArgumentParser({
-      version: "1.1.2",
+      version: "1.1.3",
       addHelp: true,
       formatterClass: ArgParse.RawTextHelpFormatter,
       description: "Maddox CLI runs performance tests on Maddox BDD tests that are marked with the .perf() function."
@@ -87,11 +87,13 @@ class AddTestFilesToMocha {
   static next(state) {
     const mocha = state.getMocha();
     const args = state.getArguments();
-    const testDir = args.TEST_DIR;
+    const providedTestDir = args.TEST_DIR;
 
-    fs.readdirSync(testDir).forEach((file) => {
+    const actualTestDir = (providedTestDir.startsWith("/")) ? providedTestDir : `${process.cwd()}/${providedTestDir}`;
+
+    fs.readdirSync(actualTestDir).forEach((file) => {
       if (file.endsWith(".js")) {
-        mocha.addFile(path.join(testDir, file));
+        mocha.addFile(path.join(actualTestDir, file));
       }
     });
   }
