@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "npm run ut && npm run lint",
-    "perf": "maddox -P true -m 2 -d ./spec/unit",
+    "perf": "maddox -m 10 -d ./spec/unit",
     "ut": "_mocha ./spec/unit",
     "coverage": "./bin/maddox-cov.js",
     "lint": "eslint ./spec/ ./lib",

@@ -10,6 +10,8 @@ const Mocha = require("mocha"),
   fs = require("fs-extra"),
   path = require("path");
 
+const Program = require("commander");
+
 class State {
 
   setArguments(args) {this._arguments_ = args;}
@@ -54,11 +56,12 @@ class PrepareArguments {
 
     parser.addArgument([ "-t", "--TIMEOUT" ], {help: "How long a test has (ms) to finish before timing out.", defaultValue: 30000, type: "int"});
     parser.addArgument([ "-u", "--UI" ], {help: "Specify user-interface (bdd|tdd|qunit|exports).", defaultValue: "bdd"});
-    parser.addArgument([ "-p", "--PRINT" ], {help: "Print current performance results.", defaultValue: "false"});
-    parser.addArgument([ "-P", "--PRINT_ALL" ], {help: "Print combined recent and historical performance results.", defaultValue: "false"});
+    parser.addArgument([ "-p", "--PRINT" ], {help: "Print current performance results.", nargs: "0"});
+    parser.addArgument([ "-P", "--PRINT_ALL" ], {help: "Print combined recent and historical performance results.", nargs: "0"});
     parser.addArgument([ "-m", "--MAX_RESULTS" ], {help: "Only keep this many historical results. Will delete results of the number is less than current count.", defaultValue: 10, type: "int"});
-    parser.addArgument([ "-s", "--SAVE_RESULTS" ], {help: "Save results of this run.", defaultValue: "true"});
-    parser.addArgument([ "-d", "--TEST_DIR" ], {help: "Save results of this run.", required: true});
+    parser.addArgument([ "-n", "--DO_NOT_SAVE_RESULTS" ], {help: "Do NOT save results of this run.", nargs: "0"});
+    parser.addArgument([ "-d", "--TEST_DIR" ], {help: "Save results of this run.", required: true, nargs: "*"});
+    parser.addArgument([ "-r", "--REMOVE_EXISTING" ], {help: "Remove all existing results.", nargs: "0"});
 
     state.setArguments(parser.parseArgs());
   }
@@ -87,15 +90,18 @@ class AddTestFilesToMocha {
   static next(state) {
     const mocha = state.getMocha();
     const args = state.getArguments();
-    const providedTestDir = args.TEST_DIR;
+    const providedTestDirs = args.TEST_DIR;
 
-    const actualTestDir = (providedTestDir.startsWith("/")) ? providedTestDir : `${process.cwd()}/${providedTestDir}`;
 
-    fs.readdirSync(actualTestDir).forEach((file) => {
-      if (file.endsWith(".js")) {
-        mocha.addFile(path.join(actualTestDir, file));
-      }
-    });
+    for (const providedTestDir of providedTestDirs) {
+      const actualTestDir = (providedTestDir.startsWith("/")) ? providedTestDir : `${process.cwd()}/${providedTestDir}`;
+
+      fs.readdirSync(actualTestDir).forEach((file) => {
+        if (file.endsWith(".js")) {
+          mocha.addFile(path.join(actualTestDir, file));
+        }
+      });
+    }
   }
 }
 
@@ -153,7 +159,8 @@ class CombineResults {
     const existingResults = state.getExistingResults();
     const args = state.getArguments();
 
-    const combinedResults = JSON.parse(JSON.stringify(existingResults, null, 2));
+    const combinedResults = (args.REMOVE_EXISTING !== null) ?
+      {} : JSON.parse(JSON.stringify(existingResults, null, 2));
 
     for (const title in currentResults) {
       if (!combinedResults[title]) {
@@ -181,7 +188,7 @@ class SaveResults {
     const args = state.getArguments();
     const perfFilePath = state.getPerfFilePath();
 
-    if (args.SAVE_RESULTS === "true") {
+    if (args.DO_NOT_SAVE_RESULTS === null) {
       fs.writeJsonSync(perfFilePath, combinedResults);
 
       console.log(`Successfully saved combined results to ${perfFilePath}`);
@@ -197,13 +204,14 @@ class PrintTestResults {
 
     const printedResults = {};
 
-    if (args.PRINT === "true") {printedResults.currentResults = currentResults;}
+    if (args.PRINT !== null) {printedResults.currentResults = currentResults;}
 
-    if (args.PRINT_ALL === "true") {printedResults.combinedResults = combinedResults;}
+    if (args.PRINT_ALL !== null) {printedResults.combinedResults = combinedResults;}
 
-    if (args.PRINT === "true" || args.PRINT_ALL === "true") {
-      console.log("********** Printed Results **********");
+    if (args.PRINT !== null || args.PRINT_ALL !== null) {
+      console.log("********** Start Printed Results **********");
       console.log(JSON.stringify(printedResults, null, 2));
+      console.log("********** End Printed Results **********");
       console.log();
     }
   }
