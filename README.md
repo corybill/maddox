@@ -75,7 +75,7 @@ The HttpRequestScenario exposes extra utility functions on top of the base Scena
 
 ### HttpRequestScenario Example
 <pre>
-    new Scenario() // Create a new Scenario
+    new Scenario(this) // Create a new Scenario
       .mockThisFunction("ProxyClass", "getFirstName", ProxyClass) // Mock ProxyClass.getFirstName
       .mockThisFunction("ProxyClass", "getMiddleName", ProxyClass) // Mock ProxyClass.getMiddleName
       .mockThisFunction("ProxyClass", "getLastName", ProxyClass) // Mock ProxyClass.getLastName

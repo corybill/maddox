@@ -70,7 +70,7 @@ describe("When using the HttpReqScenario", function () {
     testContext.setupGetLastName();
     testContext.setupExpected();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("StatefulSingletonProxy", "getInstance", StatefulSingletonProxy)
       .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
       .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
@@ -98,7 +98,7 @@ describe("When using the HttpReqScenario", function () {
       .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
       .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
 
-      .perf(this.test.fullTitle())
+      .perf()
       .test(done);
   });
 
@@ -127,7 +127,7 @@ describe("When using the HttpReqScenario", function () {
     testContext.setupGetLastName();
     testContext.setupExpected();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("StatefulSingletonProxy", "getInstance", StatefulSingletonProxy)
       .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
       .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)

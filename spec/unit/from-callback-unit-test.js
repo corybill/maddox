@@ -70,7 +70,7 @@ describe("FromCallbackScenario", function () {
     testContext.setupGetLastName();
     testContext.setupExpected();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
       .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
       .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
@@ -90,7 +90,7 @@ describe("FromCallbackScenario", function () {
       .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
       .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
 
-      .perf(this.test.fullTitle())
+      .perf()
       .test(function (err, response) {
         try {
           Maddox.compare.shouldEqual({actual: err, expected: undefined});
@@ -127,7 +127,7 @@ describe("FromCallbackScenario", function () {
     testContext.setupGetLastName();
     testContext.setupExpected();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
       .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
       .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)

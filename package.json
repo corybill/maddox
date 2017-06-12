@@ -1,11 +1,11 @@
 {
   "name": "maddox",
-  "version": "1.1.3",
+  "version": "2.0.0",
   "description": "Maddox provides a simple way to rapidly unit test complex success and failure scenarios which can be driven by responses of mocked external dependencies.",
   "main": "lib/index.js",
   "scripts": {
     "test": "npm run ut && npm run lint",
-    "perf": "maddox -m 10 -d ./spec/unit",
+    "perf": "maddox -p -t 60000 -d ./spec/unit",
     "ut": "_mocha ./spec/unit",
     "coverage": "./bin/maddox-cov.js",
     "lint": "eslint ./spec/ ./lib",
@@ -24,6 +24,7 @@
   "keywords": [
     "StriveNine",
     "Strive9",
+    "S9",
     "Scenario Testing",
     "BDD",
     "Behavior Driven Development",
@@ -51,16 +52,16 @@
     }
   ],
   "dependencies": {
-    "argparse": "^1.0.9",
-    "benchmark": "2.1.0",
-    "bluebird": "3.3.4",
-    "chai": "3.5.0",
-    "errr": "2.2.0",
-    "fs-extra": "0.26.5",
-    "lodash": "4.6.1",
-    "mocha": "2.4.5",
-    "preconditions": "2.0.8",
-    "sinon": "1.17.3"
+    "argparse": "1.x",
+    "bluebird": "3.x",
+    "chai": "3.x",
+    "errr": "2.x",
+    "fs-extra": "0.x",
+    "lodash": "4.x",
+    "mocha": "3.x",
+    "preconditions": "2.x",
+    "simple-statistics": "^4.1.0",
+    "sinon": "1.x"
   },
   "devDependencies": {
     "chance": "1.0.1",

@@ -10,7 +10,10 @@ const Mocha = require("mocha"),
   fs = require("fs-extra"),
   path = require("path");
 
-const Program = require("commander");
+const SimpleStatistics = require("simple-statistics");
+
+const ZScore2 = 2;
+const MaddoxCliVersion = "1.0.0";
 
 class State {
 
@@ -39,31 +42,42 @@ class State {
   }
 }
 
-class SetProcessValues {
-  static next() {
-    process.env.perf = "true";
-  }
-}
 class PrepareArguments {
   static next(state) {
     const ArgumentParser = ArgParse.ArgumentParser;
     const parser = new ArgumentParser({
-      version: "1.1.3",
+      version: MaddoxCliVersion,
       addHelp: true,
-      formatterClass: ArgParse.RawTextHelpFormatter,
+      formatterClass: ArgParse.ArgumentDefaultsHelpFormatter,
       description: "Maddox CLI runs performance tests on Maddox BDD tests that are marked with the .perf() function."
     });
 
     parser.addArgument([ "-t", "--TIMEOUT" ], {help: "How long a test has (ms) to finish before timing out.", defaultValue: 30000, type: "int"});
     parser.addArgument([ "-u", "--UI" ], {help: "Specify user-interface (bdd|tdd|qunit|exports).", defaultValue: "bdd"});
-    parser.addArgument([ "-p", "--PRINT" ], {help: "Print current performance results.", nargs: "0"});
-    parser.addArgument([ "-P", "--PRINT_ALL" ], {help: "Print combined recent and historical performance results.", nargs: "0"});
+    parser.addArgument([ "-p", "--PRINT" ], {help: "Print all num requests per second.", nargs: "0"});
+    parser.addArgument([ "-P", "--PRINT_ALL" ], {help: "Print all saved statistics.", nargs: "0"});
     parser.addArgument([ "-m", "--MAX_RESULTS" ], {help: "Only keep this many historical results. Will delete results of the number is less than current count.", defaultValue: 10, type: "int"});
     parser.addArgument([ "-n", "--DO_NOT_SAVE_RESULTS" ], {help: "Do NOT save results of this run.", nargs: "0"});
     parser.addArgument([ "-d", "--TEST_DIR" ], {help: "Save results of this run.", required: true, nargs: "*"});
     parser.addArgument([ "-r", "--REMOVE_EXISTING" ], {help: "Remove all existing results.", nargs: "0"});
+    parser.addArgument([ "-s", "--NUM_SAMPLES" ], {help: "How many times to run the perf test.", defaultValue: 20, type: "int"});
+    parser.addArgument([ "-l", "--SAMPLE_LENGTH" ], {help: "The length (in millis) to run each individual perf test.", defaultValue: 1000, type: "int"});
+    parser.addArgument([ "-o", "--ONLY_95" ], {help: "Remove all existing results that are not with 95th percentile. WARNING: Don't use with small samples sizes or if you have changed your code.", nargs: "0"});
 
     state.setArguments(parser.parseArgs());
+  }
+}
+
+class SetProcessValues {
+  static next(state) {
+    const args = state.getArguments();
+
+    process.maddox = {
+      perf: true,
+      numSamples: args.NUM_SAMPLES,
+      sampleLength: args.SAMPLE_LENGTH,
+      currentReport: {}
+    };
   }
 }
 
@@ -110,8 +124,6 @@ class ExecuteTests {
     return new Promise((resolve, reject) => {
       const mocha = state.getMocha();
 
-      process.maddox = {currentReport: {}};
-
       mocha.run((failures) => {
         if (failures) {
           reject();
@@ -134,7 +146,7 @@ class PrepareExistingFile {
     try {
       fs.accessSync(perfFilePath, fs.R_OK | fs.W_OK);
     } catch (err) {
-      fs.writeJsonSync(perfFilePath, {});
+      fs.writeJsonSync(perfFilePath, Factory.newResultBlock());
     }
   }
 }
@@ -159,26 +171,91 @@ class CombineResults {
     const existingResults = state.getExistingResults();
     const args = state.getArguments();
 
-    const combinedResults = (args.REMOVE_EXISTING !== null) ?
-      {} : JSON.parse(JSON.stringify(existingResults, null, 2));
+    let combinedResults = (args.REMOVE_EXISTING !== null) ?
+      Factory.newResultBlock() : JSON.parse(JSON.stringify(existingResults, null, 2));
 
-    for (const title in currentResults) {
-      if (!combinedResults[title]) {
-        combinedResults[title] = {
-          results: []
-        };
-      }
-
-      // Add current results.
-      combinedResults[title].results.unshift(currentResults[title]);
-
+    function dropOld(array, maxResults) {
       // Drop old results if we have hit or gone over max results.
-      for (let i = combinedResults[title].results.length; i > args.MAX_RESULTS; i--) {
-        combinedResults[title].results.pop();
+      for (let i = array.length; i > maxResults; i--) {
+        array.pop();
       }
+
+      return array;
     }
 
+    function processNewStats() {
+      for (const title in currentResults) {
+        if (!combinedResults.allStats[title]) {
+          combinedResults.allStats[title] = Factory.newStatsBlock();
+        }
+
+        // Add current results.
+        combinedResults.allStats[title].statistics.unshift(currentResults[title]);
+
+        combinedResults.allStats[title].statistics = dropOld(combinedResults.allStats[title].statistics, args.MAX_RESULTS);
+      }
+
+      return combinedResults;
+    }
+
+    function processMinStats() {
+      for (const title in combinedResults.allStats) {
+        if (!combinedResults.minStats[title]) {
+          combinedResults.minStats[title] = Factory.newMinStatsBlock();
+        }
+
+        combinedResults.minStats[title].numPerSecond = combinedResults.allStats[title].statistics.map((stat) => {
+          return stat.numPerSecond.median;
+        });
+
+        combinedResults.minStats[title].newMean = SimpleStatistics.mean(combinedResults.minStats[title].numPerSecond);
+        combinedResults.minStats[title].newSd = SimpleStatistics.standardDeviation(combinedResults.minStats[title].numPerSecond);
+      }
+
+      return combinedResults;
+    }
+
+    combinedResults = processNewStats();
+    combinedResults = processMinStats();
+
     state.setCombinedResults(combinedResults);
+  }
+}
+
+class Only95 {
+  static next(state) {
+    const args = state.getArguments();
+    const combinedResults = state.getCombinedResults();
+
+    if (args.ONLY_95 !== null) {
+      for (const title in combinedResults.minStats) {
+        const filteredMin = [];
+        const filteredAll = [];
+
+        const newMean = combinedResults.minStats[title].newMean;
+        const newSd = combinedResults.minStats[title].newSd;
+
+        const allowableZScore = newSd * ZScore2;
+
+        const minAllowed = newMean - allowableZScore;
+        const maxAllowed = newMean + allowableZScore;
+
+        for (let i = 0; i < combinedResults.minStats[title].numPerSecond.length; i++) {
+          const currentValue = combinedResults.minStats[title].numPerSecond[i];
+
+          if (currentValue >= minAllowed && currentValue <= maxAllowed) {
+            filteredMin.push(combinedResults.minStats[title].numPerSecond[i]);
+            filteredAll.push(combinedResults.allStats[title].statistics[i]);
+          }
+        }
+
+        combinedResults.minStats[title].numPerSecond = filteredMin;
+        combinedResults.allStats[title].statistics = filteredAll;
+      }
+
+      state.setCombinedResults(combinedResults);
+    }
+
   }
 }
 
@@ -199,14 +276,13 @@ class SaveResults {
 class PrintTestResults {
   static next(state) {
     const args = state.getArguments();
-    const currentResults = state.getCurrentResults();
     const combinedResults = state.getCombinedResults();
 
     const printedResults = {};
 
-    if (args.PRINT !== null) {printedResults.currentResults = currentResults;}
+    if (args.PRINT !== null) {printedResults.minStats = combinedResults.minStats;}
 
-    if (args.PRINT_ALL !== null) {printedResults.combinedResults = combinedResults;}
+    if (args.PRINT_ALL !== null) {printedResults.allStats = combinedResults.allStats;}
 
     if (args.PRINT !== null || args.PRINT_ALL !== null) {
       console.log("********** Start Printed Results **********");
@@ -233,12 +309,33 @@ class FailureResponse {
   }
 }
 
+class Factory {
+  static newResultBlock() {
+    return {
+      minStats: {},
+      allStats: {}
+    };
+  }
+
+  static newStatsBlock() {
+    return {
+      statistics: []
+    }
+  }
+
+  static newMinStatsBlock() {
+    return {
+      numPerSecond: []
+    }
+  }
+}
+
 class Runner {
   static run() {
     const state = new State();
 
-    state.accept(SetProcessValues)
-      .then(() => state.accept(PrepareArguments))
+    state.accept(PrepareArguments)
+      .then(() => state.accept(SetProcessValues))
       .then(() => state.accept(SetPerfFile))
       .then(() => state.accept(CreateMochaInstance))
       .then(() => state.accept(AddTestFilesToMocha))
@@ -246,10 +343,12 @@ class Runner {
       .then(() => state.accept(PrepareExistingFile))
       .then(() => state.accept(GetExistingResults))
       .then(() => state.accept(CombineResults))
+      .then(() => state.accept(Only95))
       .then(() => state.accept(SaveResults))
       .then(() => state.accept(PrintTestResults))
       .then(() => state.accept(SuccessResponse))
       .catch((err) => {
+        err = err || new Error("Unknown Error. Was there a timeout?");
         state.setError(err);
         state.accept(FailureResponse)
       });

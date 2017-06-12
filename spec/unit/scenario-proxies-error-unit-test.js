@@ -82,7 +82,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .withInputParams(testContext.inputParamsArray);
 
     } catch (err) {
@@ -105,7 +105,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .withHttpRequest(testContext.httpRequestParams);
 
     } catch (err) {
@@ -123,7 +123,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction({}, "getFirstName", StatelessEs6Proxy);
 
       Maddox.compare.shouldBeUnreachable();
@@ -141,7 +141,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", function () {}, StatelessEs6Proxy);
 
       Maddox.compare.shouldBeUnreachable();
@@ -164,7 +164,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", testContext.stringInput);
 
       Maddox.compare.shouldBeUnreachable();
@@ -188,7 +188,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction);
 
       Maddox.compare.shouldBeUnreachable();
@@ -212,7 +212,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction);
 
       Maddox.compare.shouldBeUnreachable();
@@ -236,7 +236,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction);
 
       Maddox.compare.shouldBeUnreachable();
@@ -254,7 +254,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .shouldBeCalledWith({}, "shouldEqual", []);
 
@@ -273,7 +273,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .shouldBeCalledWith("StatelessEs6Proxy", function () {}, []);
 
@@ -297,7 +297,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .shouldBeCalledWith("StatelessEs6Proxy", "getFirstName", testContext.shouldBeCalledWithInput);
 
@@ -316,7 +316,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesReturn({}, "shouldEqual", {});
 
       Maddox.compare.shouldBeUnreachable();
@@ -334,7 +334,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesReturn("StatelessEs6Proxy", function () {}, {});
 
       Maddox.compare.shouldBeUnreachable();
@@ -352,7 +352,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesReturnWithPromise({}, "shouldEqual", {});
 
       Maddox.compare.shouldBeUnreachable();
@@ -370,7 +370,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesReturnWithPromise("StatelessEs6Proxy", function () {}, {});
 
       Maddox.compare.shouldBeUnreachable();
@@ -388,7 +388,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesReturnWithCallback({}, "shouldEqual", {});
 
       Maddox.compare.shouldBeUnreachable();
@@ -406,7 +406,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesReturnWithCallback("StatelessEs6Proxy", function () {}, {});
 
       Maddox.compare.shouldBeUnreachable();
@@ -424,7 +424,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesError({}, "shouldEqual", {});
 
       Maddox.compare.shouldBeUnreachable();
@@ -442,7 +442,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesError("StatelessEs6Proxy", function () {}, {});
 
       Maddox.compare.shouldBeUnreachable();
@@ -460,7 +460,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesErrorWithPromise({}, "shouldEqual", {});
 
       Maddox.compare.shouldBeUnreachable();
@@ -478,7 +478,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesErrorWithPromise("StatelessEs6Proxy", function () {}, {});
 
       Maddox.compare.shouldBeUnreachable();
@@ -496,7 +496,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesErrorWithCallback({}, "shouldEqual", {});
 
       Maddox.compare.shouldBeUnreachable();
@@ -514,7 +514,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesErrorWithCallback("StatelessEs6Proxy", function () {}, {});
 
       Maddox.compare.shouldBeUnreachable();
@@ -532,7 +532,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario().test();
+      new Scenario(this).test();
 
       Maddox.compare.shouldBeUnreachable();
     } catch (err) {
@@ -615,7 +615,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario().test(function () {});
+      new Scenario(this).test(function () {});
 
       Maddox.compare.shouldBeUnreachable();
     } catch (err) {
@@ -698,7 +698,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesReturnWithCallback("StatelessEs6Proxy", "getFirstName", "foo");
 
       Maddox.compare.shouldBeUnreachable();
@@ -716,7 +716,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesAlwaysReturnWithCallback("StatelessEs6Proxy", "getFirstName", "foo");
 
       Maddox.compare.shouldBeUnreachable();
@@ -734,8 +734,26 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesErrorWithCallback("StatelessEs6Proxy", "getFirstName", "foo");
+
+      Maddox.compare.shouldBeUnreachable();
+    } catch (err) {
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+    }
+  });
+
+  // MissingMochaTestContext 1028
+  it("it should throw when a performance test is being executed, and the 'this' context was not provided in the Scenario constructor.", function () {
+    testContext.setupErrorMessage = function () {
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (1028): When running a performance test, the 'this' context must be provided in the scenario constructor.";
+    };
+
+    testContext.setupErrorMessage();
+
+    try {
+      new Scenario()
+        .perf();
 
       Maddox.compare.shouldBeUnreachable();
     } catch (err) {
@@ -752,7 +770,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesReturnWithCallback("StatelessEs6Proxy", "getFirstName", Maddox.constants.EmptyParameters);
 
       Maddox.compare.shouldBeUnreachable();
@@ -770,7 +788,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesAlwaysReturnWithCallback("StatelessEs6Proxy", "getFirstName", Maddox.constants.EmptyParameters);
 
       Maddox.compare.shouldBeUnreachable();
@@ -788,7 +806,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesErrorWithCallback("StatelessEs6Proxy", "getFirstName", Maddox.constants.EmptyParameters);
 
       Maddox.compare.shouldBeUnreachable();
@@ -808,7 +826,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .shouldBeCalledWith(testContext.mockName, testContext.funcName, Maddox.constants.EmptyParameters);
 
       Maddox.compare.shouldBeUnreachable();
@@ -828,7 +846,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .shouldBeCalledWith(testContext.mockName, testContext.funcName, Maddox.constants.EmptyParameters);
 
@@ -849,7 +867,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesReturn(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
       Maddox.compare.shouldBeUnreachable();
@@ -869,7 +887,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .doesReturn(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
@@ -890,7 +908,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesReturnWithPromise(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
       Maddox.compare.shouldBeUnreachable();
@@ -910,7 +928,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .doesReturnWithPromise(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
@@ -931,7 +949,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesReturnWithCallback(testContext.mockName, testContext.funcName, Maddox.constants.EmptyParameters);
 
       Maddox.compare.shouldBeUnreachable();
@@ -951,7 +969,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .doesReturnWithCallback(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
@@ -972,7 +990,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesError(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
       Maddox.compare.shouldBeUnreachable();
@@ -992,7 +1010,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .doesError(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
@@ -1013,7 +1031,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesErrorWithPromise(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
       Maddox.compare.shouldBeUnreachable();
@@ -1033,7 +1051,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .doesErrorWithPromise(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
@@ -1054,7 +1072,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .doesErrorWithCallback(testContext.mockName, testContext.funcName, Maddox.constants.EmptyParameters);
 
       Maddox.compare.shouldBeUnreachable();
@@ -1074,7 +1092,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .doesErrorWithCallback(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
@@ -1097,7 +1115,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction(testContext.mockName, testContext.funcName, StatelessEs6Proxy);
 
       Maddox.compare.shouldBeUnreachable();
@@ -1118,7 +1136,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction(testContext.mockName, testContext.funcName, StatelessEs6Proxy)
         .mockThisFunction(testContext.mockName, testContext.funcName, StatelessEs6Proxy);
 
@@ -1142,7 +1160,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupExpected();
     testContext.setupErrorMessage();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
@@ -1181,7 +1199,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupExpected();
     testContext.setupErrorMessage();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
@@ -1226,7 +1244,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupExpected();
     testContext.setupErrorMessage();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
@@ -1265,7 +1283,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupExpected();
     testContext.setupErrorMessage();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
@@ -1307,7 +1325,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupExpected();
     testContext.setupErrorMessage();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
@@ -1360,7 +1378,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupExpected();
     testContext.setupErrorMessage();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
@@ -1420,7 +1438,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupExpected();
     testContext.setupErrorMessage();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
@@ -1478,7 +1496,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupExpected();
     testContext.setupErrorMessage();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
@@ -1536,7 +1554,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupExpected();
     testContext.setupErrorMessage();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
@@ -1602,7 +1620,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupExpected();
     testContext.setupErrorMessage();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
@@ -1678,7 +1696,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupExpected();
     testContext.setupErrorMessage();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
@@ -1751,7 +1769,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupExpected();
     testContext.setupErrorMessage();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
@@ -1824,7 +1842,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupExpected();
     testContext.setupErrorMessage();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
       .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
@@ -1864,7 +1882,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .resShouldBeCalledWith("StatelessEs6Proxy", function () {}, []);
 
@@ -1888,7 +1906,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .resShouldBeCalledWith("StatelessEs6Proxy", "getFirstName", testContext.shouldBeCalledWithInput);
 
@@ -1914,7 +1932,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
         .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
@@ -1958,7 +1976,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
         .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
@@ -2001,7 +2019,7 @@ describe("When using a Scenario and getting errors", function () {
     testContext.setupErrorMessage();
 
     try {
-      new Scenario()
+      new Scenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
         .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)

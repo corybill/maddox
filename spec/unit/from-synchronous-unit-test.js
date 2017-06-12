@@ -62,7 +62,7 @@ describe("When using FromSynchronousScenario and getting errors", function () {
     testContext.setupGetMiddleName();
     testContext.setupExpected();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("uuid", "v4", uuid)
       .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
 
@@ -78,7 +78,7 @@ describe("When using FromSynchronousScenario and getting errors", function () {
       .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName2Params)
       .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName2Result)
 
-      .perf(this.test.fullTitle())
+      .perf()
       .test(function (err, response) {
         try {
           Maddox.compare.shouldEqual({actual: err, expected: undefined});
@@ -112,7 +112,7 @@ describe("When using FromSynchronousScenario and getting errors", function () {
     testContext.setupGetMiddleName();
     testContext.setupExpected();
 
-    new Scenario()
+    new Scenario(this)
       .mockThisFunction("uuid", "v4", uuid)
       .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
 
