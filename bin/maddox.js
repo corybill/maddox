@@ -62,9 +62,15 @@ class PrepareArguments {
     parser.addArgument([ "-r", "--REMOVE_EXISTING" ], {help: "Remove all existing results.", nargs: "0"});
     parser.addArgument([ "-s", "--NUM_SAMPLES" ], {help: "How many times to run the perf test.", defaultValue: 20, type: "int"});
     parser.addArgument([ "-l", "--SAMPLE_LENGTH" ], {help: "The length (in millis) to run each individual perf test.", defaultValue: 1000, type: "int"});
+    parser.addArgument([ "-c", "--NUM_CONCURRENT" ], {help: "How many samples to run concurrently.", defaultValue: 20, type: "int"});
     parser.addArgument([ "-o", "--ONLY_95" ], {help: "Remove all existing results that are not with 95th percentile. WARNING: Don't use with small samples sizes or if you have changed your code.", nargs: "0"});
 
-    state.setArguments(parser.parseArgs());
+    const args = parser.parseArgs();
+
+    // SET TIMEOUT TO BE 50% GREATER THAN EXPECTED TIME TO FINISH ONE TEST TO ENSURE WE DON'T TIMEOUT.
+    args.TIMEOUT = args.NUM_SAMPLES * args.SAMPLE_LENGTH * 1.50;
+
+    state.setArguments(args);
   }
 }
 
@@ -76,6 +82,7 @@ class SetProcessValues {
       perf: true,
       numSamples: args.NUM_SAMPLES,
       sampleLength: args.SAMPLE_LENGTH,
+      numConcurrent: args.NUM_CONCURRENT,
       currentReport: {}
     };
   }
@@ -208,8 +215,12 @@ class CombineResults {
           return stat.numPerSecond.median;
         });
 
-        combinedResults.minStats[title].newMean = SimpleStatistics.mean(combinedResults.minStats[title].numPerSecond);
-        combinedResults.minStats[title].newSd = SimpleStatistics.standardDeviation(combinedResults.minStats[title].numPerSecond);
+        const cov = Math.round(combinedResults.minStats[title].totals.sd / combinedResults.minStats[title].totals.mean * 100 * 100) / 100;
+        combinedResults.minStats[title].totals.mean = SimpleStatistics.mean(combinedResults.minStats[title].numPerSecond);
+        combinedResults.minStats[title].totals.sd = SimpleStatistics.standardDeviation(combinedResults.minStats[title].numPerSecond);
+        combinedResults.minStats[title].totals.cov = `${cov}%`;
+
+        combinedResults.allStats[title].totals = combinedResults.minStats[title].totals;
       }
 
       return combinedResults;
@@ -325,7 +336,8 @@ class Factory {
 
   static newMinStatsBlock() {
     return {
-      numPerSecond: []
+      numPerSecond: [],
+      totals: {}
     }
   }
 }
