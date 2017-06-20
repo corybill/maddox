@@ -215,9 +215,11 @@ class CombineResults {
           return stat.numPerSecond.median;
         });
 
-        const cov = Math.round(combinedResults.minStats[title].totals.sd / combinedResults.minStats[title].totals.mean * 100 * 100) / 100;
         combinedResults.minStats[title].totals.mean = SimpleStatistics.mean(combinedResults.minStats[title].numPerSecond);
         combinedResults.minStats[title].totals.sd = SimpleStatistics.standardDeviation(combinedResults.minStats[title].numPerSecond);
+
+        const cov = Math.round(combinedResults.minStats[title].totals.sd / combinedResults.minStats[title].totals.mean * 100 * 100) / 100;
+
         combinedResults.minStats[title].totals.cov = `${cov}%`;
 
         combinedResults.allStats[title].totals = combinedResults.minStats[title].totals;

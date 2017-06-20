@@ -761,6 +761,66 @@ describe("When using a Scenario and getting errors", function () {
     }
   });
 
+  // MissingInputParams 1029
+  it("it should throw when input params are not provided when using FromCallbackScenario.", function () {
+    testContext.setupErrorMessage = function () {
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (1029): Before executing a test, you must provide input parameters using the 'withInputParams' function.";
+    };
+
+    testContext.setupTest();
+    testContext.setupErrorMessage();
+
+    try {
+      new FromCallbackScenario()
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .test(function () {});
+
+      Maddox.compare.shouldBeUnreachable();
+    } catch (err) {
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+    }
+  });
+
+  // MissingInputParams 1029
+  it("it should throw when input params are not provided when using FromPromiseScenario.", function () {
+    testContext.setupErrorMessage = function () {
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (1029): Before executing a test, you must provide input parameters using the 'withInputParams' function.";
+    };
+
+    testContext.setupTest();
+    testContext.setupErrorMessage();
+
+    try {
+      new FromPromiseScenario()
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .test(function () {});
+
+      Maddox.compare.shouldBeUnreachable();
+    } catch (err) {
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+    }
+  });
+
+  // MissingInputParams 1029
+  it("it should throw when input params are not provided when using FromSynchronousScenario.", function () {
+    testContext.setupErrorMessage = function () {
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (1029): Before executing a test, you must provide input parameters using the 'withInputParams' function.";
+    };
+
+    testContext.setupTest();
+    testContext.setupErrorMessage();
+
+    try {
+      new FromSynchronousScenario()
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .test(function () {});
+
+      Maddox.compare.shouldBeUnreachable();
+    } catch (err) {
+      Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+    }
+  });
+
   // MissingMockThisFunction 2000  && NOT DoesReturnCallbackDataToReturn 1025
   it("it should ignore when the third parameter in doesReturnWithCallback is an empty object and it should throw because the function wasn't mocked.", function () {
     testContext.setupErrorMessage = function () {
@@ -2007,7 +2067,7 @@ describe("When using a Scenario and getting errors", function () {
   it("it should throw when the user has not set the HTTP Request object using the 'withHttpRequest' function.", function () {
 
     testContext.setupErrorMessage = function () {
-      testContext.expectedErrorMessage = "Maddox Scenario Build Error (4003): You need to define the Http Request object using the 'withHttpRequest' function.";
+      testContext.expectedErrorMessage = "Maddox Scenario Build Error (4003): Before executing a test, you must provide input parameters using the 'withInputParams' or 'withHttpRequest' functions.";
     };
 
     testContext.setupTest();
