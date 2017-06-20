@@ -1,11 +1,11 @@
 {
   "name": "maddox",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Maddox provides a simple way to rapidly unit test complex success and failure scenarios which can be driven by responses of mocked external dependencies.",
   "main": "lib/index.js",
   "scripts": {
     "test": "npm run ut && npm run lint",
-    "perf": "maddox -p -d ./spec/unit",
+    "perf": "maddox -Pp -d ./spec/unit",
     "ut": "_mocha ./spec/unit",
     "coverage": "./bin/maddox-cov.js",
     "lint": "eslint ./spec/ ./lib",

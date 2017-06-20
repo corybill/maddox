@@ -67,9 +67,6 @@ class PrepareArguments {
 
     const args = parser.parseArgs();
 
-    // SET TIMEOUT TO BE 50% GREATER THAN EXPECTED TIME TO FINISH ONE TEST TO ENSURE WE DON'T TIMEOUT.
-    args.TIMEOUT = args.NUM_SAMPLES * args.SAMPLE_LENGTH * 1.50;
-
     state.setArguments(args);
   }
 }
