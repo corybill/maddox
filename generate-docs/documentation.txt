@@ -217,6 +217,27 @@ This function is synonymous with the 'shouldBeCalledWith' function except here w
 
 ******************************************************
 
+## resShouldAlwaysBeCalledWith(funcName, params)
+A variant of 'shouldBeCalledWith' that defines a mocked function on the response object that should be called with the same expected parameters on every call to the Response Mock 
+
+* **funcName** *{String}* - The name of the function to be mocked. Should match the name from 'mockThisFunction'.
+* **params** *{Array}* - An array of expected parameters. First parameter of the function goes in index 0 and the nth parameter of the function goes into index n.
+* **returns** *{HttpReqScenario}*
+
+******************************************************
+
+## resShouldContainHeader(headerName, headerValue, funcName)
+A variant of 'shouldBeCalledWith' specifically designed for Http Headers. This function mocks the 'set' function (or the provided function name) on the response mock. This function should be used to set a header in the response. 
+
+In Express, you use the following syntax for for setting a header 'res.set("headerKey", "headerValue");'. 
+
+* **headerName** *{String}* - The name of the header. i.e. The key.
+* **headerValue** *{String}* - The value of the header.
+* **[funcName]** *{String}* - Defaults to Expresses .set function.
+* **returns** *{HttpReqScenario}*
+
+******************************************************
+
 ## resShouldAlwaysBeIgnored(funcName)
 A variant of 'shouldBeCalledWith' that defines the parameters being passed into a given mocked function should never be tested. 
 
@@ -224,7 +245,7 @@ I was hesitant to add this functionality as it can easily be abused. That being 
 
 * **mockName** *{String}* - This is the key for the mock. It should match the key from 'mockThisFunction'.
 * **funcName** *{String}* - The name of the function to be mocked. Should match the name from 'mockThisFunction'.
-* **returns** *{Scenario}*
+* **returns** *{HttpReqScenario}*
 
 ******************************************************
 
