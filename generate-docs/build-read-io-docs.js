@@ -132,7 +132,7 @@ class Factory {
 
 const files = [
   "../lib/scenarios/scenario.js",
-  "../lib/scenarios/functional/http-req-scenario.js",
+  "../lib/scenarios/http-req-scenario.js",
   "../lib/proxies/mocha-proxy.js"
 ];
 

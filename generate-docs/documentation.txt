@@ -8,6 +8,16 @@ Mock any function from a given object.  The most common use case would be to moc
 
 ******************************************************
 
+##withTestFinisherFunction(mockName, funcName, iteration)
+Set a mocked proxy function as the finisher function for the test. When the finisher function is executed, the test will be considered complete, the mocks will begin being tested, and then the provided testable function will be executed. 
+
+* **mockName** *{String}* - This is the key for the mock. It will be used again in other functions and is used in Maddox to keep track of mocks.
+* **funcName** *{String}* - The name of the function to be mocked.
+* **[iteration]** *{Number}* - Defaults to 0. The finisher function will be executed the nth time this mocked proxy function is executed. Iterations start at 0. So if you want the finisher function to called on the second time a mocked proxy is called, then you would pass in 1.
+* **returns** *{Scenario}*
+
+******************************************************
+
 ##withEntryPoint(entryPointObject, entryPointFunction)
 Defines where to begin the test. 
 
@@ -180,7 +190,7 @@ By default, when a comparison fails, Maddox will place a stringified version of 
 
 ******************************************************
 
-##test()
+##test(testable)
 Initiates the test. This will call the entry point function with given input params. When the function is done executing, it will test that all of mocked functions were called with the expected parameters, and then call the testable function that was the parameter for the test function. 
 
 If testing the HttpReqScenario, Maddox call into the controller function using your input params as the request and mocking out the response for you. When a response finishing function (i.e. send, json, end, etc) is called on the response object, Maddox will begin validating the request. It will first test that all functions mocked on the response were called with the expected values. Next it will test that all of mocked functions were called with the expected parameters. And finally it will call function that was the parameter for the test function. Usually for the HttpReqScenario, you can just pass in the 'done' function from your testing framework. 
@@ -207,8 +217,41 @@ This function is synonymous with the 'shouldBeCalledWith' function except here w
 
 ******************************************************
 
+##resShouldAlwaysBeIgnored(funcName)
+A variant of 'shouldBeCalledWith' that defines the parameters being passed into a given mocked function should never be tested. 
+
+I was hesitant to add this functionality as it can easily be abused. That being said, there are some valid use cases but you should always think twice before using this function as you are essentially saying that you do not care about testing this mock. 
+
+* **mockName** *{String}* - This is the key for the mock. It should match the key from 'mockThisFunction'.
+* **funcName** *{String}* - The name of the function to be mocked. Should match the name from 'mockThisFunction'.
+* **returns** *{Scenario}*
+
+******************************************************
+
+##resDoesReturn(funcName, dataToReturn)
+This function is synonymous with the 'doesReturn' function except here we are defining what is returned from a mocked function on the HTTP Response object. i.e. Defines what to return during a success scenario from a **synchronous** mocked function on the HTTP Response object. 
+
+Ordering matters when defining the response from mocked functions. The first time your mock is called, Maddox will return the response of the first defined response from 'doesReturn' or one of its variants. 
+
+* **mockName** *{String}* - This is the key for the mock. It should match the key from 'mockThisFunction'.
+* **funcName** *{String}* - The name of the function to be mocked. Should match the name from 'mockThisFunction'.
+* **dataToReturn** *{Any}* - The data that will be returned when this mocked function is executed.
+* **returns** *{Scenario}*
+
+******************************************************
+
+##resDoesAlwaysReturn(funcName, dataToReturn)
+This is a variant of 'doesReturn'. Defines what to return during a success scenario from a **synchronous** mocked function on the HTTP Response Object. The dataToReturn will be returned on every execution of the mock. That means you only need to define one return value for all calls to the mock. 
+
+* **mockName** *{String}* - This is the key for the mock. It should match the key from 'mockThisFunction'.
+* **funcName** *{String}* - The name of the function to be mocked. Should match the name from 'mockThisFunction'.
+* **dataToReturn** *{Any}* - The data that will be returned when this mocked function is executed.
+* **returns** *{Scenario}*
+
+******************************************************
+
 ##resDoesReturnSelf(funcName)
-Some Http libraries in Node allow chainable functionality. For example, the following is a common express paradigm: res.statusCod(200).send(result). To ensure Maddox allows a chainable interface like this, it allows the user to define which functions should be chainable by using the 'resDoesReturnSelf'.  For the status code example, you would want to add 'resDoesReturnSelf("statusCode")' to your scenario.* **funcName** *{String}* - The name of the function to be mocked on the HttpResponse object.
+Some Http libraries in Node allow chainable functionality. For example, the following is a common express paradigm: res.statusCode(200).send(result). To ensure Maddox allows a chainable interface like this, it allows the user to define which functions should be chainable by using the 'resDoesReturnSelf'.  For the status code example, you would want to add 'resDoesReturnSelf("statusCode")' to your scenario.* **funcName** *{String}* - The name of the function to be mocked on the HttpResponse object.
 * **returns** *{HttpReqScenario}*
 
 ******************************************************
