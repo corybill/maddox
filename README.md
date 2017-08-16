@@ -69,6 +69,8 @@ Maddox uses the philosophy of Scenario testing.  All scenarios use the same base
       // NOTE: All scenarios are asynchronous. Ensure that that 'done' function is passed in or executed by you.
 </pre>
 
+## Maddox API
+
 ## mockThisFunction(mockName, funcName, object)
 Mock any function from a given object.  The most common use case would be to mock out a function in your proxy layer. 
 
