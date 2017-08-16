@@ -142,7 +142,7 @@ describe("Given the FromSynchronousScenario", function () {
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
-        .withFinisher("proxyInstance", "getMiddleName", 0)
+        .withTestFinisherFunction("proxyInstance", "getMiddleName", 0)
 
         .shouldBeCalledWith("uuid", "v4", Maddox.constants.EmptyParameters)
         .doesReturn("uuid", "v4", testContext.getFirstNameResult)

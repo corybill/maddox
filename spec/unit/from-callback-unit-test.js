@@ -158,7 +158,7 @@ describe("Given the FromCallbackScenario", function () {
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
-        .withFinisher("proxyInstance", "getFirstName", 1)
+        .withTestFinisherFunction("proxyInstance", "getFirstName", 1)
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -249,7 +249,7 @@ describe("Given the FromCallbackScenario", function () {
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
-        .withFinisher("proxyInstance", "getLastName", 0)
+        .withTestFinisherFunction("proxyInstance", "getLastName", 0)
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -289,7 +289,7 @@ describe("Given the FromCallbackScenario", function () {
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withInputParams(testContext.inputParams)
-        .withFinisher("proxyInstance", "getFirstName", 1)
+        .withTestFinisherFunction("proxyInstance", "getFirstName", 1)
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)

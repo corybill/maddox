@@ -212,7 +212,7 @@ describe("Given the HttpReqScenario", function () {
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withHttpRequest(testContext.httpRequestParams)
-        .withFinisher("proxyInstance", "getLastName", 0)
+        .withTestFinisherFunction("proxyInstance", "getLastName", 0)
 
         .resShouldBeCalledWith("send", testContext.expectedResponse)
         .resShouldBeCalledWith("status", testContext.expectedStatusCode)

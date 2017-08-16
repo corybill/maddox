@@ -2372,7 +2372,7 @@ describe("Given a Scenario", function () {
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withHttpRequest(testContext.httpRequestParams)
 
-        .withFinisher("proxyInstance", "getFirstName", 0)
+        .withTestFinisherFunction("proxyInstance", "getFirstName", 0)
 
         .resShouldAlwaysBeIgnored("send")
         .resShouldAlwaysBeIgnored("status")
@@ -2416,7 +2416,7 @@ describe("Given a Scenario", function () {
         .resShouldAlwaysBeIgnored("status")
         .resDoesReturnSelf("status")
 
-        .withFinisher("proxyInstance", "getFirstName", 0)
+        .withTestFinisherFunction("proxyInstance", "getFirstName", 0)
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -2456,7 +2456,7 @@ describe("Given a Scenario", function () {
         .resShouldAlwaysBeIgnored("status")
         .resDoesReturnSelf("status")
 
-        .withFinisher("proxyInstance", "getFirstName", 1)
+        .withTestFinisherFunction("proxyInstance", "getFirstName", 1)
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -2495,7 +2495,7 @@ describe("Given a Scenario", function () {
         .resShouldAlwaysBeIgnored("status")
         .resDoesReturnSelf("status")
 
-        .withFinisher("proxyInstance", "getFirstName")
+        .withTestFinisherFunction("proxyInstance", "getFirstName")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
@@ -2535,7 +2535,7 @@ describe("Given a Scenario", function () {
         .resShouldAlwaysBeIgnored("status")
         .resDoesReturnSelf("status")
 
-        .withFinisher("proxyInstance", "getLastName", 0)
+        .withTestFinisherFunction("proxyInstance", "getLastName", 0)
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
