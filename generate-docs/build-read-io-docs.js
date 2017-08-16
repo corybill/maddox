@@ -159,7 +159,7 @@ files.forEach((filePath) => {
 
     description = Factory.condense(description);
 
-    const functionHeader = `##${item[1].split("\n  ")[1].split(" {")[0]}`;
+    const functionHeader = `## ${item[1].split("\n  ")[1].split(" {")[0]}`;
 
     mapped[functionHeader] = {functionHeader, description};
   });

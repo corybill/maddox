@@ -71,6 +71,26 @@ class Controller {
 
     res.status(200).send({result: "OK"});
   }
+
+  static specialResponseFunctionality(req, res) {
+    Service.executeWithStatefulSingletonProxy(req.params, req.query).then(function (result) {
+      res.set("someHeader1", result.personId);
+      res.set("someHeader2", result.homeState);
+      res.fakeHeaderFunction("someHeader3", result.homeState);
+
+      const someHeaderResponse1 = res.someResFunction(result.lastName);
+      const someHeaderResponse2 = res.someResFunction(result.lastName);
+
+      result.someHeaderResponse1 = someHeaderResponse1;
+      result.someHeaderResponse2 = someHeaderResponse2;
+
+      res.status(200).send(result);
+
+    }).catch(function (err) {
+      res.status(404).send(err.message);
+
+    });
+  }
 }
 
 module.exports = Controller;

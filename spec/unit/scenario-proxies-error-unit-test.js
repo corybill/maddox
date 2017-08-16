@@ -823,6 +823,44 @@ describe("Given Scenarios", function () {
       }
     });
 
+    // HeaderNameShouldBeString 1030
+    it("should throw when headerName is undefined when using the 'resShouldContainHeader' function.", function () {
+      testContext.setupErrorMessage = function () {
+        testContext.expectedErrorMessage = "Maddox Scenario Build Error (1030): When using 'resShouldContainHeader', the first parameter must be of type string that is equal to the header name.";
+      };
+
+      testContext.setupTest();
+      testContext.setupErrorMessage();
+
+      try {
+        new Scenario()
+          .resShouldContainHeader(undefined, "someValue");
+
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+      }
+    });
+
+    // HeaderValueShouldBeString 1031
+    it("should throw when headerValue is undefined when using the 'resShouldContainHeader' function.", function () {
+      testContext.setupErrorMessage = function () {
+        testContext.expectedErrorMessage = "Maddox Scenario Build Error (1031): When using 'resShouldContainHeader', the second parameter must be of type string that is equal to the header value.";
+      };
+
+      testContext.setupTest();
+      testContext.setupErrorMessage();
+
+      try {
+        new Scenario()
+          .resShouldContainHeader("someValue", undefined);
+
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+      }
+    });
+
     // MissingMockThisFunction 2000  && NOT DoesReturnCallbackDataToReturn 1025
     it("should ignore when the third parameter in doesReturnWithCallback is an empty object and it should throw because the function wasn't mocked.", function () {
       testContext.setupErrorMessage = function () {
