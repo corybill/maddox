@@ -64,6 +64,13 @@ class Controller {
     });
   }
 
+  static initiateAsyncProcessing(req, callback) {
+    setTimeout(() => {
+      Service.executeWithStatelessEs6Proxy(req.params, req.query);
+    }, 10);
+
+    callback(undefined, {result: "OK"});
+  }
 }
 
 module.exports = Controller;

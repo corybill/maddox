@@ -28,6 +28,13 @@ class Controller {
     return Service.executeWithStatelessPreEs6StaticProxy(req.params, req.query);
   }
 
+  static initiateAsyncProcessing(req) {
+    setTimeout(() => {
+      Service.executeWithStatelessEs6Proxy(req.params, req.query);
+    }, 10);
+
+    return Promise.resolve({result: "OK"});
+  }
 }
 
 module.exports = Controller;

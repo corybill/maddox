@@ -73,7 +73,7 @@ class Service {
         homeState: queryParams.homeState
       };
 
-      let proxy = StatefulSingletonProxy.getInstance(); // e.g. Must call mocked function with the flow of code
+      let proxy = StatefulSingletonProxy.getInstance(); // e.g. Must call mocked function within the flow of code
 
       return proxy.getFirstName(urlParams.personId).then(function (firstName) {
         return proxy.getFirstName(urlParams.personId, firstName);

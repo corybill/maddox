@@ -63,6 +63,14 @@ class Controller {
 
     });
   }
+
+  static initiateAsyncProcessing(req, res) {
+    setTimeout(() => {
+      Service.executeWithStatefulSingletonProxy(req.params, req.query);
+    }, 10);
+
+    res.status(200).send({result: "OK"});
+  }
 }
 
 module.exports = Controller;

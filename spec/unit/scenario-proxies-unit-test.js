@@ -13,10 +13,10 @@ const Maddox = require("../../lib/index"), // require("maddox");
 
 const Scenario = Maddox.functional.HttpReqScenario;
 
-describe("When using a Scenario", function () {
+describe("Given a Scenario", function () {
   let testContext;
 
-  describe("without external dependencies", function () {
+  describe("when without external dependencies, it", function () {
 
     beforeEach(function () {
       testContext = {};
@@ -49,7 +49,7 @@ describe("When using a Scenario", function () {
       };
     });
 
-    it("it should get expected result.", function (done) {
+    it("should get expected result.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupExpected();
@@ -65,7 +65,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle a checked exception.", function (done) {
+    it("should handle a checked exception.", function (done) {
       testContext.setupHttpRequest = function () {
         testContext.httpRequest = {
           params: {},
@@ -99,7 +99,7 @@ describe("When using a Scenario", function () {
     });
   });
 
-  describe("and using a stateful factory proxy", function () {
+  describe("when using a stateful factory proxy, it", function () {
     beforeEach(function () {
       testContext = {};
 
@@ -151,7 +151,7 @@ describe("When using a Scenario", function () {
       };
     });
 
-    it("it should pass all tests.", function (done) {
+    it("should pass all tests.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -191,7 +191,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle a checked exception.", function (done) {
+    it("should handle a checked exception.", function (done) {
       testContext.setupHttpRequest = function () {
         testContext.httpRequest = {
           params: {},
@@ -232,7 +232,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle first call to mock throwing an error.", function (done) {
+    it("should handle first call to mock throwing an error.", function (done) {
       testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -276,7 +276,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle second call to mock throwing an error.", function (done) {
+    it("should handle second call to mock throwing an error.", function (done) {
       testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -323,7 +323,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle mock throwing an error with a promise.", function (done) {
+    it("should handle mock throwing an error with a promise.", function (done) {
       testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -367,7 +367,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle mock throwing an error with a callback.", function (done) {
+    it("should handle mock throwing an error with a callback.", function (done) {
       testContext.setupGetLastName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -417,7 +417,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle mock throwing an error synchronously.", function (done) {
+    it("should handle mock throwing an error synchronously.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -465,7 +465,7 @@ describe("When using a Scenario", function () {
     });
   });
 
-  describe("and using a stateful singleton proxy", function () {
+  describe("when using a stateful singleton proxy, it", function () {
     beforeEach(function () {
       testContext = {};
 
@@ -517,7 +517,7 @@ describe("When using a Scenario", function () {
       };
     });
 
-    it("it should pass all tests.", function (done) {
+    it("should pass all tests.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -557,7 +557,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle a checked exception.", function (done) {
+    it("should handle a checked exception.", function (done) {
       testContext.setupHttpRequest = function () {
         testContext.httpRequest = {
           params: {},
@@ -598,7 +598,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle first call to mock throwing an error.", function (done) {
+    it("should handle first call to mock throwing an error.", function (done) {
       testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -642,7 +642,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle second call to mock throwing an error.", function (done) {
+    it("should handle second call to mock throwing an error.", function (done) {
       testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -689,7 +689,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle mock throwing an error with a promise.", function (done) {
+    it("should handle mock throwing an error with a promise.", function (done) {
       testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -733,7 +733,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle mock throwing an error with a callback.", function (done) {
+    it("should handle mock throwing an error with a callback.", function (done) {
       testContext.setupGetLastName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -783,7 +783,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle mock throwing an error synchronously.", function (done) {
+    it("should handle mock throwing an error synchronously.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -831,7 +831,7 @@ describe("When using a Scenario", function () {
     });
   });
 
-  describe("and using a stateless es6 proxy", function () {
+  describe("when using a stateless es6 proxy, it", function () {
     beforeEach(function () {
       testContext = {};
 
@@ -883,7 +883,7 @@ describe("When using a Scenario", function () {
       };
     });
 
-    it("it should pass all tests.", function (done) {
+    it("should pass all tests.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -919,7 +919,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle a checked exception.", function (done) {
+    it("should handle a checked exception.", function (done) {
       testContext.setupHttpRequest = function () {
         testContext.httpRequest = {
           params: {},
@@ -959,7 +959,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle first call to mock throwing an error.", function (done) {
+    it("should handle first call to mock throwing an error.", function (done) {
       testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -999,7 +999,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle second call to mock throwing an error.", function (done) {
+    it("should handle second call to mock throwing an error.", function (done) {
       testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -1042,7 +1042,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle mock throwing an error with a promise.", function (done) {
+    it("should handle mock throwing an error with a promise.", function (done) {
       testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -1082,7 +1082,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle mock throwing an error with a callback.", function (done) {
+    it("should handle mock throwing an error with a callback.", function (done) {
       testContext.setupGetLastName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -1128,7 +1128,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle mock throwing an error synchronously.", function (done) {
+    it("should handle mock throwing an error synchronously.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -1172,7 +1172,7 @@ describe("When using a Scenario", function () {
     });
   });
 
-  describe("and using a stateless pre es6 singleton proxy", function () {
+  describe("when using a stateless pre es6 singleton proxy, it", function () {
     beforeEach(function () {
       testContext = {};
 
@@ -1224,7 +1224,7 @@ describe("When using a Scenario", function () {
       };
     });
 
-    it("it should pass all tests.", function (done) {
+    it("should pass all tests.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -1260,7 +1260,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle a checked exception.", function (done) {
+    it("should handle a checked exception.", function (done) {
       testContext.setupHttpRequest = function () {
         testContext.httpRequest = {
           params: {},
@@ -1300,7 +1300,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle first call to mock throwing an error.", function (done) {
+    it("should handle first call to mock throwing an error.", function (done) {
       testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -1340,7 +1340,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle second call to mock throwing an error.", function (done) {
+    it("should handle second call to mock throwing an error.", function (done) {
       testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -1383,7 +1383,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle mock throwing an error with a promise.", function (done) {
+    it("should handle mock throwing an error with a promise.", function (done) {
       testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -1423,7 +1423,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle mock throwing an error with a callback.", function (done) {
+    it("should handle mock throwing an error with a callback.", function (done) {
       testContext.setupGetLastName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -1469,7 +1469,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle mock throwing an error synchronously.", function (done) {
+    it("should handle mock throwing an error synchronously.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -1513,7 +1513,7 @@ describe("When using a Scenario", function () {
     });
   });
 
-  describe("and using a stateless pre es6 static proxy", function () {
+  describe("when using a stateless pre es6 static proxy, it", function () {
     beforeEach(function () {
       testContext = {};
 
@@ -1565,7 +1565,7 @@ describe("When using a Scenario", function () {
       };
     });
 
-    it("it should pass all tests.", function (done) {
+    it("should pass all tests.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -1601,7 +1601,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle a checked exception.", function (done) {
+    it("should handle a checked exception.", function (done) {
       testContext.setupHttpRequest = function () {
         testContext.httpRequest = {
           params: {},
@@ -1641,7 +1641,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle first call to mock throwing an error.", function (done) {
+    it("should handle first call to mock throwing an error.", function (done) {
       testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -1681,7 +1681,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle second call to mock throwing an error.", function (done) {
+    it("should handle second call to mock throwing an error.", function (done) {
       testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -1724,7 +1724,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle mock throwing an error with a promise.", function (done) {
+    it("should handle mock throwing an error with a promise.", function (done) {
       testContext.setupGetFirstName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -1764,7 +1764,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle mock throwing an error with a callback.", function (done) {
+    it("should handle mock throwing an error with a callback.", function (done) {
       testContext.setupGetLastName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -1810,7 +1810,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should handle mock throwing an error synchronously.", function (done) {
+    it("should handle mock throwing an error synchronously.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -1854,7 +1854,7 @@ describe("When using a Scenario", function () {
     });
   });
 
-  describe("and using the noDebug flag", function () {
+  describe("when using the noDebug flag, it", function () {
     beforeEach(function () {
       testContext = {};
 
@@ -1908,7 +1908,7 @@ describe("When using a Scenario", function () {
       };
     });
 
-    it("it should add the full object print out of actual and expected when the noDebug flag is NOT set.", function (done) {
+    it("should add the full object print out of actual and expected when the noDebug flag is NOT set.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -1954,7 +1954,7 @@ describe("When using a Scenario", function () {
         });
     });
 
-    it("it should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function (done) {
+    it("should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
@@ -2002,7 +2002,7 @@ describe("When using a Scenario", function () {
     });
   });
 
-  describe("and using shouldAlways / doesAlways", function () {
+  describe("when using shouldAlways / doesAlways, it", function () {
     beforeEach(function () {
       testContext = {};
 
@@ -2067,7 +2067,7 @@ describe("When using a Scenario", function () {
       };
     });
 
-    it("it should process when using shouldAlways for some proxy calls, but not using doesAlways for any proxy calls.", function (done) {
+    it("should process when using shouldAlways for some proxy calls, but not using doesAlways for any proxy calls.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -2113,7 +2113,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should process when using shouldAlways for some proxy calls, and using doesAlways for some proxy calls.", function (done) {
+    it("should process when using shouldAlways for some proxy calls, when using doesAlways for some proxy calls.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.getMiddleName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
         testContext.getMiddleName1Result = random.firstName();
@@ -2179,7 +2179,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should process when using shouldAlways for some proxy calls, and using doesAlways for all proxy calls.", function (done) {
+    it("should process when using shouldAlways for some proxy calls, when using doesAlways for all proxy calls.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.getMiddleName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
         testContext.getMiddleName1Result = random.firstName();
@@ -2249,7 +2249,7 @@ describe("When using a Scenario", function () {
         .test(done);
     });
 
-    it("it should process when using shouldAlways for all proxy calls, and using doesAlways for all proxy calls.", function (done) {
+    it("should process when using shouldAlways for all proxy calls, when using doesAlways for all proxy calls.", function (done) {
       testContext.setupGetMiddleName = function () {
         testContext.getMiddleName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
         testContext.getMiddleName1Result = random.firstName();
@@ -2304,7 +2304,256 @@ describe("When using a Scenario", function () {
     });
   });
 
-  describe("and changing the state of a shouldBeCalledWith through out the code", function () {
+  describe("when setting a test finisher function, it", function () {
+    beforeEach(function () {
+      testContext = {};
+
+      testContext.setupTest = function () {
+        testContext.entryPointObject = Controller;
+        testContext.entryPointFunction = "statelessEs6Proxy";
+        testContext.proxyInstance = StatelessEs6Proxy;
+      };
+
+      testContext.setupHttpRequest = function () {
+        testContext.httpRequest = {
+          params: {
+            personId: "123456789"
+          },
+          query: {
+            homeState: "IL"
+          }
+        };
+
+        testContext.httpRequestParams = [testContext.httpRequest];
+      };
+
+      testContext.setupGetFirstName = function () {
+        testContext.getFirstName1Params = [testContext.httpRequest.params.personId];
+        testContext.getFirstName1Result = random.firstName();
+
+        testContext.getFirstName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
+        testContext.getFirstName2Result = random.firstName();
+      };
+
+      testContext.setupGetMiddleName = function () {
+        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result];
+        testContext.getMiddleNameResult = random.firstName();
+      };
+
+      testContext.setupGetLastName = function () {
+        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameResult = [undefined, random.lastName()];
+      };
+
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = [{
+          personId: testContext.httpRequest.params.personId,
+          homeState: testContext.httpRequest.query.homeState,
+          lastName: testContext.getLastNameResult[1]
+        }];
+
+        testContext.expectedStatusCode = [200];
+      };
+    });
+
+    it("should handle a finisher function that is defined before to the response finisher function.", function (done) {
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .withFinisher("proxyInstance", "getFirstName", 0)
+
+        .resShouldAlwaysBeIgnored("send")
+        .resShouldAlwaysBeIgnored("status")
+        .resDoesReturnSelf("status")
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        // Don't need a shouldBeCalledWith because it never gets called
+        // .shouldAlwaysBeIgnored("proxyInstance", "getFirstName")
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        // Don't need a shouldBeCalledWith because it never gets called
+        // .shouldAlwaysBeIgnored("proxyInstance", "getMiddleName")
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        // Don't need a shouldBeCalledWith because it never gets called
+        // .shouldAlwaysBeIgnored("proxyInstance", "getLastName")
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
+        .test(done);
+    });
+
+    it("should handle a finisher function that is defined after to the response finisher function.", function (done) {
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldAlwaysBeIgnored("send")
+        .resShouldAlwaysBeIgnored("status")
+        .resDoesReturnSelf("status")
+
+        .withFinisher("proxyInstance", "getFirstName", 0)
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        // Don't need a shouldBeCalledWith because it never gets called
+        // .shouldAlwaysBeIgnored("proxyInstance", "getFirstName")
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        // Don't need a shouldBeCalledWith because it never gets called
+        // .shouldAlwaysBeIgnored("proxyInstance", "getMiddleName")
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        // Don't need a shouldBeCalledWith because it never gets called
+        // .shouldAlwaysBeIgnored("proxyInstance", "getLastName")
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
+        .test(done);
+    });
+
+    it("should handle a finisher function with an iteration greater than 0.", function (done) {
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldAlwaysBeIgnored("send")
+        .resShouldAlwaysBeIgnored("status")
+        .resDoesReturnSelf("status")
+
+        .withFinisher("proxyInstance", "getFirstName", 1)
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        // Don't need a shouldBeCalledWith because it never gets called
+        // .shouldAlwaysBeIgnored("proxyInstance", "getMiddleName")
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        // Don't need a shouldBeCalledWith because it never gets called
+        // .shouldAlwaysBeIgnored("proxyInstance", "getLastName")
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
+        .test(done);
+    });
+
+    it("should default finisher function 'iteration' property to 0.", function (done) {
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldAlwaysBeIgnored("send")
+        .resShouldAlwaysBeIgnored("status")
+        .resDoesReturnSelf("status")
+
+        .withFinisher("proxyInstance", "getFirstName")
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        // Don't need a shouldBeCalledWith because it never gets called
+        // .shouldAlwaysBeIgnored("proxyInstance", "getFirstName")
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        // Don't need a shouldBeCalledWith because it never gets called
+        // .shouldAlwaysBeIgnored("proxyInstance", "getMiddleName")
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        // Don't need a shouldBeCalledWith because it never gets called
+        // .shouldAlwaysBeIgnored("proxyInstance", "getLastName")
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
+        .test(done);
+    });
+
+    it("should handle a finisher function but still test all prior mocks.", function (done) {
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldAlwaysBeIgnored("send")
+        .resShouldAlwaysBeIgnored("status")
+        .resDoesReturnSelf("status")
+
+        .withFinisher("proxyInstance", "getLastName", 0)
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
+        .test(done);
+    });
+  });
+
+  describe("when changing the state of a shouldBeCalledWith through out the code, it", function () {
     beforeEach(function () {
       testContext = {};
 
@@ -2346,7 +2595,7 @@ describe("When using a Scenario", function () {
       };
     });
 
-    it("it should test the mock inputParams with the state that they were called with.", function (done) {
+    it("should test the mock inputParams with the state that they were called with.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -2371,7 +2620,7 @@ describe("When using a Scenario", function () {
     });
   });
 
-  describe("and using shouldAlwaysIgnore", function () {
+  describe("when using shouldAlwaysIgnore, it", function () {
     beforeEach(function () {
       testContext = {};
 
@@ -2436,7 +2685,7 @@ describe("When using a Scenario", function () {
       };
     });
 
-    it("it should process when using shouldAlwaysIgnore", function (done) {
+    it("should process when using shouldAlwaysIgnore", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -2483,7 +2732,7 @@ describe("When using a Scenario", function () {
     });
   });
 
-  describe("and no passing in the test context", function () {
+  describe("when not passing in the test context, it", function () {
     beforeEach(function () {
       testContext = {};
 
@@ -2548,7 +2797,7 @@ describe("When using a Scenario", function () {
       };
     });
 
-    it("it should process when not providing test context and not marking as performance test.", function (done) {
+    it("should process when not providing test context and not marking as performance test.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
