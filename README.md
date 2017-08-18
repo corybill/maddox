@@ -84,7 +84,7 @@ Mock any function from a given object.  The most common use case would be to moc
 ## withTestFinisherFunction(mockName, funcName, iteration)
 Set a mocked proxy function as the finisher function for the test. When the finisher function is executed, the test will be considered complete, the mocks will begin being tested, and then the provided testable function will be executed. 
 
-A common use case for using this function, is if you want to execute a set of code asynchronously but you don't care about the result. For Example: Let's say you want to call an HTTP endpoint to execute some code. But you want the HTTP endpoint to provide an immediate acknowledgement, ending the HTTP Request without waiting for the executed code to be finished. 
+A common use case for using this function, is if you want to execute a set of code asynchronously but you don't care about the result. For Example: Let's say you want to call an HTTP endpoint to execute some code, but you want the HTTP endpoint to provide an immediate acknowledgement. In other words, you want to end the HTTP Request without waiting for the executed code to be finished. 
 
 As always, there are detailed examples in the unit tests of Maddox to see how this can be used. But I will also be publishing specific examples of this use case since it isn't that common. 
 
