@@ -2,6 +2,7 @@
 
 const Maddox = require("../../lib/index"), // require("maddox");
   random = require("../random"),
+  constants = require("../../lib/constants"),
   Controller = require("../testable/modules/test-module/from-http-req-controller"),
   SpecialScenariosController = require("../testable/modules/test-module/special-scenarios-controller"),
   testConstants = require("../test-constants"),
@@ -2842,5 +2843,182 @@ describe("Given a Scenario", function () {
 
         .test(done);
     });
+  });
+
+  describe("when ignoring params, it", function () {
+    beforeEach(function () {
+      testContext = {};
+
+      testContext.setupTest = function () {
+        testContext.entryPointObject = Controller;
+        testContext.entryPointFunction = "statelessEs6Proxy";
+        testContext.proxyInstance = StatelessEs6Proxy;
+      };
+
+      testContext.setupHttpRequest = function () {
+        testContext.httpRequest = {
+          params: {
+            personId: "123456789"
+          },
+          query: {
+            homeState: "IL"
+          }
+        };
+
+        testContext.httpRequestParams = [testContext.httpRequest];
+      };
+
+      testContext.setupGetFirstName = function () {
+        testContext.getFirstName1Params = [testContext.httpRequest.params.personId];
+        testContext.getFirstName1Result = random.firstName();
+
+        testContext.getFirstName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
+        testContext.getFirstName2Result = random.firstName();
+      };
+
+      testContext.setupGetMiddleName = function () {
+        testContext.getMiddleNameParams = [constants.IgnoreParam, testContext.getFirstName2Result];
+        testContext.getMiddleNameResult = random.firstName();
+      };
+
+      testContext.setupGetLastName = function () {
+        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameResult = [undefined, random.lastName()];
+      };
+
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = [{
+          personId: testContext.httpRequest.params.personId,
+          homeState: testContext.httpRequest.query.homeState,
+          lastName: testContext.getLastNameResult[1]
+        }];
+
+        testContext.expectedStatusCode = [200];
+      };
+    });
+
+    it("should should ignore the first param of a mock when the first param is marked to be ignored.", function (done) {
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalledWith("send", testContext.expectedResponse)
+        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
+        .resDoesReturnSelf("status")
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
+        .perf()
+        .test(done);
+    });
+
+    it("should should ignore all params of a mock when they are marked to be ignored.", function (done) {
+      testContext.setupGetMiddleName = function () {
+        testContext.getMiddleNameParams = [constants.IgnoreParam, constants.IgnoreParam];
+        testContext.getMiddleNameResult = random.firstName();
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalledWith("send", testContext.expectedResponse)
+        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
+        .resDoesReturnSelf("status")
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
+        .perf()
+        .test(done);
+    });
+
+    it("should should ignore params in more than one mock when they are marked to be ignored.", function (done) {
+      testContext.setupGetMiddleName = function () {
+        testContext.getMiddleNameParams = [constants.IgnoreParam, constants.IgnoreParam];
+        testContext.getMiddleNameResult = random.firstName();
+      };
+
+      testContext.setupGetLastName = function () {
+        testContext.getLastNameParams = [testContext.httpRequest.params.personId, constants.IgnoreParam, testContext.getMiddleNameResult];
+        testContext.getLastNameResult = [undefined, random.lastName()];
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalledWith("send", testContext.expectedResponse)
+        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
+        .resDoesReturnSelf("status")
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
+        .perf()
+        .test(done);
+    });
+
   });
 });
