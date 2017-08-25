@@ -35,6 +35,23 @@ The best way to learn is to see it in action.
 2. Testing a library - https://github.com/corybill/Preconditions/tree/master/spec
 3. Testing a library - https://github.com/corybill/Optional/tree/master/spec
 
+### Scenario Constants
+There are a few constants that Maddox exposes that will make it easier to use. They can be used like this:
+```
+const Maddox = require("maddox");
+
+Maddox.constants.IgnoreParam
+Maddox.constants.EmptyResult
+Maddox.constants.EmptyParameters
+```
+
+1. IgnoreParam - If you replace a parameter within a 'shouldBeCalledWith' (or any of its variants) function call, then
+that parameter will not validated.
+2. EmptyResult - When your mocked function doesn't have a return value, you can use the EmptyResult constant instead of
+saying undefined.
+2. EmptyParameters - When your mocked function has no expected parameters, you can use EmptyParameters constant instead
+of saying empty array.
+
 ### Scenario API
 Maddox uses the philosophy of Scenario testing.  All scenarios use the same base api.
 
