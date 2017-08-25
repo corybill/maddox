@@ -48,8 +48,8 @@ Maddox.constants.EmptyParameters
 1. IgnoreParam - If you replace a parameter within a 'shouldBeCalledWith' (or any of its variants) function call, then
 that parameter will not validated.
 2. EmptyResult - When your mocked function doesn't have a return value, you can use the EmptyResult constant instead of
-saying undefined.
-2. EmptyParameters - When your mocked function has no expected parameters, you can use EmptyParameters constant instead
+passing in undefined.
+2. EmptyParameters - When your mocked function has no expected parameters, you can use the EmptyParameters constant instead
 of saying empty array.
 
 ### Scenario API
