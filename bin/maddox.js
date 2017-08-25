@@ -52,18 +52,18 @@ class PrepareArguments {
       description: "Maddox CLI runs performance tests on Maddox BDD tests that are marked with the .perf() function."
     });
 
-    parser.addArgument([ "-t", "--TIMEOUT" ], {help: "How long a test has (ms) to finish before timing out.", defaultValue: 30000, type: "int"});
-    parser.addArgument([ "-u", "--UI" ], {help: "Specify user-interface (bdd|tdd|qunit|exports).", defaultValue: "bdd"});
-    parser.addArgument([ "-p", "--PRINT" ], {help: "Print all num requests per second.", nargs: "0"});
-    parser.addArgument([ "-P", "--PRINT_ALL" ], {help: "Print all saved statistics.", nargs: "0"});
+    parser.addArgument([ "-t", "--TIMEOUT" ], {help: "Defines how long a test has (ms) to finish before timing out (See mocha.js).", defaultValue: 30000, type: "int"});
+    parser.addArgument([ "-u", "--UI" ], {help: "Specify the user-interface (bdd|tdd|qunit|exports) (See mocha.js).", defaultValue: "bdd"});
+    parser.addArgument([ "-p", "--PRINT" ], {help: "When marked, it will print the number of requests per second for each test to the console.", nargs: "0"});
+    parser.addArgument([ "-P", "--PRINT_ALL" ], {help: "When marked, it will print all saved (including historical) statistics to the console.", nargs: "0"});
     parser.addArgument([ "-m", "--MAX_RESULTS" ], {help: "Only keep this many historical results. Will delete results of the number is less than current count.", defaultValue: 10, type: "int"});
     parser.addArgument([ "-n", "--DO_NOT_SAVE_RESULTS" ], {help: "Do NOT save results of this run.", nargs: "0"});
-    parser.addArgument([ "-d", "--TEST_DIR" ], {help: "Save results of this run.", required: true, nargs: "*"});
+    parser.addArgument([ "-d", "--TEST_DIR" ], {help: "Add the directories that you would like to test.", required: true, nargs: "*"});
     parser.addArgument([ "-r", "--REMOVE_EXISTING" ], {help: "Remove all existing results.", nargs: "0"});
-    parser.addArgument([ "-s", "--NUM_SAMPLES" ], {help: "How many times to run the perf test.", defaultValue: 20, type: "int"});
-    parser.addArgument([ "-l", "--SAMPLE_LENGTH" ], {help: "The length (in millis) to run each individual perf test.", defaultValue: 1000, type: "int"});
-    parser.addArgument([ "-c", "--NUM_CONCURRENT" ], {help: "How many samples to run concurrently.", defaultValue: 20, type: "int"});
-    parser.addArgument([ "-o", "--ONLY_95" ], {help: "Remove all existing results that are not with 95th percentile. WARNING: Don't use with small samples sizes or if you have changed your code.", nargs: "0"});
+    parser.addArgument([ "-s", "--NUM_SAMPLES" ], {help: "Sets the sample size for each individual perf test i.e. each test will be executed this many times in an attempt to normalize results.", defaultValue: 20, type: "int"});
+    parser.addArgument([ "-l", "--SAMPLE_LENGTH" ], {help: "The time length (in millis) to run each individual perf test.", defaultValue: 1000, type: "int"});
+    parser.addArgument([ "-c", "--NUM_CONCURRENT" ], {help: "**CURRENTLY NOT IMPLEMENTED** How many samples to run concurrently. **CURRENTLY NOT IMPLEMENTED**", defaultValue: 20, type: "int"});
+    parser.addArgument([ "-o", "--ONLY_95" ], {help: "Remove all historical results that are not within the current 95th percentile. WARNING: Don't use with small samples sizes or if you have recently changed your code. Doing so will artificially keep the statistics close to the existing mean.", nargs: "0"});
 
     const args = parser.parseArgs();
 
@@ -109,7 +109,6 @@ class AddTestFilesToMocha {
     const mocha = state.getMocha();
     const args = state.getArguments();
     const providedTestDirs = args.TEST_DIR;
-
 
     for (const providedTestDir of providedTestDirs) {
       const actualTestDir = (providedTestDir.startsWith("/")) ? providedTestDir : `${process.cwd()}/${providedTestDir}`;
