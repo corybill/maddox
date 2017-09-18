@@ -1,6 +1,7 @@
 "use strict";
 
 const Preconditions = require("preconditions"),
+  BluebirdPromise = require("bluebird"),
   uuid = require("node-uuid");
 
 const testConstants = require("../../../test-constants"),
@@ -109,6 +110,14 @@ class Controller {
     };
 
     return result;
+  }
+
+  static returnBluebirdPromise() {
+    return BluebirdPromise.resolve();
+  }
+
+  static returnNativePromise() {
+    return Promise.resolve();
   }
 }
 

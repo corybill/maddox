@@ -183,7 +183,7 @@ describe("Given Scenarios", function () {
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = "Maddox Scenario Build Error (1005): When calling 'withEntryPoint', the first parameter must be of type object representing the object that contains the function to be mocked.";
+        testContext.expectedErrorMessage = "Maddox Scenario Build Error (1005): When calling 'withEntryPoint', the first parameter must be of type object representing the object that contains the EntryPointString (i.e. function) that will be called to kick off the test.";
       };
 
       testContext.setupTest();
@@ -207,7 +207,7 @@ describe("Given Scenarios", function () {
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = "Maddox Scenario Build Error (1006): When calling 'withEntryPoint', the second parameter must be of type String representing the function name that will be mocked.";
+        testContext.expectedErrorMessage = "Maddox Scenario Build Error (1006): When calling 'withEntryPoint', the second parameter must be of type string representing the function that will be called to kick off the test.";
       };
 
       testContext.setupTest();
@@ -1974,7 +1974,7 @@ describe("Given Scenarios", function () {
     });
 
     // ResponseNotAPromise 3005
-    it("should throw when the response is not a Promise.", function (done) {
+    it("should throw when using the FromPromiseScenario and the response is NOT a Promise.", function (done) {
       testContext.setupTest = function () {
         testContext.entryPointObject = FromPromiseController;
         testContext.entryPointFunction = "returnEmptyString";
@@ -2021,7 +2021,7 @@ describe("Given Scenarios", function () {
     });
 
     // ResponseNotAPromise 3005
-    it("should throw when the response is not a Promise.", function (done) {
+    it("should throw when using the FromPromiseScenario and the response is NOT a Promise.", function (done) {
       testContext.setupTest = function () {
         testContext.entryPointObject = FromPromiseController;
         testContext.entryPointFunction = "returnUndefined";
@@ -2040,6 +2040,100 @@ describe("Given Scenarios", function () {
       testContext.setupErrorMessage();
 
       new FromPromiseScenario(this)
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
+        .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
+        .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withInputParams(testContext.httpRequestParams)
+
+        .shouldBeCalledWith("StatelessEs6Proxy", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("StatelessEs6Proxy", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWith("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameParams)
+        .doesReturn("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
+        .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
+
+        .test(function (err, response) {
+          try {
+            Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+            Maddox.compare.shouldEqual({actual: response, expected: undefined});
+            done();
+          } catch (testError) {
+            done(testError);
+          }
+        });
+    });
+
+    // ResponseCannotBePromise 3006
+    it("should throw when using the FromSynchronousScenario and the response IS a BlueBird Promise.", function (done) {
+      testContext.setupTest = function () {
+        testContext.entryPointObject = FromSynchronousController;
+        testContext.entryPointFunction = "returnBluebirdPromise";
+      };
+
+      testContext.setupErrorMessage = function () {
+        testContext.expectedErrorMessage = "Maddox Runtime Error (3006): When using the 'FromSynchronousScenario', the result of the tested code can NOT be a promise. See 'FromPromiseScenario' if you want to test a function returning a promise.";
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+      testContext.setupErrorMessage();
+
+      new FromSynchronousScenario(this)
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
+        .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
+        .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withInputParams(testContext.httpRequestParams)
+
+        .shouldBeCalledWith("StatelessEs6Proxy", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("StatelessEs6Proxy", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWith("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameParams)
+        .doesReturn("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
+        .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
+
+        .test(function (err, response) {
+          try {
+            Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+            Maddox.compare.shouldEqual({actual: response, expected: undefined});
+            done();
+          } catch (testError) {
+            done(testError);
+          }
+        });
+    });
+
+    // ResponseCannotBePromise 3006
+    it("should throw when using the FromSynchronousScenario and the response IS a native Promise.", function (done) {
+      testContext.setupTest = function () {
+        testContext.entryPointObject = FromSynchronousController;
+        testContext.entryPointFunction = "returnNativePromise";
+      };
+
+      testContext.setupErrorMessage = function () {
+        testContext.expectedErrorMessage = "Maddox Runtime Error (3006): When using the 'FromSynchronousScenario', the result of the tested code can NOT be a promise. See 'FromPromiseScenario' if you want to test a function returning a promise.";
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+      testContext.setupErrorMessage();
+
+      new FromSynchronousScenario(this)
         .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
         .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
         .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
