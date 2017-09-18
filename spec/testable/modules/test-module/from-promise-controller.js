@@ -35,6 +35,14 @@ class Controller {
 
     return Promise.resolve({result: "OK"});
   }
+
+  static returnEmptyString() {
+    return "";
+  }
+
+  static returnUndefined() {
+    return undefined;
+  }
 }
 
 module.exports = Controller;

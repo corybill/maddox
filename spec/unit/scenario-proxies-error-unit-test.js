@@ -1973,6 +1973,100 @@ describe("Given Scenarios", function () {
         });
     });
 
+    // ResponseNotAPromise 3005
+    it("should throw when the response is not a Promise.", function (done) {
+      testContext.setupTest = function () {
+        testContext.entryPointObject = FromPromiseController;
+        testContext.entryPointFunction = "returnEmptyString";
+      };
+
+      testContext.setupErrorMessage = function () {
+        testContext.expectedErrorMessage = "Maddox Runtime Error (3005): When using the 'FromPromiseScenario', the result of the tested code must be a promise following Promise/A+.";
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+      testContext.setupErrorMessage();
+
+      new FromPromiseScenario(this)
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
+        .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
+        .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withInputParams(testContext.httpRequestParams)
+
+        .shouldBeCalledWith("StatelessEs6Proxy", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("StatelessEs6Proxy", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWith("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameParams)
+        .doesReturn("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
+        .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
+
+        .test(function (err, response) {
+          try {
+            Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+            Maddox.compare.shouldEqual({actual: response, expected: undefined});
+            done();
+          } catch (testError) {
+            done(testError);
+          }
+        });
+    });
+
+    // ResponseNotAPromise 3005
+    it("should throw when the response is not a Promise.", function (done) {
+      testContext.setupTest = function () {
+        testContext.entryPointObject = FromPromiseController;
+        testContext.entryPointFunction = "returnUndefined";
+      };
+
+      testContext.setupErrorMessage = function () {
+        testContext.expectedErrorMessage = "Maddox Runtime Error (3005): When using the 'FromPromiseScenario', the result of the tested code must be a promise following Promise/A+.";
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+      testContext.setupErrorMessage();
+
+      new FromPromiseScenario(this)
+        .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
+        .mockThisFunction("StatelessEs6Proxy", "getMiddleName", StatelessEs6Proxy)
+        .mockThisFunction("StatelessEs6Proxy", "getLastName", StatelessEs6Proxy)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withInputParams(testContext.httpRequestParams)
+
+        .shouldBeCalledWith("StatelessEs6Proxy", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("StatelessEs6Proxy", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWith("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameParams)
+        .doesReturn("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
+        .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
+
+        .test(function (err, response) {
+          try {
+            Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+            Maddox.compare.shouldEqual({actual: response, expected: undefined});
+            done();
+          } catch (testError) {
+            done(testError);
+          }
+        });
+    });
+
     // ResShouldBeCalledWithFunctionString 4000
     it("should throw when the first parameter in 'resShouldBeCalledWith' is not of type String.", function () {
       testContext.setupErrorMessage = function () {

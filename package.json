@@ -55,6 +55,7 @@
     "argparse": "1.x",
     "bluebird": "3.x",
     "chai": "3.x",
+    "core-util-is": "^1.0.2",
     "errr": "2.x",
     "fs-extra": "0.x",
     "lodash": "4.x",
