@@ -290,7 +290,7 @@ Initiates the test. This will call the entry point function with given input par
 If testing the HttpReqScenario, Maddox call into the controller function using your input params as the request and mocking out the response for you. When a response finishing function (i.e. send, json, end, etc) is called on the response object, Maddox will begin validating the request. It will first test that all functions mocked on the response were called with the expected values. Next it will test that all of mocked functions were called with the expected parameters. And finally it will call function that was the parameter for the test function. Usually for the HttpReqScenario, you can just pass in the 'done' function from your testing framework. 
 
 * **testable** *{Function}* - A function to test or to end the test.  This function will be called with two parameters, err and result. In other words, 'testable(err, result)'.
-* **returns** *nothing*
+* **returns** *{Promise} - Nothing gets resolved on a successful resolution of this promise chain. But you can use the promise to handle errors thrown from the 'test' function to ensure you do not allow false positives.*
 
 ******************************************************
 
