@@ -129,6 +129,51 @@ describe("Given the FromSynchronousScenario", function () {
         });
     });
 
+    it("should attach the exception from service (if it exists) when a mock test fails.", function (done) {
+      testContext.setupInputParams = function () {
+        testContext.params = {
+          personId: testConstants.ForceTestFailure
+        };
+        testContext.query = {
+          homeState: "IL"
+        };
+
+        testContext.inputParams = [testContext.params, testContext.query];
+      };
+
+      testContext.setupTest();
+      testContext.setupInputParams();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("uuid", "v4", uuid)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withInputParams(testContext.inputParams)
+
+        .shouldBeCalledWith("uuid", "v4", Maddox.constants.EmptyParameters)
+        .doesReturn("uuid", "v4", testContext.getFirstNameResult)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName1Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleName2Params)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleName2Result)
+
+        .test(function (err, response) {
+          try {
+            Maddox.compare.truthy(err.stack.indexOf(testConstants.ForceTestFailure) >= 0, "Should have the message of the error thrown from the service.");
+            Maddox.compare.shouldEqual({actual: response, expected: undefined});
+            done();
+          } catch (testError) {
+            done(testError);
+          }
+        });
+    });
+
     it("should not test mocks that come after finisher function.", function (done) {
       testContext.setupTest();
       testContext.setupInputParams();

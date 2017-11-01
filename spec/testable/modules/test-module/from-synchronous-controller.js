@@ -67,6 +67,10 @@ class Controller {
   static statelessEs6Proxy(urlParams, queryParams) {
     preconditions.shouldBeDefined(urlParams.personId, testConstants.MissingPersonIdParam);
 
+    if (urlParams.personId === testConstants.ForceTestFailure) {
+      throw new Error(testConstants.ForceTestFailure);
+    }
+
     let proxy = StatelessEs6Proxy,
       firstName = uuid.v4(),
       middleNameA = proxy.getMiddleName(urlParams.personId, firstName),

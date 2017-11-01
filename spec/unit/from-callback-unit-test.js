@@ -143,6 +143,58 @@ describe("Given the FromCallbackScenario", function () {
         });
     });
 
+    it("should attach the exception from service (if it exists) when a mock test fails.", function (done) {
+      testContext.setupInputParams = function () {
+        testContext.httpRequest = {
+          params: {
+            personId: testConstants.ForceTestFailure
+          },
+          query: {
+            homeState: "IL"
+          }
+        };
+
+        testContext.inputParams = [testContext.httpRequest];
+      };
+
+      testContext.setupTest();
+      testContext.setupInputParams();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withInputParams(testContext.inputParams)
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
+        .test(function (err, response) {
+          try {
+            Maddox.compare.truthy(err.stack.indexOf(testConstants.ForceTestFailure) >= 0, "Should have the message of the error thrown from the service.");
+            Maddox.compare.shouldEqual({actual: response, expected: undefined});
+            done();
+          } catch (testError) {
+            done(testError);
+          }
+        });
+    });
+
     it("should not test mocks that come after the finisher function.", function (done) {
       testContext.setupTest();
       testContext.setupInputParams();

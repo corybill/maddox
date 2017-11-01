@@ -2262,7 +2262,7 @@ describe("Given Scenarios", function () {
     });
 
     // HttpReqUndefined 4003
-    it("should add the 'CatchOwnErrors' message when user does not catch their own comparison errors.", function (done) {
+    it("should add the 'TestFailure' message when user does not catch their own comparison errors.", function (done) {
 
       testContext.setupTest();
       testContext.setupHttpRequest();
@@ -2301,7 +2301,7 @@ describe("Given Scenarios", function () {
         })
         .catch(function (err) {
           try {
-            Maddox.compare.equal(err.message, `Unchecked Error (4004): ${constants.errorMessages.CatchOwnErrors.message}`);
+            Maddox.compare.equal(err.message, `Unchecked Error (4004): ${constants.errorMessages.TestFailure.message}`);
             done();
           } catch (testErr) {
             done(testErr);

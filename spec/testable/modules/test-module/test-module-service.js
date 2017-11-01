@@ -110,6 +110,10 @@ class Service {
         return proxy.getFirstName(urlParams.personId, firstName);
 
       }).then(function (firstName) {
+        if (urlParams.personId === testConstants.ForceTestFailure) {
+          throw new Error(testConstants.ForceTestFailure);
+        }
+
         var middleName = proxy.getMiddleName(urlParams.personId, firstName);
 
         return proxy.getLastName(urlParams.personId, firstName, middleName, function (err, lastName) {
