@@ -801,6 +801,82 @@ describe("Given Scenarios", function () {
       }
     });
 
+    // DoesReturnDataToReturn 1032
+    it("should throw when the third parameter in doesReturn is undefined.", function () {
+      testContext.setupErrorMessage = function () {
+        testContext.expectedErrorMessage = "Maddox Scenario Build Error (1032): When calling 'doesReturn', the third parameter must a defined value or Maddox.constants.EmptyResult.";
+      };
+
+      testContext.setupErrorMessage();
+
+      try {
+        new Scenario(this)
+          .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
+          .doesReturn("StatelessEs6Proxy", "shouldEqual", undefined);
+
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+      }
+    });
+
+    // DoesReturnPromiseDataToReturn 1033
+    it("should throw when the third parameter in doesReturnWithPromise is undefined.", function () {
+      testContext.setupErrorMessage = function () {
+        testContext.expectedErrorMessage = "Maddox Scenario Build Error (1033): When calling 'doesReturnWithPromise', the third parameter must a defined value or Maddox.constants.EmptyResult.";
+      };
+
+      testContext.setupErrorMessage();
+
+      try {
+        new Scenario(this)
+          .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
+          .doesReturnWithPromise("StatelessEs6Proxy", "shouldEqual", undefined);
+
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+      }
+    });
+
+    // DoesErrorDataToReturn 1034
+    it("should throw when the third parameter in doesError is undefined.", function () {
+      testContext.setupErrorMessage = function () {
+        testContext.expectedErrorMessage = "Maddox Scenario Build Error (1034): When calling 'doesError', the third parameter must a defined value or Maddox.constants.EmptyResult.";
+      };
+
+      testContext.setupErrorMessage();
+
+      try {
+        new Scenario(this)
+          .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
+          .doesError("StatelessEs6Proxy", "shouldEqual", undefined);
+
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+      }
+    });
+
+    // DoesErrorPromiseDataToReturn 1035
+    it("should throw when the third parameter in doesErrorWithPromise is undefined.", function () {
+      testContext.setupErrorMessage = function () {
+        testContext.expectedErrorMessage = "Maddox Scenario Build Error (1035): When calling 'doesErrorWithPromise', the third parameter must a defined value or Maddox.constants.EmptyResult.";
+      };
+
+      testContext.setupErrorMessage();
+
+      try {
+        new Scenario(this)
+          .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
+          .doesErrorWithPromise("StatelessEs6Proxy", "shouldEqual", undefined);
+
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+      }
+    });
+
     // MissingMockThisFunction 2000  && NOT DoesReturnCallbackDataToReturn 1025
     it("should ignore when the third parameter in doesReturnWithCallback is an empty object and it should throw because the function wasn't mocked.", function () {
       testContext.setupErrorMessage = function () {
