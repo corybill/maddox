@@ -415,7 +415,9 @@ describe("Given a Scenario", function () {
         .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
         .doesErrorWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
 
-        .test(done);
+        .test(done).catch((err) => {
+          done(err);
+        });
     });
 
     it("should handle mock throwing an error synchronously.", function (done) {
@@ -462,7 +464,9 @@ describe("Given a Scenario", function () {
         .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
         .doesError("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
 
-        .test(done);
+        .test(done).catch((err) => {
+          done(err);
+        });
     });
   });
 
@@ -1945,11 +1949,13 @@ describe("Given a Scenario", function () {
         .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
         .doesError("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
 
-        .test(function (response) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
-            Maddox.compare.shouldEqual({actual: response.stack.split(testContext.expectedResponse).length, expected: 2});
+            Maddox.compare.shouldEqual({actual: err.stack.split(testContext.expectedResponse).length, expected: 2});
             done();
-          } catch (err) {
+          } catch (testErr) {
             done(err);
           }
         });
@@ -1992,12 +1998,15 @@ describe("Given a Scenario", function () {
         .doesError("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
 
         .noDebug()
-        .test(function (response) {
+
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
-            Maddox.compare.shouldEqual({actual: response.stack.split(testContext.expectedResponse).length, expected: 1});
+            Maddox.compare.shouldEqual({actual: err.stack.split(testContext.expectedResponse).length, expected: 1});
             done();
-          } catch (err) {
-            done(err);
+          } catch (testErr) {
+            done(testErr);
           }
         });
     });

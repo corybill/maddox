@@ -101,6 +101,41 @@ describe("Given the FromPromiseScenario", function () {
         });
     });
 
+    it("should not test mocks or call testable function when maddox throws a error.", function (done) {
+      testContext.setupExpected = () => {
+        testContext.expectedResponse = "Maddox Runtime Error (3001): Attempted to get mocked data for the second call to proxyInstance.getFirstName, but it wasn't created in the scenario.  You are missing a 'doesReturn / doesError' call.";
+      };
+
+      testContext.setupTest();
+      testContext.setupInputParams();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withInputParams(testContext.inputParams)
+
+        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .test(function () {
+          done(new Error("Should not reach here"));
+        }).catch((err) => {
+          try {
+            Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedResponse});
+            done();
+          } catch (testErr) {
+            done(testErr);
+          }
+        });
+    });
+
     it("should handle a checked exception.", function (done) {
       testContext.setupInputParams = function () {
         testContext.httpRequest = {
@@ -184,13 +219,14 @@ describe("Given the FromPromiseScenario", function () {
         .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
 
-        .test(function (err, response) {
+        .test(function () {
+          done(new Error("Should not reach here"));
+        }).catch((err) => {
           try {
             Maddox.compare.truthy(err.stack.indexOf(testConstants.ForceTestFailure) >= 0, "Should have the message of the error thrown from the service.");
-            Maddox.compare.shouldEqual({actual: response, expected: undefined});
             done();
-          } catch (testError) {
-            done(testError);
+          } catch (testErr) {
+            done(testErr);
           }
         });
     });

@@ -1291,7 +1291,9 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "getFirstName", testContext.getFirstName1Params)
         .doesReturnWithCallback("StatelessEs6Proxy", "getFirstName", [testContext.getFirstName1Result])
 
-        .test(function (err) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
             done();
@@ -1336,7 +1338,9 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameParams)
         .doesReturnWithCallback("StatelessEs6Proxy", "getMiddleName", [testContext.getMiddleNameResult])
 
-        .test(function (err) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
             done();
@@ -1375,7 +1379,9 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
 
-        .test(function (err) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
             done();
@@ -1417,7 +1423,9 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameParams)
         .doesReturn("StatelessEs6Proxy", "getMiddleName", testContext.getMiddleNameResult)
 
-        .test(function (err) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
             done();
@@ -1469,9 +1477,10 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "dummyFunction", testContext.getFirstName1Params)
         .doesReturnWithPromise("StatelessEs6Proxy", "dummyFunction", testContext.getFirstName1Result)
 
-        .test(function (err) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
-
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
             done();
           } catch (testError) {
@@ -1521,7 +1530,9 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
 
-        .test(function (err) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
             done();
@@ -1578,7 +1589,9 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
 
-        .test(function (err) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
             done();
@@ -1636,7 +1649,9 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
 
-        .test(function (err) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
             done();
@@ -1694,7 +1709,9 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
 
-        .test(function (err) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
             done();
@@ -1760,7 +1777,9 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
 
-        .test(function (err) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
             done();
@@ -1833,7 +1852,9 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
 
-        .test(function (err) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
             done();
@@ -1906,7 +1927,9 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
 
-        .test(function (err) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
             done();
@@ -1979,7 +2002,9 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
 
-        .test(function (err) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
             done();
@@ -2025,10 +2050,11 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
 
-        .test(function (err, response) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
-            Maddox.compare.shouldEqual({actual: response, expected: undefined});
             done();
           } catch (testError) {
             done(testError);
@@ -2072,10 +2098,11 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
 
-        .test(function (err, response) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
-            Maddox.compare.shouldEqual({actual: response, expected: undefined});
             done();
           } catch (testError) {
             done(testError);
@@ -2119,10 +2146,11 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
 
-        .test(function (err, response) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
-            Maddox.compare.shouldEqual({actual: response, expected: undefined});
             done();
           } catch (testError) {
             done(testError);
@@ -2166,10 +2194,11 @@ describe("Given Scenarios", function () {
         .shouldBeCalledWith("StatelessEs6Proxy", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("StatelessEs6Proxy", "getLastName", testContext.getLastNameResult)
 
-        .test(function (err, response) {
+        .test(function () {
+          done(new Error("Should not reach here."));
+        }).catch((err) => {
           try {
             Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
-            Maddox.compare.shouldEqual({actual: response, expected: undefined});
             done();
           } catch (testError) {
             done(testError);
