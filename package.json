@@ -54,12 +54,12 @@
   "dependencies": {
     "argparse": "1.x",
     "bluebird": "3.x",
-    "chai": "3.x",
-    "core-util-is": "^1.0.2",
+    "chai": "4.x",
+    "core-util-is": "1.x",
     "errr": "2.x",
     "fs-extra": "5.x",
     "lodash": "4.x",
-    "mocha": "3.x",
+    "mocha": "4.x",
     "preconditions": "2.x",
     "simple-statistics": "5.x",
     "sinon": "4.x"
