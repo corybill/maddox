@@ -267,6 +267,7 @@ describe("Given the FromCallbackScenario", function () {
           done(err);
         });
     });
+
   });
 
   describe("when initiating an async process and using a finisher function, it", function () {
