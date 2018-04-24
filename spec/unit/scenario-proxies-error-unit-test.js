@@ -18,7 +18,8 @@ const Scenario = Maddox.functional.HttpReqScenario,
 describe("Given Scenarios", function () {
   let testContext;
 
-  describe("when the scenario throws or processes an error, it", () => {
+  // 1000
+  describe("when the scenario throws or processes an error during scenario building, it", () => {
     beforeEach(function () {
       testContext = {};
 
@@ -68,8 +69,6 @@ describe("Given Scenarios", function () {
         testContext.expectedStatusCode = [200];
       };
     });
-
-    // 4003, 4004
 
     // InputParamsArray 1000
     it("should throw when withInputParams is given a parameter that is not of type Array.", function () {
@@ -877,6 +876,97 @@ describe("Given Scenarios", function () {
       }
     });
 
+    // ShouldBeCalledKeyString 1036
+    it("should throw when the first parameter in shouldBeCalled is not of type String.", function () {
+      testContext.setupErrorMessage = function () {
+        testContext.expectedErrorMessage = "Maddox Scenario Build Error (1036): When calling 'shouldBeCalled', the first parameter must be of type String representing the mock key.";
+      };
+
+      testContext.setupErrorMessage();
+
+      try {
+        new Scenario(this)
+          .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
+          .shouldBeCalled({}, "shouldEqual");
+
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+      }
+    });
+
+    // ShouldBeCalledFunctionString 1037
+    it("should throw when the second parameter in shouldBeCalled is not of type String.", function () {
+      testContext.setupErrorMessage = function () {
+        testContext.expectedErrorMessage = "Maddox Scenario Build Error (1037): When calling 'shouldBeCalled', the second parameter must be of type String representing the function that was mocked.";
+      };
+
+      testContext.setupErrorMessage();
+
+      try {
+        new Scenario(this)
+          .mockThisFunction("StatelessEs6Proxy", "getFirstName", StatelessEs6Proxy)
+          .shouldBeCalled("StatelessEs6Proxy", function () {});
+
+        Maddox.compare.shouldBeUnreachable();
+      } catch (err) {
+        Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
+      }
+    });
+  });
+
+  // 2000
+  describe("when the scenario throws or processes an error during mock building, it", () => {
+    beforeEach(function () {
+      testContext = {};
+
+      testContext.setupTest = function () {
+        testContext.entryPointObject = HttpReqController;
+        testContext.entryPointFunction = "statelessEs6Proxy";
+      };
+
+      testContext.setupHttpRequest = function () {
+        testContext.httpRequest = {
+          params: {
+            personId: random.uniqueId()
+          },
+          query: {
+            homeState: random.word(2)
+          }
+        };
+
+        testContext.httpRequestParams = [testContext.httpRequest];
+      };
+
+      testContext.setupGetFirstName = function () {
+        testContext.getFirstName1Params = [testContext.httpRequest.params.personId];
+        testContext.getFirstName1Result = random.firstName();
+
+        testContext.getFirstName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
+        testContext.getFirstName2Result = random.firstName();
+      };
+
+      testContext.setupGetMiddleName = function () {
+        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result];
+        testContext.getMiddleNameResult = random.firstName();
+      };
+
+      testContext.setupGetLastName = function () {
+        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameResult = [undefined, random.lastName()];
+      };
+
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = [{
+          personId: testContext.httpRequest.params.personId,
+          homeState: testContext.httpRequest.query.homeState,
+          lastName: testContext.getLastNameResult[1]
+        }];
+
+        testContext.expectedStatusCode = [200];
+      };
+    });
+
     // MissingMockThisFunction 2000  && NOT DoesReturnCallbackDataToReturn 1025
     it("should ignore when the third parameter in doesReturnWithCallback is an empty object and it should throw because the function wasn't mocked.", function () {
       testContext.setupErrorMessage = function () {
@@ -1260,6 +1350,60 @@ describe("Given Scenarios", function () {
       } catch (err) {
         Maddox.compare.shouldEqual({actual: err.message, expected: testContext.expectedErrorMessage});
       }
+    });
+
+  });
+
+  // 3000
+  describe("when the scenario throws or processes an error during test execution, it", () => {
+    beforeEach(function () {
+      testContext = {};
+
+      testContext.setupTest = function () {
+        testContext.entryPointObject = HttpReqController;
+        testContext.entryPointFunction = "statelessEs6Proxy";
+      };
+
+      testContext.setupHttpRequest = function () {
+        testContext.httpRequest = {
+          params: {
+            personId: random.uniqueId()
+          },
+          query: {
+            homeState: random.word(2)
+          }
+        };
+
+        testContext.httpRequestParams = [testContext.httpRequest];
+      };
+
+      testContext.setupGetFirstName = function () {
+        testContext.getFirstName1Params = [testContext.httpRequest.params.personId];
+        testContext.getFirstName1Result = random.firstName();
+
+        testContext.getFirstName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
+        testContext.getFirstName2Result = random.firstName();
+      };
+
+      testContext.setupGetMiddleName = function () {
+        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result];
+        testContext.getMiddleNameResult = random.firstName();
+      };
+
+      testContext.setupGetLastName = function () {
+        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameResult = [undefined, random.lastName()];
+      };
+
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = [{
+          personId: testContext.httpRequest.params.personId,
+          homeState: testContext.httpRequest.query.homeState,
+          lastName: testContext.getLastNameResult[1]
+        }];
+
+        testContext.expectedStatusCode = [200];
+      };
     });
 
     // MissingCallback 3000
@@ -2204,6 +2348,60 @@ describe("Given Scenarios", function () {
             done(testError);
           }
         });
+    });
+
+  });
+
+  // 4000
+  describe("when the scenario throws or processes an error specific to HttpReqScenario, it", () => {
+    beforeEach(function () {
+      testContext = {};
+
+      testContext.setupTest = function () {
+        testContext.entryPointObject = HttpReqController;
+        testContext.entryPointFunction = "statelessEs6Proxy";
+      };
+
+      testContext.setupHttpRequest = function () {
+        testContext.httpRequest = {
+          params: {
+            personId: random.uniqueId()
+          },
+          query: {
+            homeState: random.word(2)
+          }
+        };
+
+        testContext.httpRequestParams = [testContext.httpRequest];
+      };
+
+      testContext.setupGetFirstName = function () {
+        testContext.getFirstName1Params = [testContext.httpRequest.params.personId];
+        testContext.getFirstName1Result = random.firstName();
+
+        testContext.getFirstName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
+        testContext.getFirstName2Result = random.firstName();
+      };
+
+      testContext.setupGetMiddleName = function () {
+        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result];
+        testContext.getMiddleNameResult = random.firstName();
+      };
+
+      testContext.setupGetLastName = function () {
+        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameResult = [undefined, random.lastName()];
+      };
+
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = [{
+          personId: testContext.httpRequest.params.personId,
+          homeState: testContext.httpRequest.query.homeState,
+          lastName: testContext.getLastNameResult[1]
+        }];
+
+        testContext.expectedStatusCode = [200];
+      };
     });
 
     // ResShouldBeCalledWithFunctionString 4000
