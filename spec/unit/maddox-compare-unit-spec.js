@@ -1,8 +1,9 @@
 "use strict";
 
-const Maddox = require("../../lib/index"),
-  chai = require("chai"),
-  random = require("../random");
+const chai = require("chai");
+
+const Maddox = require("../../lib/index");
+const random = require("../random");
 
 const expect = chai.expect;
 
@@ -588,6 +589,93 @@ describe("Given the comparison module", function () {
           expect("shouldBeUnreachable should throw an error making it impossible to reach this code").eql(undefined);
         } catch (err) {
           expect(err.message).eql(`${message}: expected false to deeply equal true`);
+        }
+      });
+    });
+
+    describe.only("shouldFuzzyEqualObject, it", () => {
+      it("should pass fuzzy match when given to empty objects.", () => {
+        const actual = {};
+        const expected = {};
+
+        try {
+          Maddox.compare.shouldFuzzyEqualObject(actual, expected);
+          expect("I should be here.").to.be.ok; // eslint-disable-line
+        } catch (err) {
+          Maddox.compare.shouldBeUnreachable();
+        }
+      });
+
+      it("should pass fuzzy match when expected object is a subset of actual object.", () => {
+        const randomId1 = random.uniqueId();
+        const randomId2 = random.uniqueId();
+
+        const actual = {one: {foo1: randomId1}, two: {foo2: randomId2}};
+        const expected = {two: {foo2: randomId2}};
+
+        try {
+          Maddox.compare.shouldFuzzyEqualObject(actual, expected);
+          expect("I should be here.").to.be.ok; // eslint-disable-line
+        } catch (err) {
+          Maddox.compare.shouldBeUnreachable(err.stack);
+        }
+      });
+
+      it("should fail fuzzy match when expected object has a value that does not exist in actual.", () => {
+        const randomId1 = random.uniqueId();
+        const randomId2 = random.uniqueId();
+
+        const actual = {one: {foo1: randomId1}, two: {foo2: randomId2}};
+        const expected = {two: {foo2: randomId2}, three: {foo2: randomId2}};
+
+        try {
+          Maddox.compare.shouldFuzzyEqualObject(actual, expected);
+          Maddox.compare.shouldBeUnreachable();
+        } catch (err) {
+          Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
+          Maddox.compare.truthy(err.stack.indexOf("expected") !== -1, "Should have expected in debug params");
+          Maddox.compare.truthy(err.stack.indexOf("keyThatFailed") !== -1, "Should have keyThatFailed in debug params");
+        }
+      });
+
+      it("should fail fuzzy match when expected object has a value that does not match the value in actual.", () => {
+        const randomId1 = random.uniqueId();
+        const randomId2 = random.uniqueId();
+
+        const actual = {one: {foo1: randomId1}, two: {foo2: randomId2}};
+        const expected = {one: {foo1: randomId1}, two: {foo2: randomId1}};
+
+        try {
+          Maddox.compare.shouldFuzzyEqualObject(actual, expected);
+          Maddox.compare.shouldBeUnreachable();
+        } catch (err) {
+          Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
+          Maddox.compare.truthy(err.stack.indexOf("expected") !== -1, "Should have expected in debug params");
+          Maddox.compare.truthy(err.stack.indexOf("keyThatFailed") !== -1, "Should have keyThatFailed in debug params");
+        }
+      });
+
+      it("should fail fuzzy match when the actual value is not an object.", () => {
+        const actual = "SOME NON OBJECT";
+        const expected = {foo: "foo"};
+
+        try {
+          Maddox.compare.shouldFuzzyEqualObject(actual, expected);
+          Maddox.compare.shouldBeUnreachable();
+        } catch (err) {
+          Maddox.compare.equal(err.message, "When fuzzy comparing two objects, you the first two arguments must be of object.");
+        }
+      });
+
+      it("should fail fuzzy match when the expected value is not an object.", () => {
+        const actual = {foo: "foo"};
+        const expected = "SOME NON OBJECT";
+
+        try {
+          Maddox.compare.shouldFuzzyEqualObject(actual, expected);
+          Maddox.compare.shouldBeUnreachable();
+        } catch (err) {
+          Maddox.compare.equal(err.message, "When fuzzy comparing two objects, you the first two arguments must be of object.");
         }
       });
     });
