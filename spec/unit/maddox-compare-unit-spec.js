@@ -593,13 +593,13 @@ describe("Given the comparison module", function () {
       });
     });
 
-    describe.only("shouldFuzzyEqualObject, it", () => {
+    describe.only("fuzzyEqualObject, it", () => {
       it("should pass fuzzy match when given to empty objects.", () => {
         const actual = {};
         const expected = {};
 
         try {
-          Maddox.compare.shouldFuzzyEqualObject(actual, expected);
+          Maddox.compare.fuzzyEqualObject(actual, expected);
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
@@ -614,7 +614,22 @@ describe("Given the comparison module", function () {
         const expected = {two: {foo2: randomId2}};
 
         try {
-          Maddox.compare.shouldFuzzyEqualObject(actual, expected);
+          Maddox.compare.fuzzyEqualObject(actual, expected);
+          expect("I should be here.").to.be.ok; // eslint-disable-line
+        } catch (err) {
+          Maddox.compare.shouldBeUnreachable(err.stack);
+        }
+      });
+
+      it("should pass fuzzy match when using the context version.", () => {
+        const randomId1 = random.uniqueId();
+        const randomId2 = random.uniqueId();
+
+        const actual = {one: {foo1: randomId1}, two: {foo2: randomId2}};
+        const expected = {two: {foo2: randomId2}};
+
+        try {
+          Maddox.compare.shouldFuzzyEqualObject({actual, expected});
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable(err.stack);
@@ -629,7 +644,7 @@ describe("Given the comparison module", function () {
         const expected = {two: {foo2: randomId2}, three: {foo2: randomId2}};
 
         try {
-          Maddox.compare.shouldFuzzyEqualObject(actual, expected);
+          Maddox.compare.fuzzyEqualObject(actual, expected);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
@@ -646,7 +661,7 @@ describe("Given the comparison module", function () {
         const expected = {one: {foo1: randomId1}, two: {foo2: randomId1}};
 
         try {
-          Maddox.compare.shouldFuzzyEqualObject(actual, expected);
+          Maddox.compare.fuzzyEqualObject(actual, expected);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
@@ -660,7 +675,7 @@ describe("Given the comparison module", function () {
         const expected = {foo: "foo"};
 
         try {
-          Maddox.compare.shouldFuzzyEqualObject(actual, expected);
+          Maddox.compare.fuzzyEqualObject(actual, expected);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           Maddox.compare.equal(err.message, "When fuzzy comparing two objects, you the first two arguments must be of object.");
@@ -672,7 +687,7 @@ describe("Given the comparison module", function () {
         const expected = "SOME NON OBJECT";
 
         try {
-          Maddox.compare.shouldFuzzyEqualObject(actual, expected);
+          Maddox.compare.fuzzyEqualObject(actual, expected);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           Maddox.compare.equal(err.message, "When fuzzy comparing two objects, you the first two arguments must be of object.");
