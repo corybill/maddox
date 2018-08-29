@@ -593,13 +593,13 @@ describe("Given the comparison module", function () {
       });
     });
 
-    describe("isSubset, it", () => {
+    describe("subset, it", () => {
       it("should pass subset comparison when given to empty objects.", () => {
         const actual = {};
         const expected = {};
 
         try {
-          Maddox.compare.isSubset(actual, expected);
+          Maddox.compare.subset(actual, expected);
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
@@ -614,7 +614,7 @@ describe("Given the comparison module", function () {
         const expected = {two: {foo2: randomId2}};
 
         try {
-          Maddox.compare.isSubset(actual, expected);
+          Maddox.compare.subset(actual, expected);
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable(err.stack);
@@ -644,7 +644,7 @@ describe("Given the comparison module", function () {
         const expected = {two: {foo2: randomId2}, three: {foo2: randomId2}};
 
         try {
-          Maddox.compare.isSubset(actual, expected);
+          Maddox.compare.subset(actual, expected);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           Maddox.compare.equal(err.message, "Failed the subset validation. The subset was not found in the superset.");
@@ -661,7 +661,7 @@ describe("Given the comparison module", function () {
         const expected = {one: {foo1: randomId1}, two: {foo2: randomId1}};
 
         try {
-          Maddox.compare.isSubset(actual, expected);
+          Maddox.compare.subset(actual, expected);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           Maddox.compare.equal(err.message, "Failed the subset validation. The subset was not found in the superset.");
@@ -679,7 +679,7 @@ describe("Given the comparison module", function () {
         const expected = {one: {foo1: randomId1}, two: {foo2: randomId1}};
 
         try {
-          Maddox.compare.isSubset(actual, expected, message);
+          Maddox.compare.subset(actual, expected, message);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           Maddox.compare.equal(err.message, message);
