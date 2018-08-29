@@ -1,6 +1,6 @@
 {
   "name": "maddox",
-  "version": "2.8.2",
+  "version": "2.8.3",
   "description": "Maddox provides a simple way to rapidly unit test complex success and failure scenarios which can be driven by responses of mocked external dependencies.",
   "main": "lib/index.js",
   "scripts": {
@@ -58,8 +58,10 @@
     "core-util-is": "1.x",
     "errr": "2.x",
     "fs-extra": "5.x",
+    "is-subset": "^0.1.1",
     "lodash": "4.x",
     "mocha": "4.x",
+    "npm": "^6.4.0",
     "preconditions": "2.x",
     "simple-statistics": "5.x",
     "sinon": "4.x"

@@ -593,20 +593,20 @@ describe("Given the comparison module", function () {
       });
     });
 
-    describe.only("fuzzyEqualObject, it", () => {
-      it("should pass fuzzy match when given to empty objects.", () => {
+    describe("isSubset, it", () => {
+      it("should pass subset comparison when given to empty objects.", () => {
         const actual = {};
         const expected = {};
 
         try {
-          Maddox.compare.fuzzyEqualObject(actual, expected);
+          Maddox.compare.isSubset(actual, expected);
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
       });
 
-      it("should pass fuzzy match when expected object is a subset of actual object.", () => {
+      it("should pass subset comparison when expected object is a subset of actual object.", () => {
         const randomId1 = random.uniqueId();
         const randomId2 = random.uniqueId();
 
@@ -614,14 +614,14 @@ describe("Given the comparison module", function () {
         const expected = {two: {foo2: randomId2}};
 
         try {
-          Maddox.compare.fuzzyEqualObject(actual, expected);
+          Maddox.compare.isSubset(actual, expected);
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable(err.stack);
         }
       });
 
-      it("should pass fuzzy match when using the context version.", () => {
+      it("should pass subset comparison when using the context version.", () => {
         const randomId1 = random.uniqueId();
         const randomId2 = random.uniqueId();
 
@@ -629,14 +629,14 @@ describe("Given the comparison module", function () {
         const expected = {two: {foo2: randomId2}};
 
         try {
-          Maddox.compare.shouldFuzzyEqualObject({actual, expected});
+          Maddox.compare.shouldBeSubset({actual, expected});
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable(err.stack);
         }
       });
 
-      it("should fail fuzzy match when expected object has a value that does not exist in actual.", () => {
+      it("should fail subset comparison when expected object has a value that does not exist in actual.", () => {
         const randomId1 = random.uniqueId();
         const randomId2 = random.uniqueId();
 
@@ -644,16 +644,16 @@ describe("Given the comparison module", function () {
         const expected = {two: {foo2: randomId2}, three: {foo2: randomId2}};
 
         try {
-          Maddox.compare.fuzzyEqualObject(actual, expected);
+          Maddox.compare.isSubset(actual, expected);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
+          Maddox.compare.equal(err.message, "Failed the subset validation. The subset was not found in the superset.");
           Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
           Maddox.compare.truthy(err.stack.indexOf("expected") !== -1, "Should have expected in debug params");
-          Maddox.compare.truthy(err.stack.indexOf("keyThatFailed") !== -1, "Should have keyThatFailed in debug params");
         }
       });
 
-      it("should fail fuzzy match when expected object has a value that does not match the value in actual.", () => {
+      it("should fail subset comparison when expected object has a value that does not match the value in actual.", () => {
         const randomId1 = random.uniqueId();
         const randomId2 = random.uniqueId();
 
@@ -661,36 +661,30 @@ describe("Given the comparison module", function () {
         const expected = {one: {foo1: randomId1}, two: {foo2: randomId1}};
 
         try {
-          Maddox.compare.fuzzyEqualObject(actual, expected);
+          Maddox.compare.isSubset(actual, expected);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
+          Maddox.compare.equal(err.message, "Failed the subset validation. The subset was not found in the superset.");
           Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
           Maddox.compare.truthy(err.stack.indexOf("expected") !== -1, "Should have expected in debug params");
-          Maddox.compare.truthy(err.stack.indexOf("keyThatFailed") !== -1, "Should have keyThatFailed in debug params");
         }
       });
 
-      it("should fail fuzzy match when the actual value is not an object.", () => {
-        const actual = "SOME NON OBJECT";
-        const expected = {foo: "foo"};
+      it("should fail subset comparison and use the provided message for the error..", () => {
+        const randomId1 = random.uniqueId();
+        const randomId2 = random.uniqueId();
+        const message = random.uniqueId();
+
+        const actual = {one: {foo1: randomId1}, two: {foo2: randomId2}};
+        const expected = {one: {foo1: randomId1}, two: {foo2: randomId1}};
 
         try {
-          Maddox.compare.fuzzyEqualObject(actual, expected);
+          Maddox.compare.isSubset(actual, expected, message);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          Maddox.compare.equal(err.message, "When fuzzy comparing two objects, you the first two arguments must be of object.");
-        }
-      });
-
-      it("should fail fuzzy match when the expected value is not an object.", () => {
-        const actual = {foo: "foo"};
-        const expected = "SOME NON OBJECT";
-
-        try {
-          Maddox.compare.fuzzyEqualObject(actual, expected);
-          Maddox.compare.shouldBeUnreachable();
-        } catch (err) {
-          Maddox.compare.equal(err.message, "When fuzzy comparing two objects, you the first two arguments must be of object.");
+          Maddox.compare.equal(err.message, message);
+          Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
+          Maddox.compare.truthy(err.stack.indexOf("expected") !== -1, "Should have expected in debug params");
         }
       });
     });
