@@ -55,6 +55,20 @@ If your function takes a callback you should NOT add this to the params array. T
 
 ******************************************************
 
+## shouldBeCalled(mockName, funcName)
+Defines an expectation for a mocked function. i.e. after your test is complete, Maddox will compare the actual parameters the mock was called with to the defined exepected parameters from this function.  If a mocked function (from 'mockThisFunction') is called once, then 'shouldBeCalledWith' should be defined once for that mocked function. If a mocked function is called 'n' times, then 'shouldBeCalledWith' should be defined 'n' times for that mocked function. 
+
+Ordering matters when defining these expectations. If your function is called 3 times, Maddox will compare the first set of actual parameters to the first set of defined expected parameters and so on. 
+
+If your function takes a callback you should NOT add this to the params array. The callback will be automatically validated during execution when you use 'doesReturnWithCallback'. 
+
+* **mockName** *{String}* - This is the key for the mock. It should match the key from 'mockThisFunction'.
+* **funcName** *{String}* - The name of the function to be mocked. Should match the name from 'mockThisFunction'.
+* **params** *{Array}* - An array of expected parameters. First parameter of the function goes in index 0 and the nth parameter of the function goes into index n.
+* **returns** *{Scenario}*
+
+******************************************************
+
 ## shouldAlwaysBeCalledWith(mockName, funcName, params)
 A variant of 'shouldBeCalledWith' that defines a mocked function should be called with the same expected parameters on every call to the mock. 
 
@@ -317,6 +331,18 @@ Validate that the value resolves to falsey using Chai.js ([to.not.be.ok](http://
 
 ******************************************************
 
+## static subset(actual, expected, message, context)
+Validates that expected value is a subset (contained within) the actual value. This should work on any nested level object. 
+
+* **actual** *{Object}* - The actual value for comparison (superset).
+* **expected** *{Object}* - The expected value for comparison (subset).
+* **[message]** *{String}* - The message added to the Errr if the comparison fails.
+* **[context]** *{Object}* - Holds different configuration options.
+* **[context.noDebug]** *{Boolean}* - If set to true, Maddox will not append debug info in the stacktrace. Defaults to false.
+* **returns** *nothing*
+
+******************************************************
+
 ## static shouldEqual(context)
 Synonymous with shouldBeEqual, but with different definition. Does a deep comparison of actual and expected using Chai.js ([Deep Equals](http://chaijs.com/api/bdd/#method_eql). If the comparison fails, it will throw with a pretty printed version of the expected and actual params to the stacktrace. This functionality is provided by the [Errr](https://www.npmjs.com/package/errr) module. If an error message is provided, it will be used in the error message if the comparison fails. 
 
@@ -366,6 +392,18 @@ Equivalent to 'shouldBeFalsey'. Validate that the value resolves to falsey using
 Function will always fail with a message stating that this line of code should not be executed. A common use case for this would be in the catch block of a test to ensure that you are actually verifying the did not throw. If you do not add some test in a catch block, you are test could be throwing but since you aren't catching it, it could give you a false positive. 
 
 * **[message]** *{String}* - Define the message to fail with. The default message is: 'It should be impossible to reach this code.'.
+* **returns** *nothing*
+
+******************************************************
+
+## static shouldBeSubset(context)
+Equivalent to the 'subset' function. Validates that expected value is a subset (contained within) the actual value. This should work on any nested level object. 
+
+* **context** *{Object}* - A context object holding 3 main parameters: actual, expected, and message. Also holds configuration params.
+* **actual** *{Object}* - The actual value for comparison (superset).
+* **expected** *{Object}* - The expected value for comparison (subset).
+* **[context.message]** *{String}* - The message added to the Errr if the comparison fails.
+* **[context.noDebug]** *{Boolean}* - If set to true, Maddox will not append the actual and expected in the stacktrace. Defaults to false.
 * **returns** *nothing*
 
 ******************************************************
