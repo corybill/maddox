@@ -2810,8 +2810,8 @@ describe("Given a Scenario", function () {
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withHttpRequest(testContext.httpRequestParams)
 
-        .resShouldBeCalledWith("send", testContext.expectedResponse)
-        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
+        .resShouldBeCalled("send")
+        .resShouldBeCalled("status")
         .resDoesReturnSelf("status")
 
         .shouldBeCalled("proxyInstance", "getFirstName")
@@ -2846,8 +2846,8 @@ describe("Given a Scenario", function () {
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withHttpRequest(testContext.httpRequestParams)
 
-        .resShouldBeCalledWith("send", testContext.expectedResponse)
-        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
+        .resShouldBeCalled("send")
+        .resShouldBeCalled("status")
         .resDoesReturnSelf("status")
 
         .shouldBeCalled("proxyInstance", "getFirstName")
@@ -2882,8 +2882,8 @@ describe("Given a Scenario", function () {
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withHttpRequest(testContext.httpRequestParams)
 
-        .resShouldBeCalledWith("send", testContext.expectedResponse)
-        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
+        .resShouldBeCalled("send")
+        .resShouldBeCalled("status")
         .resDoesReturnSelf("status")
 
         .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
@@ -2930,8 +2930,8 @@ describe("Given a Scenario", function () {
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withHttpRequest(testContext.httpRequestParams)
 
-        .resShouldBeCalledWith("send", testContext.expectedResponse)
-        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
+        .resShouldBeCalled("send")
+        .resShouldBeCalled("status")
         .resDoesReturnSelf("status")
 
         .shouldBeCalled("proxyInstance", "getFirstName")
@@ -2950,6 +2950,124 @@ describe("Given a Scenario", function () {
         .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
 
         .perf()
+        .test(() => {
+          Maddox.compare.shouldBeUnreachable();
+        }).catch((err) => {
+          try {
+            Maddox.compare.equal(err.message, testContext.expectedErrorMessage);
+            done();
+          } catch (testError) {
+            done(testError);
+          }
+        });
+    });
+
+    it("should fail when a mock function was not called.", function (done) {
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = [{
+          personId: testContext.httpRequest.params.personId,
+          homeState: testContext.httpRequest.query.homeState,
+          lastName: testContext.getLastNameResult[1]
+        }];
+
+        testContext.expectedStatusCode = [200];
+
+        testContext.expectedErrorMessage = "Maddox Runtime Error (3002): Expected the mock proxyInstance.dummyFunction to be called 1 time(s), but it was actually called 0 time(s).";
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "dummyFunction", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalled("send")
+        .resShouldBeCalled("status")
+        .resDoesReturnSelf("status")
+
+        .shouldBeCalled("proxyInstance", "getFirstName")
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalled("proxyInstance", "getFirstName")
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        .shouldBeCalled("proxyInstance", "getMiddleName")
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalled("proxyInstance", "getLastName")
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
+        .shouldBeCalled("proxyInstance", "dummyFunction")
+        .doesReturnWithCallback("proxyInstance", "dummyFunction", testContext.getLastNameResult)
+
+        .test(() => {
+          Maddox.compare.shouldBeUnreachable();
+        }).catch((err) => {
+          try {
+            Maddox.compare.equal(err.message, testContext.expectedErrorMessage);
+            done();
+          } catch (testError) {
+            done(testError);
+          }
+        });
+    });
+
+    it("should fail when a http response mock function was not called.", function (done) {
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = [{
+          personId: testContext.httpRequest.params.personId,
+          homeState: testContext.httpRequest.query.homeState,
+          lastName: testContext.getLastNameResult[1]
+        }];
+
+        testContext.expectedStatusCode = [200];
+
+        testContext.expectedErrorMessage = "Maddox Runtime Error (3002): Expected the mock HttpResponseMock.SomeUnknownFunction to be called 1 time(s), but it was actually called 0 time(s).";
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "dummyFunction", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalled("send")
+        .resShouldBeCalled("SomeUnknownFunction")
+        .resShouldBeCalled("status")
+        .resDoesReturnSelf("status")
+
+        .shouldBeCalled("proxyInstance", "getFirstName")
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalled("proxyInstance", "getFirstName")
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        .shouldBeCalled("proxyInstance", "getMiddleName")
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalled("proxyInstance", "getLastName")
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
         .test(() => {
           Maddox.compare.shouldBeUnreachable();
         }).catch((err) => {
@@ -3250,5 +3368,322 @@ describe("Given a Scenario", function () {
         .test(done);
     });
 
+  });
+
+  describe("when using shouldBeCallWithSubset params, it", function () {
+    beforeEach(function () {
+      testContext = {};
+
+      testContext.setupTest = function () {
+        testContext.entryPointObject = Controller;
+        testContext.entryPointFunction = "statelessEs6Proxy";
+        testContext.proxyInstance = StatelessEs6Proxy;
+      };
+
+      testContext.setupHttpRequest = function () {
+        testContext.httpRequest = {
+          params: {
+            personId: {
+              someId: "123456789",
+              anotherId: "123456789"
+            }
+          },
+          query: {
+            homeState: "IL"
+          }
+        };
+
+        testContext.httpRequestParams = [testContext.httpRequest];
+      };
+
+      testContext.setupGetFirstName = function () {
+        testContext.getFirstName1Params = [testContext.httpRequest.params.personId];
+        testContext.getFirstName1Result = random.firstName();
+
+        testContext.getFirstName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
+        testContext.getFirstName2Result = random.firstName();
+      };
+
+      testContext.setupGetMiddleName = function () {
+        testContext.getMiddleNameParams = [constants.IgnoreParam, testContext.getFirstName2Result];
+        testContext.getMiddleNameResult = random.firstName();
+      };
+
+      testContext.setupGetLastName = function () {
+        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameResult = [undefined, random.lastName()];
+      };
+
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = [{
+          personId: testContext.httpRequest.params.personId,
+          homeState: testContext.httpRequest.query.homeState,
+          lastName: testContext.getLastNameResult[1]
+        }];
+
+        testContext.expectedStatusCode = [200];
+      };
+    });
+
+    it("should pass all tests when using subset comparisons and all values are identical.", function (done) {
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalledWithSubset("send", testContext.expectedResponse)
+        .resShouldBeCalledWithSubset("status", testContext.expectedStatusCode)
+        .resDoesReturnSelf("status")
+
+        .shouldBeCalledWithSubset("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWithSubset("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        .shouldBeCalledWithSubset("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalledWithSubset("proxyInstance", "getLastName", testContext.getLastNameParams)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
+        .test(done);
+    });
+
+    it("should pass all tests when using subset comparisons and the object is a subset.", function (done) {
+      testContext.setupGetFirstName = function () {
+        const params1 = {
+          someId: testContext.httpRequest.params.personId.someId
+        };
+
+        const params2 = {
+          anotherId: testContext.httpRequest.params.personId.anotherId
+        };
+
+        testContext.getFirstName1Params = [params1];
+        testContext.getFirstName1Result = random.firstName();
+
+        testContext.getFirstName2Params = [params2, testContext.getFirstName1Result];
+        testContext.getFirstName2Result = random.firstName();
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalledWithSubset("send", testContext.expectedResponse)
+        .resShouldBeCalledWithSubset("status", testContext.expectedStatusCode)
+        .resDoesReturnSelf("status")
+
+        .shouldBeCalledWithSubset("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWithSubset("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        .shouldBeCalledWithSubset("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalledWithSubset("proxyInstance", "getLastName", testContext.getLastNameParams)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
+        .test(done);
+    });
+
+    it("should pass all tests when using subset comparisons and the array is a subset.", function (done) {
+      testContext.setupHttpRequest = function () {
+        testContext.httpRequest = {
+          params: {
+            personId: [
+              {
+                someId: "123456789",
+                anotherId: "123456789"
+              }
+            ]
+          },
+          query: {
+            homeState: "IL"
+          }
+        };
+
+        testContext.httpRequestParams = [testContext.httpRequest];
+      };
+
+      testContext.setupGetFirstName = function () {
+        const params1 = [{
+          someId: testContext.httpRequest.params.personId[0].someId
+        }];
+
+        const params2 = [{
+          anotherId: testContext.httpRequest.params.personId[0].anotherId
+        }];
+
+        testContext.getFirstName1Params = [params1];
+        testContext.getFirstName1Result = random.firstName();
+
+        testContext.getFirstName2Params = [params2, testContext.getFirstName1Result];
+        testContext.getFirstName2Result = random.firstName();
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalledWithSubset("send", testContext.expectedResponse)
+        .resShouldBeCalledWithSubset("status", testContext.expectedStatusCode)
+        .resDoesReturnSelf("status")
+
+        .shouldBeCalledWithSubset("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWithSubset("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        .shouldBeCalledWithSubset("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalledWithSubset("proxyInstance", "getLastName", testContext.getLastNameParams)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
+        .test(done)
+        .catch((err) => done(err));
+    });
+
+    it("should pass all tests when using subset comparisons for res.send.", function (done) {
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = [{
+          homeState: testContext.httpRequest.query.homeState
+        }];
+
+        testContext.expectedStatusCode = [200];
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalledWithSubset("send", testContext.expectedResponse)
+        .resShouldBeCalledWithSubset("status", testContext.expectedStatusCode)
+        .resDoesReturnSelf("status")
+
+        .shouldBeCalledWithSubset("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWithSubset("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        .shouldBeCalledWithSubset("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalledWithSubset("proxyInstance", "getLastName", testContext.getLastNameParams)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
+        .test(done)
+        .catch((err) => done(err));
+    });
+
+    it("should fail when a string comparison is a subset (i.e. subset is only on arrays and objects).", function (done) {
+      testContext.setupGetMiddleName = function () {
+        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, "SomeWrongValue"];
+        testContext.getMiddleNameResult = random.firstName();
+      };
+
+      testContext.setupExpected = function () {
+        testContext.expectedResponse = [{
+          personId: testContext.httpRequest.params.personId,
+          homeState: testContext.httpRequest.query.homeState,
+          lastName: testContext.getLastNameResult[1]
+        }];
+
+        testContext.expectedErrorMessage = `Maddox Comparison Error (3003): Failed expectation for the second param in mock proxyInstance.getMiddleName, the first time the mock was called ::::: expected '${testContext.getFirstName2Result}' to deeply equal 'SomeWrongValue'`;
+
+        testContext.expectedStatusCode = [200];
+      };
+
+      testContext.setupTest();
+      testContext.setupHttpRequest();
+      testContext.setupGetFirstName();
+      testContext.setupGetMiddleName();
+      testContext.setupGetLastName();
+      testContext.setupExpected();
+
+      new Scenario(this)
+        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
+        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+
+        .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
+        .withHttpRequest(testContext.httpRequestParams)
+
+        .resShouldBeCalledWithSubset("send", testContext.expectedResponse)
+        .resShouldBeCalledWithSubset("status", testContext.expectedStatusCode)
+        .resDoesReturnSelf("status")
+
+        .shouldBeCalledWithSubset("proxyInstance", "getFirstName", testContext.getFirstName1Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+
+        .shouldBeCalledWithSubset("proxyInstance", "getFirstName", testContext.getFirstName2Params)
+        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+
+        .shouldBeCalledWithSubset("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
+        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+
+        .shouldBeCalledWithSubset("proxyInstance", "getLastName", testContext.getLastNameParams)
+        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+
+        .test(() => {
+          Maddox.compare.shouldBeUnreachable();
+        }).catch((err) => {
+          try {
+            Maddox.compare.equal(err.message, testContext.expectedErrorMessage);
+            done();
+          } catch (testError) {
+            done(testError);
+          }
+        });
+    });
   });
 });

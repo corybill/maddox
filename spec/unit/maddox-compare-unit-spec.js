@@ -670,7 +670,7 @@ describe("Given the comparison module", function () {
         }
       });
 
-      it("should fail subset comparison and use the provided message for the error..", () => {
+      it("should fail subset comparison and use the provided message for the error.", () => {
         const randomId1 = random.uniqueId();
         const randomId2 = random.uniqueId();
         const message = random.uniqueId();
