@@ -3625,9 +3625,9 @@ describe("Given a Scenario", function () {
         .catch((err) => done(err));
     });
 
-    it("should fail when a string comparison is a subset (i.e. subset is only on arrays and objects).", function (done) {
+    it("should pass all tests when doing a subset comparison for two strings, when one is a subset of the other.", function (done) {
       testContext.setupGetMiddleName = function () {
-        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, "SomeWrongValue"];
+        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result.substring(1, 3)];
         testContext.getMiddleNameResult = random.firstName();
       };
 
@@ -3674,16 +3674,8 @@ describe("Given a Scenario", function () {
         .shouldBeCalledWithSubset("proxyInstance", "getLastName", testContext.getLastNameParams)
         .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
 
-        .test(() => {
-          Maddox.compare.shouldBeUnreachable();
-        }).catch((err) => {
-          try {
-            Maddox.compare.equal(err.message, testContext.expectedErrorMessage);
-            done();
-          } catch (testError) {
-            done(testError);
-          }
-        });
+        .test(done)
+        .catch((err) => done(err));
     });
   });
 });

@@ -636,6 +636,37 @@ describe("Given the comparison module", function () {
         }
       });
 
+      it("should pass subset comparison when expected is a substring of the actual.", () => {
+        const randomId1 = random.uniqueId();
+
+        const actual = randomId1;
+        const expected = randomId1.substring(3, 10);
+
+        try {
+          Maddox.compare.shouldBeSubset({actual, expected});
+          expect("I should be here.").to.be.ok; // eslint-disable-line
+        } catch (err) {
+          Maddox.compare.shouldBeUnreachable(err.stack);
+        }
+      });
+
+      it("should fail subset comparison when either expected or actual is a string, and the other is not a string.", () => {
+        const randomId1 = random.uniqueId();
+        const randomId2 = random.uniqueId();
+
+        const actual = {one: {foo1: randomId1}, two: {foo2: randomId2}};
+        const expected = randomId2;
+
+        try {
+          Maddox.compare.subset(actual, expected);
+          Maddox.compare.shouldBeUnreachable();
+        } catch (err) {
+          Maddox.compare.equal(err.message, "Failed the subset validation. The subset was not found in the superset.");
+          Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
+          Maddox.compare.truthy(err.stack.indexOf("expected") !== -1, "Should have expected in debug params");
+        }
+      });
+
       it("should fail subset comparison when expected object has a value that does not exist in actual.", () => {
         const randomId1 = random.uniqueId();
         const randomId2 = random.uniqueId();
@@ -680,6 +711,60 @@ describe("Given the comparison module", function () {
 
         try {
           Maddox.compare.subset(actual, expected, message);
+          Maddox.compare.shouldBeUnreachable();
+        } catch (err) {
+          Maddox.compare.equal(err.message, message);
+          Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
+          Maddox.compare.truthy(err.stack.indexOf("expected") !== -1, "Should have expected in debug params");
+        }
+      });
+
+      it("should fail subset comparison when expected is not a substring of the actual.", () => {
+        const randomId1 = random.uniqueId();
+        const randomId2 = random.uniqueId();
+        const message = random.uniqueId();
+
+        const actual = randomId1;
+        const expected = randomId2;
+
+        try {
+          Maddox.compare.shouldBeSubset({actual, expected, message});
+          Maddox.compare.shouldBeUnreachable();
+        } catch (err) {
+          Maddox.compare.equal(err.message, message);
+          Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
+          Maddox.compare.truthy(err.stack.indexOf("expected") !== -1, "Should have expected in debug params");
+        }
+      });
+
+      it("should fail subset comparison when comparing an object to a string.", () => {
+        const randomId1 = random.uniqueId();
+        const randomId2 = random.uniqueId();
+        const message = random.uniqueId();
+
+        const actual = {one: {foo1: randomId1}, two: {foo2: randomId2}};
+        const expected = randomId2;
+
+        try {
+          Maddox.compare.shouldBeSubset({actual, expected, message});
+          Maddox.compare.shouldBeUnreachable();
+        } catch (err) {
+          Maddox.compare.equal(err.message, message);
+          Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
+          Maddox.compare.truthy(err.stack.indexOf("expected") !== -1, "Should have expected in debug params");
+        }
+      });
+
+      it("should fail subset comparison when comparing a string to an object.", () => {
+        const randomId1 = random.uniqueId();
+        const randomId2 = random.uniqueId();
+        const message = random.uniqueId();
+
+        const actual = randomId2;
+        const expected = {one: {foo1: randomId1}, two: {foo2: randomId2}};
+
+        try {
+          Maddox.compare.shouldBeSubset({actual, expected, message});
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           Maddox.compare.equal(err.message, message);
