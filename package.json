@@ -58,20 +58,19 @@
     "core-util-is": "1.x",
     "errr": "2.x",
     "fs-extra": "5.x",
-    "is-subset": "^0.1.1",
+    "is-subset": "0.x",
     "lodash": "4.x",
     "mocha": "4.x",
-    "npm": "^6.4.1",
     "preconditions": "2.x",
     "simple-statistics": "5.x",
     "sinon": "4.x"
   },
   "devDependencies": {
-    "chance": "1.0.1",
-    "eslint": "2.3.0",
-    "fs": "0.0.2",
-    "istanbul": "0.4.2",
-    "node-uuid": "1.4.7",
-    "semver": "5.1.0"
+    "chance": "1.x",
+    "eslint": "5.x",
+    "fs": "0.x",
+    "istanbul": "0.x",
+    "node-uuid": "1.x",
+    "semver": "5.x"
   }
 }
