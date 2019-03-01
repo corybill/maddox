@@ -1,4 +1,7 @@
 {
+  "parserOptions": {
+    "ecmaVersion": 2017
+  },
   "rules": {
     // common
     "indent": [2, 2, {"SwitchCase": 1}], // specify tab or space width for your code
