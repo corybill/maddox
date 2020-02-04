@@ -59,7 +59,7 @@
     "errr": "2.x",
     "fs-extra": "5.x",
     "is-subset": "0.x",
-    "lodash": "4.x",
+    "lodash": "^4.17.15",
     "mocha": "5.x",
     "preconditions": "2.x",
     "simple-statistics": "5.x",
@@ -69,7 +69,6 @@
     "chance": "1.x",
     "eslint": "5.x",
     "fs": "0.x",
-    "istanbul": "0.x",
     "node-uuid": "1.x",
     "semver": "5.x"
   }
