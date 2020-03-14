@@ -1,6 +1,6 @@
 {
   "name": "maddox",
-  "version": "2.9.4",
+  "version": "2.9.5",
   "description": "Maddox provides a simple way to rapidly unit test complex success and failure scenarios which can be driven by responses of mocked external dependencies.",
   "main": "lib/index.js",
   "scripts": {
