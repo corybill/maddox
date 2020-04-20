@@ -1,6 +1,6 @@
 {
   "name": "maddox",
-  "version": "2.9.5",
+  "version": "2.9.6",
   "description": "Maddox provides a simple way to rapidly unit test complex success and failure scenarios which can be driven by responses of mocked external dependencies.",
   "main": "lib/index.js",
   "scripts": {
@@ -60,14 +60,14 @@
     "fs-extra": "5.x",
     "is-subset": "0.x",
     "lodash": "^4.17.15",
-    "mocha": "5.x",
+    "mocha": "7.x",
     "preconditions": "2.x",
     "simple-statistics": "5.x",
     "sinon": "4.x"
   },
   "devDependencies": {
     "chance": "1.x",
-    "eslint": "5.x",
+    "eslint": "6.x",
     "fs": "0.x",
     "node-uuid": "1.x",
     "semver": "5.x"
