@@ -58,7 +58,7 @@
     "errr": "2.x",
     "fs-extra": "5.x",
     "is-subset": "0.x",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "mocha": "7.x",
     "preconditions": "2.x",
     "simple-statistics": "5.x",
