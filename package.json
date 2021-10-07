@@ -57,6 +57,7 @@
     "chai": "4.x",
     "chance": "1.x",
     "core-util-is": "1.x",
+    "bluebird": "^3.7.2",
     "errr": "2.x",
     "eslint": "6.x",
     "fs-extra": "5.x",
@@ -68,8 +69,5 @@
     "simple-statistics": "5.x",
     "sinon": "4.x",
     "uuid": "1.x"
-  },
-  "dependencies": {
-    "bluebird": "^3.7.2"
   }
 }
