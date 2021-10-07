@@ -63,7 +63,7 @@
     "is-subset": "0.x",
     "lodash.clonedeep": "^4.5.0",
     "mocha": "7.x",
-    "preconditions": "2.x",
+    "preconditions": "3.x",
     "semver": "5.x",
     "simple-statistics": "5.x",
     "sinon": "4.x",
