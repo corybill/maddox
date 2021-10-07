@@ -1903,12 +1903,7 @@ describe('Given a Scenario', function () {
         testContext.intentionalWrongResponse = ['SOME WRONG RESPONSE'];
         testContext.expectedStatusCode = [404];
 
-        let debugParams = {
-          actual: testContext.expectedErrorMessage,
-          expected: testContext.intentionalWrongResponse[0]
-        };
-
-        testContext.expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
+        testContext.expectedResponse = `Debug Params: {\n  "actual": "${testContext.expectedErrorMessage}",\n  "expected": "${testContext.intentionalWrongResponse[0]}"`;
       };
     });
 

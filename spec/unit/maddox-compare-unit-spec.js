@@ -45,12 +45,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.equal(true, false, undefined, { noDebug: false });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          const debugParams = {
-            actual: true,
-            expected: false
-          };
-
-          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = `Debug Params: {\n  "actual": true,\n  "expected": false\n}`;
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }
@@ -66,7 +61,7 @@ describe('Given the comparison module', function () {
             expected: false
           };
 
-          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = `Debug Params: {\n  "actual": true,\n  "expected": false\n}`;
 
           expect(err.stack.split(expectedResponse).length).eql(1);
         }
@@ -149,12 +144,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.shouldEqual({ actual: true, expected: false, noDebug: false });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          const debugParams = {
-            actual: true,
-            expected: false
-          };
-
-          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = `Debug Params: {\n  "actual": true,\n  "expected": false\n}`;
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }
@@ -165,12 +155,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.shouldEqual({ actual: true, expected: false, noDebug: true });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          const debugParams = {
-            actual: true,
-            expected: false
-          };
-
-          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = `Debug Params: {\n  "actual": true,\n  "expected": false\n}`;
 
           expect(err.stack.split(expectedResponse).length).eql(1);
         }
@@ -225,12 +210,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.truthy(false, undefined, { noDebug: false });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          const debugParams = {
-            actual: false,
-            expected: 'Some Truthy Value.'
-          };
-
-          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = `Debug Params: {\n  "actual": false,\n  "expected": "Some Truthy Value."\n}`;
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }

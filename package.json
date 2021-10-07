@@ -55,6 +55,8 @@
     "bluebird": "3.x",
     "chai": "4.x",
     "core-util-is": "1.x",
+    "deep-diff": "^1.0.2",
+    "deep-object-diff": "^1.1.0",
     "errr": "2.x",
     "fs-extra": "5.x",
     "is-subset": "0.x",
@@ -62,7 +64,8 @@
     "mocha": "7.x",
     "preconditions": "3.x",
     "simple-statistics": "5.x",
-    "sinon": "4.x"
+    "sinon": "4.x",
+    "variable-diff": "^2.0.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.33.0",
