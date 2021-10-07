@@ -1,6 +1,5 @@
-"use strict";
 
-const Service = require("./test-module-service");
+const Service = require('./test-module-service');
 
 class Controller {
 
@@ -69,14 +68,14 @@ class Controller {
       Service.executeWithStatefulSingletonProxy(req.params, req.query);
     }, 10);
 
-    res.status(200).send({result: "OK"});
+    res.status(200).send({ result: 'OK' });
   }
 
   static specialResponseFunctionality(req, res) {
     Service.executeWithStatefulSingletonProxy(req.params, req.query).then(function (result) {
-      res.set("someHeader1", result.personId);
-      res.set("someHeader2", result.homeState);
-      res.fakeHeaderFunction("someHeader3", result.homeState);
+      res.set('someHeader1', result.personId);
+      res.set('someHeader2', result.homeState);
+      res.fakeHeaderFunction('someHeader3', result.homeState);
 
       const someHeaderResponse1 = res.someResFunction(result.lastName);
       const someHeaderResponse2 = res.someResFunction(result.lastName);

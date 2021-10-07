@@ -1,33 +1,32 @@
-"use strict";
 
-const Maddox = require("../../lib/index"), // require("maddox");
-  random = require("../random"),
-  Controller = require("../testable/modules/test-module/from-http-req-controller"),
-  testConstants = require("../test-constants"),
-  StatefulSingletonProxy = require("../testable/proxies/stateful-singleton-proxy");
+const Maddox = require('../../lib/index'), // require("maddox");
+  random = require('../random'),
+  Controller = require('../testable/modules/test-module/from-http-req-controller'),
+  testConstants = require('../test-constants'),
+  StatefulSingletonProxy = require('../testable/proxies/stateful-singleton-proxy');
 
 const Scenario = Maddox.functional.HttpReqScenario;
 
-describe("Given the HttpReqScenario", function () {
+describe('Given the HttpReqScenario', function () {
   let testContext;
 
-  describe("when using the HttpReqScenario, it", function () {
+  describe('when using the HttpReqScenario, it', function () {
     beforeEach(function () {
       testContext = {};
 
       testContext.setupTest = function () {
         testContext.entryPointObject = Controller;
-        testContext.entryPointFunction = "statefulSingletonProxy";
+        testContext.entryPointFunction = 'statefulSingletonProxy';
         testContext.proxyInstance = StatefulSingletonProxy.getInstance();
       };
 
       testContext.setupHttpRequest = function () {
         testContext.httpRequest = {
           params: {
-            personId: "123456789"
+            personId: '123456789'
           },
           query: {
-            homeState: "IL"
+            homeState: 'IL'
           }
         };
 
@@ -63,7 +62,7 @@ describe("Given the HttpReqScenario", function () {
       };
     });
 
-    it("should handle a successful request.", function (done) {
+    it('should handle a successful request.', function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -72,43 +71,43 @@ describe("Given the HttpReqScenario", function () {
       testContext.setupExpected();
 
       new Scenario(this)
-        .mockThisFunction("StatefulSingletonProxy", "getInstance", StatefulSingletonProxy)
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+        .mockThisFunction('StatefulSingletonProxy', 'getInstance', StatefulSingletonProxy)
+        .mockThisFunction('proxyInstance', 'getFirstName', testContext.proxyInstance)
+        .mockThisFunction('proxyInstance', 'getMiddleName', testContext.proxyInstance)
+        .mockThisFunction('proxyInstance', 'getLastName', testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withHttpRequest(testContext.httpRequestParams)
 
-        .resShouldBeCalledWith("send", testContext.expectedResponse)
-        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resDoesReturnSelf("status")
+        .resShouldBeCalledWith('send', testContext.expectedResponse)
+        .resShouldBeCalledWith('status', testContext.expectedStatusCode)
+        .resDoesReturnSelf('status')
 
-        .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
-        .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
+        .shouldBeCalledWith('StatefulSingletonProxy', 'getInstance', Maddox.constants.EmptyParameters)
+        .doesReturn('StatefulSingletonProxy', 'getInstance', testContext.proxyInstance)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+        .shouldBeCalledWith('proxyInstance', 'getFirstName', testContext.getFirstName1Params)
+        .doesReturnWithPromise('proxyInstance', 'getFirstName', testContext.getFirstName1Result)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+        .shouldBeCalledWith('proxyInstance', 'getFirstName', testContext.getFirstName2Params)
+        .doesReturnWithPromise('proxyInstance', 'getFirstName', testContext.getFirstName2Result)
 
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+        .shouldBeCalledWith('proxyInstance', 'getMiddleName', testContext.getMiddleNameParams)
+        .doesReturn('proxyInstance', 'getMiddleName', testContext.getMiddleNameResult)
 
-        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
-        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+        .shouldBeCalledWith('proxyInstance', 'getLastName', testContext.getLastNameParams)
+        .doesReturnWithCallback('proxyInstance', 'getLastName', testContext.getLastNameResult)
 
         .perf()
         .test(done);
     });
 
-    it("should handle a checked exception.", function (done) {
+    it('should handle a checked exception.', function (done) {
       testContext.setupHttpRequest = function () {
         testContext.httpRequest = {
           params: {},
           query: {
-            homeState: "IL"
+            homeState: 'IL'
           }
         };
 
@@ -129,40 +128,40 @@ describe("Given the HttpReqScenario", function () {
       testContext.setupExpected();
 
       new Scenario(this)
-        .mockThisFunction("StatefulSingletonProxy", "getInstance", StatefulSingletonProxy)
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+        .mockThisFunction('StatefulSingletonProxy', 'getInstance', StatefulSingletonProxy)
+        .mockThisFunction('proxyInstance', 'getFirstName', testContext.proxyInstance)
+        .mockThisFunction('proxyInstance', 'getMiddleName', testContext.proxyInstance)
+        .mockThisFunction('proxyInstance', 'getLastName', testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withHttpRequest(testContext.httpRequestParams)
 
-        .resShouldBeCalledWith("send", testContext.expectedResponse)
-        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resDoesReturnSelf("status")
+        .resShouldBeCalledWith('send', testContext.expectedResponse)
+        .resShouldBeCalledWith('status', testContext.expectedStatusCode)
+        .resDoesReturnSelf('status')
 
         .test(done);
     });
 
   });
 
-  describe("when initiating an async process and using a finisher function, it", function () {
+  describe('when initiating an async process and using a finisher function, it', function () {
     beforeEach(function () {
       testContext = {};
 
       testContext.setupTest = function () {
         testContext.entryPointObject = Controller;
-        testContext.entryPointFunction = "initiateAsyncProcessing";
+        testContext.entryPointFunction = 'initiateAsyncProcessing';
         testContext.proxyInstance = StatefulSingletonProxy.getInstance();
       };
 
       testContext.setupHttpRequest = function () {
         testContext.httpRequest = {
           params: {
-            personId: "123456789"
+            personId: '123456789'
           },
           query: {
-            homeState: "IL"
+            homeState: 'IL'
           }
         };
 
@@ -189,14 +188,14 @@ describe("Given the HttpReqScenario", function () {
 
       testContext.setupExpected = function () {
         testContext.expectedResponse = [{
-          result: "OK"
+          result: 'OK'
         }];
 
         testContext.expectedStatusCode = [200];
       };
     });
 
-    it("should still test HTTP Response if it happens before the finisher function is executed.", function (done) {
+    it('should still test HTTP Response if it happens before the finisher function is executed.', function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -205,55 +204,55 @@ describe("Given the HttpReqScenario", function () {
       testContext.setupExpected();
 
       new Scenario(this)
-        .mockThisFunction("StatefulSingletonProxy", "getInstance", StatefulSingletonProxy)
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+        .mockThisFunction('StatefulSingletonProxy', 'getInstance', StatefulSingletonProxy)
+        .mockThisFunction('proxyInstance', 'getFirstName', testContext.proxyInstance)
+        .mockThisFunction('proxyInstance', 'getMiddleName', testContext.proxyInstance)
+        .mockThisFunction('proxyInstance', 'getLastName', testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withHttpRequest(testContext.httpRequestParams)
-        .withTestFinisherFunction("proxyInstance", "getLastName", 0)
+        .withTestFinisherFunction('proxyInstance', 'getLastName', 0)
 
-        .resShouldBeCalledWith("send", testContext.expectedResponse)
-        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resDoesReturnSelf("status")
+        .resShouldBeCalledWith('send', testContext.expectedResponse)
+        .resShouldBeCalledWith('status', testContext.expectedStatusCode)
+        .resDoesReturnSelf('status')
 
-        .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
-        .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
+        .shouldBeCalledWith('StatefulSingletonProxy', 'getInstance', Maddox.constants.EmptyParameters)
+        .doesReturn('StatefulSingletonProxy', 'getInstance', testContext.proxyInstance)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+        .shouldBeCalledWith('proxyInstance', 'getFirstName', testContext.getFirstName1Params)
+        .doesReturnWithPromise('proxyInstance', 'getFirstName', testContext.getFirstName1Result)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+        .shouldBeCalledWith('proxyInstance', 'getFirstName', testContext.getFirstName2Params)
+        .doesReturnWithPromise('proxyInstance', 'getFirstName', testContext.getFirstName2Result)
 
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+        .shouldBeCalledWith('proxyInstance', 'getMiddleName', testContext.getMiddleNameParams)
+        .doesReturn('proxyInstance', 'getMiddleName', testContext.getMiddleNameResult)
 
-        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
-        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+        .shouldBeCalledWith('proxyInstance', 'getLastName', testContext.getLastNameParams)
+        .doesReturnWithCallback('proxyInstance', 'getLastName', testContext.getLastNameResult)
 
         .test(done);
     });
   });
 
-  describe("when using the specialResponseFunctionality, it", function () {
+  describe('when using the specialResponseFunctionality, it', function () {
     beforeEach(function () {
       testContext = {};
 
       testContext.setupTest = function () {
         testContext.entryPointObject = Controller;
-        testContext.entryPointFunction = "specialResponseFunctionality";
+        testContext.entryPointFunction = 'specialResponseFunctionality';
         testContext.proxyInstance = StatefulSingletonProxy.getInstance();
       };
 
       testContext.setupHttpRequest = function () {
         testContext.httpRequest = {
           params: {
-            personId: "123456789"
+            personId: '123456789'
           },
           query: {
-            homeState: "IL"
+            homeState: 'IL'
           }
         };
 
@@ -279,13 +278,13 @@ describe("Given the HttpReqScenario", function () {
       };
 
       testContext.setupHttpHeaders = function () {
-        testContext.headerKey1 = "someHeader1";
+        testContext.headerKey1 = 'someHeader1';
         testContext.headerValue1 = testContext.httpRequest.params.personId;
 
-        testContext.headerKey2 = "someHeader2";
+        testContext.headerKey2 = 'someHeader2';
         testContext.headerValue2 = testContext.httpRequest.query.homeState;
 
-        testContext.headerKey3 = "someHeader3";
+        testContext.headerKey3 = 'someHeader3';
         testContext.headerValue3 = testContext.httpRequest.query.homeState;
       };
 
@@ -307,7 +306,7 @@ describe("Given the HttpReqScenario", function () {
       };
     });
 
-    it("should use 'resShouldContainerHeader' and 'resDoesReturn'.", function (done) {
+    it('should use \'resShouldContainerHeader\' and \'resDoesReturn\'.', function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -317,48 +316,48 @@ describe("Given the HttpReqScenario", function () {
       testContext.setupExpected();
 
       new Scenario(this)
-        .mockThisFunction("StatefulSingletonProxy", "getInstance", StatefulSingletonProxy)
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+        .mockThisFunction('StatefulSingletonProxy', 'getInstance', StatefulSingletonProxy)
+        .mockThisFunction('proxyInstance', 'getFirstName', testContext.proxyInstance)
+        .mockThisFunction('proxyInstance', 'getMiddleName', testContext.proxyInstance)
+        .mockThisFunction('proxyInstance', 'getLastName', testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withHttpRequest(testContext.httpRequestParams)
 
-        .resShouldBeCalledWith("send", testContext.expectedResponse)
+        .resShouldBeCalledWith('send', testContext.expectedResponse)
 
-        .resShouldBeCalledWith("someResFunction", testContext.someResParams1)
-        .resDoesReturn("someResFunction", testContext.someResResponse1)
+        .resShouldBeCalledWith('someResFunction', testContext.someResParams1)
+        .resDoesReturn('someResFunction', testContext.someResResponse1)
 
-        .resShouldBeCalledWith("someResFunction", testContext.someResParams2)
-        .resDoesReturn("someResFunction", testContext.someResResponse2)
+        .resShouldBeCalledWith('someResFunction', testContext.someResParams2)
+        .resDoesReturn('someResFunction', testContext.someResResponse2)
 
-        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resDoesReturnSelf("status")
+        .resShouldBeCalledWith('status', testContext.expectedStatusCode)
+        .resDoesReturnSelf('status')
 
-        .resShouldContainHeader(testContext.headerKey1, testContext.headerValue1, "set")
+        .resShouldContainHeader(testContext.headerKey1, testContext.headerValue1, 'set')
         .resShouldContainHeader(testContext.headerKey2, testContext.headerValue2) // Should default to set
-        .resShouldContainHeader(testContext.headerKey3, testContext.headerValue3, "fakeHeaderFunction")
+        .resShouldContainHeader(testContext.headerKey3, testContext.headerValue3, 'fakeHeaderFunction')
 
-        .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
-        .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
+        .shouldBeCalledWith('StatefulSingletonProxy', 'getInstance', Maddox.constants.EmptyParameters)
+        .doesReturn('StatefulSingletonProxy', 'getInstance', testContext.proxyInstance)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+        .shouldBeCalledWith('proxyInstance', 'getFirstName', testContext.getFirstName1Params)
+        .doesReturnWithPromise('proxyInstance', 'getFirstName', testContext.getFirstName1Result)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+        .shouldBeCalledWith('proxyInstance', 'getFirstName', testContext.getFirstName2Params)
+        .doesReturnWithPromise('proxyInstance', 'getFirstName', testContext.getFirstName2Result)
 
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+        .shouldBeCalledWith('proxyInstance', 'getMiddleName', testContext.getMiddleNameParams)
+        .doesReturn('proxyInstance', 'getMiddleName', testContext.getMiddleNameResult)
 
-        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
-        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+        .shouldBeCalledWith('proxyInstance', 'getLastName', testContext.getLastNameParams)
+        .doesReturnWithCallback('proxyInstance', 'getLastName', testContext.getLastNameResult)
 
         .test(done);
     });
 
-    it("should use 'resDoesAlwaysReturn' and 'resShouldAlwaysBeCalledWith'.", function (done) {
+    it('should use \'resDoesAlwaysReturn\' and \'resShouldAlwaysBeCalledWith\'.', function (done) {
       testContext.setupExpected = function () {
         testContext.someResParams1 = [testContext.getLastNameResult[1]];
         testContext.someResResponse1 = random.uniqueId();
@@ -385,45 +384,45 @@ describe("Given the HttpReqScenario", function () {
       testContext.setupExpected();
 
       new Scenario(this)
-        .mockThisFunction("StatefulSingletonProxy", "getInstance", StatefulSingletonProxy)
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+        .mockThisFunction('StatefulSingletonProxy', 'getInstance', StatefulSingletonProxy)
+        .mockThisFunction('proxyInstance', 'getFirstName', testContext.proxyInstance)
+        .mockThisFunction('proxyInstance', 'getMiddleName', testContext.proxyInstance)
+        .mockThisFunction('proxyInstance', 'getLastName', testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withHttpRequest(testContext.httpRequestParams)
 
-        .resShouldBeCalledWith("send", testContext.expectedResponse)
+        .resShouldBeCalledWith('send', testContext.expectedResponse)
 
-        .resShouldAlwaysBeCalledWith("someResFunction", testContext.someResParams1)
-        .resDoesAlwaysReturn("someResFunction", testContext.someResResponse1)
+        .resShouldAlwaysBeCalledWith('someResFunction', testContext.someResParams1)
+        .resDoesAlwaysReturn('someResFunction', testContext.someResResponse1)
 
-        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resDoesReturnSelf("status")
+        .resShouldBeCalledWith('status', testContext.expectedStatusCode)
+        .resDoesReturnSelf('status')
 
-        .resShouldContainHeader(testContext.headerKey1, testContext.headerValue1, "set")
+        .resShouldContainHeader(testContext.headerKey1, testContext.headerValue1, 'set')
         .resShouldContainHeader(testContext.headerKey2, testContext.headerValue2) // Should default to set
-        .resShouldContainHeader(testContext.headerKey3, testContext.headerValue3, "fakeHeaderFunction")
+        .resShouldContainHeader(testContext.headerKey3, testContext.headerValue3, 'fakeHeaderFunction')
 
-        .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
-        .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
+        .shouldBeCalledWith('StatefulSingletonProxy', 'getInstance', Maddox.constants.EmptyParameters)
+        .doesReturn('StatefulSingletonProxy', 'getInstance', testContext.proxyInstance)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+        .shouldBeCalledWith('proxyInstance', 'getFirstName', testContext.getFirstName1Params)
+        .doesReturnWithPromise('proxyInstance', 'getFirstName', testContext.getFirstName1Result)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+        .shouldBeCalledWith('proxyInstance', 'getFirstName', testContext.getFirstName2Params)
+        .doesReturnWithPromise('proxyInstance', 'getFirstName', testContext.getFirstName2Result)
 
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+        .shouldBeCalledWith('proxyInstance', 'getMiddleName', testContext.getMiddleNameParams)
+        .doesReturn('proxyInstance', 'getMiddleName', testContext.getMiddleNameResult)
 
-        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
-        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+        .shouldBeCalledWith('proxyInstance', 'getLastName', testContext.getLastNameParams)
+        .doesReturnWithCallback('proxyInstance', 'getLastName', testContext.getLastNameResult)
 
         .test(done);
     });
 
-    it("should use 'resDoesAlwaysReturn' by itself.", function (done) {
+    it('should use \'resDoesAlwaysReturn\' by itself.', function (done) {
       testContext.setupExpected = function () {
         testContext.someResParams1 = [testContext.getLastNameResult[1]];
         testContext.someResResponse1 = random.uniqueId();
@@ -450,47 +449,47 @@ describe("Given the HttpReqScenario", function () {
       testContext.setupExpected();
 
       new Scenario(this)
-        .mockThisFunction("StatefulSingletonProxy", "getInstance", StatefulSingletonProxy)
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+        .mockThisFunction('StatefulSingletonProxy', 'getInstance', StatefulSingletonProxy)
+        .mockThisFunction('proxyInstance', 'getFirstName', testContext.proxyInstance)
+        .mockThisFunction('proxyInstance', 'getMiddleName', testContext.proxyInstance)
+        .mockThisFunction('proxyInstance', 'getLastName', testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withHttpRequest(testContext.httpRequestParams)
 
-        .resShouldBeCalledWith("send", testContext.expectedResponse)
+        .resShouldBeCalledWith('send', testContext.expectedResponse)
 
-        .resShouldBeCalledWith("someResFunction", testContext.someResParams1)
-        .resShouldBeCalledWith("someResFunction", testContext.someResParams2)
+        .resShouldBeCalledWith('someResFunction', testContext.someResParams1)
+        .resShouldBeCalledWith('someResFunction', testContext.someResParams2)
 
-        .resDoesAlwaysReturn("someResFunction", testContext.someResResponse1)
+        .resDoesAlwaysReturn('someResFunction', testContext.someResResponse1)
 
-        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resDoesReturnSelf("status")
+        .resShouldBeCalledWith('status', testContext.expectedStatusCode)
+        .resDoesReturnSelf('status')
 
-        .resShouldContainHeader(testContext.headerKey1, testContext.headerValue1, "set")
+        .resShouldContainHeader(testContext.headerKey1, testContext.headerValue1, 'set')
         .resShouldContainHeader(testContext.headerKey2, testContext.headerValue2) // Should default to set
-        .resShouldContainHeader(testContext.headerKey3, testContext.headerValue3, "fakeHeaderFunction")
+        .resShouldContainHeader(testContext.headerKey3, testContext.headerValue3, 'fakeHeaderFunction')
 
-        .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
-        .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
+        .shouldBeCalledWith('StatefulSingletonProxy', 'getInstance', Maddox.constants.EmptyParameters)
+        .doesReturn('StatefulSingletonProxy', 'getInstance', testContext.proxyInstance)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+        .shouldBeCalledWith('proxyInstance', 'getFirstName', testContext.getFirstName1Params)
+        .doesReturnWithPromise('proxyInstance', 'getFirstName', testContext.getFirstName1Result)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+        .shouldBeCalledWith('proxyInstance', 'getFirstName', testContext.getFirstName2Params)
+        .doesReturnWithPromise('proxyInstance', 'getFirstName', testContext.getFirstName2Result)
 
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+        .shouldBeCalledWith('proxyInstance', 'getMiddleName', testContext.getMiddleNameParams)
+        .doesReturn('proxyInstance', 'getMiddleName', testContext.getMiddleNameResult)
 
-        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
-        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+        .shouldBeCalledWith('proxyInstance', 'getLastName', testContext.getLastNameParams)
+        .doesReturnWithCallback('proxyInstance', 'getLastName', testContext.getLastNameResult)
 
         .test(done);
     });
 
-    it("should use 'resShouldAlwaysBeCalledWith' by itself.", function (done) {
+    it('should use \'resShouldAlwaysBeCalledWith\' by itself.', function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -500,41 +499,41 @@ describe("Given the HttpReqScenario", function () {
       testContext.setupExpected();
 
       new Scenario(this)
-        .mockThisFunction("StatefulSingletonProxy", "getInstance", StatefulSingletonProxy)
-        .mockThisFunction("proxyInstance", "getFirstName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getMiddleName", testContext.proxyInstance)
-        .mockThisFunction("proxyInstance", "getLastName", testContext.proxyInstance)
+        .mockThisFunction('StatefulSingletonProxy', 'getInstance', StatefulSingletonProxy)
+        .mockThisFunction('proxyInstance', 'getFirstName', testContext.proxyInstance)
+        .mockThisFunction('proxyInstance', 'getMiddleName', testContext.proxyInstance)
+        .mockThisFunction('proxyInstance', 'getLastName', testContext.proxyInstance)
 
         .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction)
         .withHttpRequest(testContext.httpRequestParams)
 
-        .resShouldBeCalledWith("send", testContext.expectedResponse)
+        .resShouldBeCalledWith('send', testContext.expectedResponse)
 
-        .resShouldAlwaysBeCalledWith("someResFunction", testContext.someResParams1)
-        .resDoesReturn("someResFunction", testContext.someResResponse1)
-        .resDoesReturn("someResFunction", testContext.someResResponse2)
+        .resShouldAlwaysBeCalledWith('someResFunction', testContext.someResParams1)
+        .resDoesReturn('someResFunction', testContext.someResResponse1)
+        .resDoesReturn('someResFunction', testContext.someResResponse2)
 
-        .resShouldBeCalledWith("status", testContext.expectedStatusCode)
-        .resDoesReturnSelf("status")
+        .resShouldBeCalledWith('status', testContext.expectedStatusCode)
+        .resDoesReturnSelf('status')
 
-        .resShouldContainHeader(testContext.headerKey1, testContext.headerValue1, "set")
+        .resShouldContainHeader(testContext.headerKey1, testContext.headerValue1, 'set')
         .resShouldContainHeader(testContext.headerKey2, testContext.headerValue2) // Should default to set
-        .resShouldContainHeader(testContext.headerKey3, testContext.headerValue3, "fakeHeaderFunction")
+        .resShouldContainHeader(testContext.headerKey3, testContext.headerValue3, 'fakeHeaderFunction')
 
-        .shouldBeCalledWith("StatefulSingletonProxy", "getInstance", Maddox.constants.EmptyParameters)
-        .doesReturn("StatefulSingletonProxy", "getInstance", testContext.proxyInstance)
+        .shouldBeCalledWith('StatefulSingletonProxy', 'getInstance', Maddox.constants.EmptyParameters)
+        .doesReturn('StatefulSingletonProxy', 'getInstance', testContext.proxyInstance)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName1Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName1Result)
+        .shouldBeCalledWith('proxyInstance', 'getFirstName', testContext.getFirstName1Params)
+        .doesReturnWithPromise('proxyInstance', 'getFirstName', testContext.getFirstName1Result)
 
-        .shouldBeCalledWith("proxyInstance", "getFirstName", testContext.getFirstName2Params)
-        .doesReturnWithPromise("proxyInstance", "getFirstName", testContext.getFirstName2Result)
+        .shouldBeCalledWith('proxyInstance', 'getFirstName', testContext.getFirstName2Params)
+        .doesReturnWithPromise('proxyInstance', 'getFirstName', testContext.getFirstName2Result)
 
-        .shouldBeCalledWith("proxyInstance", "getMiddleName", testContext.getMiddleNameParams)
-        .doesReturn("proxyInstance", "getMiddleName", testContext.getMiddleNameResult)
+        .shouldBeCalledWith('proxyInstance', 'getMiddleName', testContext.getMiddleNameParams)
+        .doesReturn('proxyInstance', 'getMiddleName', testContext.getMiddleNameResult)
 
-        .shouldBeCalledWith("proxyInstance", "getLastName", testContext.getLastNameParams)
-        .doesReturnWithCallback("proxyInstance", "getLastName", testContext.getLastNameResult)
+        .shouldBeCalledWith('proxyInstance', 'getLastName', testContext.getLastNameParams)
+        .doesReturnWithCallback('proxyInstance', 'getLastName', testContext.getLastNameResult)
 
         .test(done);
     });

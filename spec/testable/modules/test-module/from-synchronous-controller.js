@@ -1,15 +1,13 @@
-"use strict";
+const Preconditions = require('preconditions'),
+  BluebirdPromise = require('bluebird'),
+  uuid = require('uuid');
 
-const Preconditions = require("preconditions"),
-  BluebirdPromise = require("bluebird"),
-  uuid = require("node-uuid");
-
-const testConstants = require("../../../test-constants"),
-  StatefulFactoryProxy = require("../../proxies/stateful-factory-proxy"),
-  StatefulSingletonProxy = require("../../proxies/stateful-singleton-proxy"),
-  StatelessEs6Proxy = require("../../proxies/stateless-es6-proxy"),
-  StatelessPreEs6SingletonProxy = require("../../proxies/stateless-pre-es6-singleton-proxy"),
-  StatelessPreEs6StaticProxy = require("../../proxies/stateless-pre-es6-static-proxy");
+const testConstants = require('../../../test-constants'),
+  StatefulFactoryProxy = require('../../proxies/stateful-factory-proxy'),
+  StatefulSingletonProxy = require('../../proxies/stateful-singleton-proxy'),
+  StatelessEs6Proxy = require('../../proxies/stateless-es6-proxy'),
+  StatelessPreEs6SingletonProxy = require('../../proxies/stateless-pre-es6-singleton-proxy'),
+  StatelessPreEs6StaticProxy = require('../../proxies/stateless-pre-es6-static-proxy');
 
 const preconditions = Preconditions.singleton();
 

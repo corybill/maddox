@@ -1,6 +1,5 @@
-"use strict";
 
-const Service = require("./test-module-service");
+const Service = require('./test-module-service');
 
 class Controller {
 

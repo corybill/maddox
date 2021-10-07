@@ -1,4 +1,3 @@
-"use strict";
 
 let _instance_;
 
@@ -6,15 +5,15 @@ let _instance_;
 class StatefulSingletonProxy {
 
   getFirstName(personId) { // eslint-disable-line
-    Promise.resolve("Cory");
+    Promise.resolve('Cory');
   }
 
   getMiddleName(personId, firstName) { // eslint-disable-line
-    return "Bill";
+    return 'Bill';
   }
 
   getLastName(personId, firstName, middleName, callback) { // eslint-disable-line
-    callback("Parrish");
+    callback('Parrish');
   }
 
 }

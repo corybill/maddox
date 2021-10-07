@@ -1,14 +1,13 @@
-"use strict";
 
-const Promise = require("bluebird"),
-  Preconditions = require("preconditions");
+const Promise = require('bluebird'),
+  Preconditions = require('preconditions');
 
-const testConstants = require("../../../test-constants"),
-  StatefulFactoryProxy = require("../../proxies/stateful-factory-proxy"),
-  StatefulSingletonProxy = require("../../proxies/stateful-singleton-proxy"),
-  StatelessEs6Proxy = require("../../proxies/stateless-es6-proxy"),
-  StatelessPreEs6SingletonProxy = require("../../proxies/stateless-pre-es6-singleton-proxy"),
-  StatelessPreEs6StaticProxy = require("../../proxies/stateless-pre-es6-static-proxy");
+const testConstants = require('../../../test-constants'),
+  StatefulFactoryProxy = require('../../proxies/stateful-factory-proxy'),
+  StatefulSingletonProxy = require('../../proxies/stateful-singleton-proxy'),
+  StatelessEs6Proxy = require('../../proxies/stateless-es6-proxy'),
+  StatelessPreEs6SingletonProxy = require('../../proxies/stateless-pre-es6-singleton-proxy'),
+  StatelessPreEs6StaticProxy = require('../../proxies/stateless-pre-es6-static-proxy');
 
 const preconditions = Preconditions.singleton();
 
@@ -261,14 +260,14 @@ class Service {
     return new Promise(function (resolve) {
       let proxy = StatelessEs6Proxy,
         context = {
-          someValue1: "first"
+          someValue1: 'first'
         };
 
       proxy.getFirstName(context).then(function () {
-        context.someValue2 = "second";
+        context.someValue2 = 'second';
         return proxy.getFirstName(context);
       }).then(function () {
-        context.someValue3 = "third";
+        context.someValue3 = 'third';
         return proxy.getFirstName(context);
       }).then(function () {
         resolve(context);

@@ -1,6 +1,5 @@
-"use strict";
 
-var Promise = require("bluebird");
+var Promise = require('bluebird');
 
 function StatelessPreEs6StaticProxy() {}
 
@@ -8,15 +7,15 @@ function StatelessPreEs6StaticProxy() {}
 // Returns a promise to demonstrate the use of mocking a function that returns a promise.
 
 StatelessPreEs6StaticProxy.getFirstName = function (personId) {  // eslint-disable-line
-  return Promise.resolve("Cory");
+  return Promise.resolve('Cory');
 };
 
 StatelessPreEs6StaticProxy.getMiddleName = function (personId, firstName) {  // eslint-disable-line
-  return "Bill";
+  return 'Bill';
 };
 
 StatelessPreEs6StaticProxy.getLastName = function (personId, firstName, middleName, callback) {  // eslint-disable-line
-  callback("Parrish");
+  callback('Parrish');
 };
 
 module.exports = StatelessPreEs6StaticProxy;

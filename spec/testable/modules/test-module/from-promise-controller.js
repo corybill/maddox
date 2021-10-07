@@ -1,6 +1,5 @@
-"use strict";
 
-const Service = require("./test-module-service");
+const Service = require('./test-module-service');
 
 class Controller {
 
@@ -33,11 +32,11 @@ class Controller {
       Service.executeWithStatelessEs6Proxy(req.params, req.query);
     }, 10);
 
-    return Promise.resolve({result: "OK"});
+    return Promise.resolve({ result: 'OK' });
   }
 
   static returnEmptyString() {
-    return "";
+    return '';
   }
 
   static returnUndefined() {

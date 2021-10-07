@@ -1,17 +1,16 @@
-"use strict";
 
-const chai = require("chai");
+const chai = require('chai');
 
-const Maddox = require("../../lib/index");
-const random = require("../random");
+const Maddox = require('../../lib/index');
+const random = require('../random');
 
 const expect = chai.expect;
 
-describe("Given the comparison module", function () {
-  describe("When statically comparing two items using", function () {
+describe('Given the comparison module', function () {
+  describe('When statically comparing two items using', function () {
     let testContext;
 
-    describe("equal, it", function () {
+    describe('equal, it', function () {
       beforeEach(function () {
         testContext = {};
 
@@ -41,9 +40,9 @@ describe("Given the comparison module", function () {
         };
       });
 
-      it("should add the full object print out of actual and expected when the noDebug flag is NOT set.", function () {
+      it('should add the full object print out of actual and expected when the noDebug flag is NOT set.', function () {
         try {
-          Maddox.compare.equal(true, false, undefined, {noDebug: false});
+          Maddox.compare.equal(true, false, undefined, { noDebug: false });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           const debugParams = {
@@ -51,15 +50,15 @@ describe("Given the comparison module", function () {
             expected: false
           };
 
-          const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }
       });
 
-      it("should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function () {
+      it('should NOT add the full object print out of actual and expected when the noDebug flag IS set.', function () {
         try {
-          Maddox.compare.equal(true, false, undefined, {noDebug: true});
+          Maddox.compare.equal(true, false, undefined, { noDebug: true });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           const debugParams = {
@@ -67,13 +66,13 @@ describe("Given the comparison module", function () {
             expected: false
           };
 
-          const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
 
           expect(err.stack.split(expectedResponse).length).eql(1);
         }
       });
 
-      it("should throw when the items DO NOT equal", function (done) {
+      it('should throw when the items DO NOT equal', function (done) {
         testContext.setupRhs = function () {
           testContext.rhs = {
             field1: testContext.field2,
@@ -100,7 +99,7 @@ describe("Given the comparison module", function () {
         }
       });
 
-      it("should pass when the items DO equal", function () {
+      it('should pass when the items DO equal', function () {
         testContext.setupValues();
         testContext.setupLhs();
         testContext.setupRhs();
@@ -115,7 +114,7 @@ describe("Given the comparison module", function () {
       });
     });
 
-    describe("shouldBeEqual, it", function () {
+    describe('shouldBeEqual, it', function () {
       beforeEach(function () {
         testContext = {};
 
@@ -145,9 +144,9 @@ describe("Given the comparison module", function () {
         };
       });
 
-      it("should add the full object print out of actual and expected when the noDebug flag is NOT set.", function () {
+      it('should add the full object print out of actual and expected when the noDebug flag is NOT set.', function () {
         try {
-          Maddox.compare.shouldEqual({actual: true, expected: false, noDebug: false});
+          Maddox.compare.shouldEqual({ actual: true, expected: false, noDebug: false });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           const debugParams = {
@@ -155,15 +154,15 @@ describe("Given the comparison module", function () {
             expected: false
           };
 
-          const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }
       });
 
-      it("should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function () {
+      it('should NOT add the full object print out of actual and expected when the noDebug flag IS set.', function () {
         try {
-          Maddox.compare.shouldEqual({actual: true, expected: false, noDebug: true});
+          Maddox.compare.shouldEqual({ actual: true, expected: false, noDebug: true });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           const debugParams = {
@@ -171,13 +170,13 @@ describe("Given the comparison module", function () {
             expected: false
           };
 
-          const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
 
           expect(err.stack.split(expectedResponse).length).eql(1);
         }
       });
 
-      it("should throw when the items DO NOT equal", function (done) {
+      it('should throw when the items DO NOT equal', function (done) {
         testContext.setupRhs = function () {
           testContext.rhs = {
             field1: testContext.field2,
@@ -192,7 +191,7 @@ describe("Given the comparison module", function () {
         testContext.setupExpected();
 
         try {
-          Maddox.compare.shouldEqual({actual: testContext.lhs, expected: testContext.rhs});
+          Maddox.compare.shouldEqual({ actual: testContext.lhs, expected: testContext.rhs });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           try {
@@ -204,14 +203,14 @@ describe("Given the comparison module", function () {
         }
       });
 
-      it("should pass when the items DO equal", function () {
+      it('should pass when the items DO equal', function () {
         testContext.setupValues();
         testContext.setupLhs();
         testContext.setupRhs();
         testContext.setupExpected();
 
         try {
-          Maddox.compare.shouldEqual({actual: testContext.lhs, expected: testContext.rhs});
+          Maddox.compare.shouldEqual({ actual: testContext.lhs, expected: testContext.rhs });
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
@@ -219,41 +218,41 @@ describe("Given the comparison module", function () {
       });
     });
 
-    describe("truthy, it", function () {
+    describe('truthy, it', function () {
 
-      it("should add the full object print out of actual and expected when the noDebug flag is NOT set.", function () {
+      it('should add the full object print out of actual and expected when the noDebug flag is NOT set.', function () {
         try {
-          Maddox.compare.truthy(false, undefined, {noDebug: false});
+          Maddox.compare.truthy(false, undefined, { noDebug: false });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           const debugParams = {
             actual: false,
-            expected: "Some Truthy Value."
+            expected: 'Some Truthy Value.'
           };
 
-          const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }
       });
 
-      it("should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function () {
+      it('should NOT add the full object print out of actual and expected when the noDebug flag IS set.', function () {
         try {
-          Maddox.compare.truthy(false, undefined, {noDebug: true});
+          Maddox.compare.truthy(false, undefined, { noDebug: true });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           const debugParams = {
             actual: false,
-            expected: "Some Truthy Value."
+            expected: 'Some Truthy Value.'
           };
 
-          const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
 
           expect(err.stack.split(expectedResponse).length).eql(1);
         }
       });
 
-      it("should pass when shouldBeTruthy comparison is given true value.", function () {
+      it('should pass when shouldBeTruthy comparison is given true value.', function () {
         try {
           Maddox.compare.truthy(true);
           expect("I should be here.").to.be.ok; // eslint-disable-line
@@ -262,16 +261,16 @@ describe("Given the comparison module", function () {
         }
       });
 
-      it("should pass when shouldBeTruthy comparison is given a defined value.", function () {
+      it('should pass when shouldBeTruthy comparison is given a defined value.', function () {
         try {
-          Maddox.compare.truthy("SomeDefinedValue");
+          Maddox.compare.truthy('SomeDefinedValue');
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
       });
 
-      it("should throw when shouldBeTruthy comparison is given a false value.", function () {
+      it('should throw when shouldBeTruthy comparison is given a false value.', function () {
         try {
           Maddox.compare.truthy(false);
           Maddox.compare.shouldBeUnreachable();
@@ -280,7 +279,7 @@ describe("Given the comparison module", function () {
         }
       });
 
-      it("should throw when shouldBeTruthy comparison is given an undefined value.", function () {
+      it('should throw when shouldBeTruthy comparison is given an undefined value.', function () {
         try {
           Maddox.compare.truthy(undefined);
           Maddox.compare.shouldBeUnreachable();
@@ -290,40 +289,40 @@ describe("Given the comparison module", function () {
       });
     });
 
-    describe("falsey, it", function () {
-      it("should add the full object print out of actual and expected when the noDebug flag is NOT set.", function () {
+    describe('falsey, it', function () {
+      it('should add the full object print out of actual and expected when the noDebug flag is NOT set.', function () {
         try {
-          Maddox.compare.falsey(true, undefined, {noDebug: false});
+          Maddox.compare.falsey(true, undefined, { noDebug: false });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           const debugParams = {
             actual: true,
-            expected: "Some Falsey Value."
+            expected: 'Some Falsey Value.'
           };
 
-          const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }
       });
 
-      it("should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function () {
+      it('should NOT add the full object print out of actual and expected when the noDebug flag IS set.', function () {
         try {
-          Maddox.compare.falsey(true, undefined, {noDebug: true});
+          Maddox.compare.falsey(true, undefined, { noDebug: true });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           const debugParams = {
             actual: true,
-            expected: "Some Falsey Value."
+            expected: 'Some Falsey Value.'
           };
 
-          const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
 
           expect(err.stack.split(expectedResponse).length).eql(1);
         }
       });
 
-      it("should pass when shouldBeFalsy comparison is given false value.", function () {
+      it('should pass when shouldBeFalsy comparison is given false value.', function () {
         try {
           Maddox.compare.falsey(false);
           expect("I should be here.").to.be.ok; // eslint-disable-line
@@ -332,7 +331,7 @@ describe("Given the comparison module", function () {
         }
       });
 
-      it("should pass when shouldBeFalsy comparison is given an undefined value.", function () {
+      it('should pass when shouldBeFalsy comparison is given an undefined value.', function () {
         try {
           Maddox.compare.falsey(undefined);
           expect("I should be here.").to.be.ok; // eslint-disable-line
@@ -341,7 +340,7 @@ describe("Given the comparison module", function () {
         }
       });
 
-      it("should throw when shouldBeFalsy comparison is given a true value.", function () {
+      it('should throw when shouldBeFalsy comparison is given a true value.', function () {
         try {
           Maddox.compare.falsey(true);
           Maddox.compare.shouldBeUnreachable();
@@ -350,9 +349,9 @@ describe("Given the comparison module", function () {
         }
       });
 
-      it("should throw when shouldBeFalsy comparison is given a defined value.", function () {
+      it('should throw when shouldBeFalsy comparison is given a defined value.', function () {
         try {
-          Maddox.compare.falsey("SomeDefinedValue");
+          Maddox.compare.falsey('SomeDefinedValue');
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           expect(err).to.be.ok // eslint-disable-line
@@ -360,69 +359,69 @@ describe("Given the comparison module", function () {
       });
     });
 
-    describe("shouldBeTruthy, it", function () {
-      it("should add the full object print out of actual and expected when the noDebug flag is NOT set.", function () {
+    describe('shouldBeTruthy, it', function () {
+      it('should add the full object print out of actual and expected when the noDebug flag is NOT set.', function () {
         try {
-          Maddox.compare.shouldBeTruthy({value: false, noDebug: false});
+          Maddox.compare.shouldBeTruthy({ value: false, noDebug: false });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           const debugParams = {
             actual: false,
-            expected: "Some Truthy Value."
+            expected: 'Some Truthy Value.'
           };
 
-          const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }
       });
 
-      it("should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function () {
+      it('should NOT add the full object print out of actual and expected when the noDebug flag IS set.', function () {
         try {
-          Maddox.compare.shouldBeTruthy({value: false, noDebug: true});
+          Maddox.compare.shouldBeTruthy({ value: false, noDebug: true });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           const debugParams = {
             actual: false,
-            expected: "Some Truthy Value."
+            expected: 'Some Truthy Value.'
           };
 
-          const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
 
           expect(err.stack.split(expectedResponse).length).eql(1);
         }
       });
 
-      it("should pass when shouldBeTruthy comparison is given true value.", function () {
+      it('should pass when shouldBeTruthy comparison is given true value.', function () {
         try {
-          Maddox.compare.shouldBeTruthy({value: true});
+          Maddox.compare.shouldBeTruthy({ value: true });
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
       });
 
-      it("should pass when shouldBeTruthy comparison is given a defined value.", function () {
+      it('should pass when shouldBeTruthy comparison is given a defined value.', function () {
         try {
-          Maddox.compare.shouldBeTruthy({value: "SomeDefinedValue"});
+          Maddox.compare.shouldBeTruthy({ value: 'SomeDefinedValue' });
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
       });
 
-      it("should throw when shouldBeTruthy comparison is given a false value.", function () {
+      it('should throw when shouldBeTruthy comparison is given a false value.', function () {
         try {
-          Maddox.compare.shouldBeTruthy({value: false});
+          Maddox.compare.shouldBeTruthy({ value: false });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           expect(err).to.be.ok // eslint-disable-line
         }
       });
 
-      it("should throw when shouldBeTruthy comparison is given an undefined value.", function () {
+      it('should throw when shouldBeTruthy comparison is given an undefined value.', function () {
         try {
-          Maddox.compare.shouldBeTruthy({value: undefined});
+          Maddox.compare.shouldBeTruthy({ value: undefined });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           expect(err).to.be.ok // eslint-disable-line
@@ -430,69 +429,69 @@ describe("Given the comparison module", function () {
       });
     });
 
-    describe("shouldBeFalsey, it", function () {
-      it("should add the full object print out of actual and expected when the noDebug flag is NOT set.", function () {
+    describe('shouldBeFalsey, it', function () {
+      it('should add the full object print out of actual and expected when the noDebug flag is NOT set.', function () {
         try {
-          Maddox.compare.shouldBeFalsey({value: true, noDebug: false});
+          Maddox.compare.shouldBeFalsey({ value: true, noDebug: false });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           const debugParams = {
             actual: true,
-            expected: "Some Falsey Value."
+            expected: 'Some Falsey Value.'
           };
 
-          const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }
       });
 
-      it("should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function () {
+      it('should NOT add the full object print out of actual and expected when the noDebug flag IS set.', function () {
         try {
-          Maddox.compare.shouldBeFalsey({value: true, noDebug: true});
+          Maddox.compare.shouldBeFalsey({ value: true, noDebug: true });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           const debugParams = {
             actual: true,
-            expected: "Some Falsey Value."
+            expected: 'Some Falsey Value.'
           };
 
-          const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
 
           expect(err.stack.split(expectedResponse).length).eql(1);
         }
       });
 
-      it("should pass when shouldBeFalsy comparison is given false value.", function () {
+      it('should pass when shouldBeFalsy comparison is given false value.', function () {
         try {
-          Maddox.compare.shouldBeFalsey({value: false});
+          Maddox.compare.shouldBeFalsey({ value: false });
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
       });
 
-      it("should pass when shouldBeFalsy comparison is given an undefined value.", function () {
+      it('should pass when shouldBeFalsy comparison is given an undefined value.', function () {
         try {
-          Maddox.compare.shouldBeFalsey({value: undefined});
+          Maddox.compare.shouldBeFalsey({ value: undefined });
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
       });
 
-      it("should throw when shouldBeFalsy comparison is given a true value.", function () {
+      it('should throw when shouldBeFalsy comparison is given a true value.', function () {
         try {
-          Maddox.compare.shouldBeFalsey({value: true});
+          Maddox.compare.shouldBeFalsey({ value: true });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           expect(err).to.be.ok // eslint-disable-line
         }
       });
 
-      it("should throw when shouldBeFalsy comparison is given a defined value.", function () {
+      it('should throw when shouldBeFalsy comparison is given a defined value.', function () {
         try {
-          Maddox.compare.shouldBeFalsey({value: "SomeDefinedValue"});
+          Maddox.compare.shouldBeFalsey({ value: 'SomeDefinedValue' });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           expect(err).to.be.ok // eslint-disable-line
@@ -500,70 +499,70 @@ describe("Given the comparison module", function () {
       });
     });
 
-    describe("shouldBeFalsy, it", function () {
+    describe('shouldBeFalsy, it', function () {
 
-      it("should add the full object print out of actual and expected when the noDebug flag is NOT set.", function () {
+      it('should add the full object print out of actual and expected when the noDebug flag is NOT set.', function () {
         try {
-          Maddox.compare.shouldBeFalsy({value: true, noDebug: false});
+          Maddox.compare.shouldBeFalsy({ value: true, noDebug: false });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           const debugParams = {
             actual: true,
-            expected: "Some Falsey Value."
+            expected: 'Some Falsey Value.'
           };
 
-          const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }
       });
 
-      it("should NOT add the full object print out of actual and expected when the noDebug flag IS set.", function () {
+      it('should NOT add the full object print out of actual and expected when the noDebug flag IS set.', function () {
         try {
-          Maddox.compare.shouldBeFalsy({value: true, noDebug: true});
+          Maddox.compare.shouldBeFalsy({ value: true, noDebug: true });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           const debugParams = {
             actual: true,
-            expected: "Some Falsey Value."
+            expected: 'Some Falsey Value.'
           };
 
-          const expectedResponse = "Debug Params: " + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
 
           expect(err.stack.split(expectedResponse).length).eql(1);
         }
       });
 
-      it("should pass when shouldBeFalsy comparison is given false value.", function () {
+      it('should pass when shouldBeFalsy comparison is given false value.', function () {
         try {
-          Maddox.compare.shouldBeFalsy({value: false});
+          Maddox.compare.shouldBeFalsy({ value: false });
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
       });
 
-      it("should pass when shouldBeFalsy comparison is given an undefined value.", function () {
+      it('should pass when shouldBeFalsy comparison is given an undefined value.', function () {
         try {
-          Maddox.compare.shouldBeFalsy({value: undefined});
+          Maddox.compare.shouldBeFalsy({ value: undefined });
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
       });
 
-      it("should throw when shouldBeFalsy comparison is given a true value.", function () {
+      it('should throw when shouldBeFalsy comparison is given a true value.', function () {
         try {
-          Maddox.compare.shouldBeFalsy({value: true});
+          Maddox.compare.shouldBeFalsy({ value: true });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           expect(err).to.be.ok // eslint-disable-line
         }
       });
 
-      it("should throw when shouldBeFalsy comparison is given a defined value.", function () {
+      it('should throw when shouldBeFalsy comparison is given a defined value.', function () {
         try {
-          Maddox.compare.shouldBeFalsy({value: "SomeDefinedValue"});
+          Maddox.compare.shouldBeFalsy({ value: 'SomeDefinedValue' });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           expect(err).to.be.ok // eslint-disable-line
@@ -571,30 +570,30 @@ describe("Given the comparison module", function () {
       });
     });
 
-    describe("shouldBeUnreachable, it", function () {
-      it("should throw when using Maddox's shouldBeUnreachable function", function () {
+    describe('shouldBeUnreachable, it', function () {
+      it('should throw when using Maddox\'s shouldBeUnreachable function', function () {
         try {
           Maddox.compare.shouldBeUnreachable();
-          expect("shouldBeUnreachable should throw an error making it impossible to reach this code").eql(undefined);
+          expect('shouldBeUnreachable should throw an error making it impossible to reach this code').eql(undefined);
         } catch (err) {
-          expect(err.message).eql("It should be impossible to reach this code.: expected false to deeply equal true");
+          expect(err.message).eql('It should be impossible to reach this code.: expected false to deeply equal true');
         }
       });
 
-      it("should throw when using Maddox's shouldBeUnreachable function with the provided message.", function () {
+      it('should throw when using Maddox\'s shouldBeUnreachable function with the provided message.', function () {
         const message = random.uniqueId();
 
         try {
           Maddox.compare.shouldBeUnreachable(message);
-          expect("shouldBeUnreachable should throw an error making it impossible to reach this code").eql(undefined);
+          expect('shouldBeUnreachable should throw an error making it impossible to reach this code').eql(undefined);
         } catch (err) {
           expect(err.message).eql(`${message}: expected false to deeply equal true`);
         }
       });
     });
 
-    describe("subset, it", () => {
-      it("should pass subset comparison when given to empty objects.", () => {
+    describe('subset, it', () => {
+      it('should pass subset comparison when given to empty objects.', () => {
         const actual = {};
         const expected = {};
 
@@ -606,12 +605,12 @@ describe("Given the comparison module", function () {
         }
       });
 
-      it("should pass subset comparison when expected object is a subset of actual object.", () => {
+      it('should pass subset comparison when expected object is a subset of actual object.', () => {
         const randomId1 = random.uniqueId();
         const randomId2 = random.uniqueId();
 
-        const actual = {one: {foo1: randomId1}, two: {foo2: randomId2}};
-        const expected = {two: {foo2: randomId2}};
+        const actual = { one: { foo1: randomId1 }, two: { foo2: randomId2 } };
+        const expected = { two: { foo2: randomId2 } };
 
         try {
           Maddox.compare.subset(actual, expected);
@@ -621,105 +620,105 @@ describe("Given the comparison module", function () {
         }
       });
 
-      it("should pass subset comparison when using the context version.", () => {
+      it('should pass subset comparison when using the context version.', () => {
         const randomId1 = random.uniqueId();
         const randomId2 = random.uniqueId();
 
-        const actual = {one: {foo1: randomId1}, two: {foo2: randomId2}};
-        const expected = {two: {foo2: randomId2}};
+        const actual = { one: { foo1: randomId1 }, two: { foo2: randomId2 } };
+        const expected = { two: { foo2: randomId2 } };
 
         try {
-          Maddox.compare.shouldBeSubset({actual, expected});
+          Maddox.compare.shouldBeSubset({ actual, expected });
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable(err.stack);
         }
       });
 
-      it("should pass subset comparison when expected is a substring of the actual.", () => {
+      it('should pass subset comparison when expected is a substring of the actual.', () => {
         const randomId1 = random.uniqueId();
 
         const actual = randomId1;
         const expected = randomId1.substring(3, 10);
 
         try {
-          Maddox.compare.shouldBeSubset({actual, expected});
+          Maddox.compare.shouldBeSubset({ actual, expected });
           expect("I should be here.").to.be.ok; // eslint-disable-line
         } catch (err) {
           Maddox.compare.shouldBeUnreachable(err.stack);
         }
       });
 
-      it("should fail subset comparison when either expected or actual is a string, and the other is not a string.", () => {
+      it('should fail subset comparison when either expected or actual is a string, and the other is not a string.', () => {
         const randomId1 = random.uniqueId();
         const randomId2 = random.uniqueId();
 
-        const actual = {one: {foo1: randomId1}, two: {foo2: randomId2}};
+        const actual = { one: { foo1: randomId1 }, two: { foo2: randomId2 } };
         const expected = randomId2;
 
         try {
           Maddox.compare.subset(actual, expected);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          Maddox.compare.equal(err.message, "Failed the subset validation. The subset was not found in the superset.");
-          Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
-          Maddox.compare.truthy(err.stack.indexOf("expected") !== -1, "Should have expected in debug params");
+          Maddox.compare.equal(err.message, 'Failed the subset validation. The subset was not found in the superset.');
+          Maddox.compare.truthy(err.stack.indexOf('actual') !== -1, 'Should have actual in debug params');
+          Maddox.compare.truthy(err.stack.indexOf('expected') !== -1, 'Should have expected in debug params');
         }
       });
 
-      it("should fail subset comparison when expected object has a value that does not exist in actual.", () => {
+      it('should fail subset comparison when expected object has a value that does not exist in actual.', () => {
         const randomId1 = random.uniqueId();
         const randomId2 = random.uniqueId();
 
-        const actual = {one: {foo1: randomId1}, two: {foo2: randomId2}};
-        const expected = {two: {foo2: randomId2}, three: {foo2: randomId2}};
+        const actual = { one: { foo1: randomId1 }, two: { foo2: randomId2 } };
+        const expected = { two: { foo2: randomId2 }, three: { foo2: randomId2 } };
 
         try {
           Maddox.compare.subset(actual, expected);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          Maddox.compare.equal(err.message, "Failed the subset validation. The subset was not found in the superset.");
-          Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
-          Maddox.compare.truthy(err.stack.indexOf("expected") !== -1, "Should have expected in debug params");
+          Maddox.compare.equal(err.message, 'Failed the subset validation. The subset was not found in the superset.');
+          Maddox.compare.truthy(err.stack.indexOf('actual') !== -1, 'Should have actual in debug params');
+          Maddox.compare.truthy(err.stack.indexOf('expected') !== -1, 'Should have expected in debug params');
         }
       });
 
-      it("should fail subset comparison when expected object has a value that does not match the value in actual.", () => {
+      it('should fail subset comparison when expected object has a value that does not match the value in actual.', () => {
         const randomId1 = random.uniqueId();
         const randomId2 = random.uniqueId();
 
-        const actual = {one: {foo1: randomId1}, two: {foo2: randomId2}};
-        const expected = {one: {foo1: randomId1}, two: {foo2: randomId1}};
+        const actual = { one: { foo1: randomId1 }, two: { foo2: randomId2 } };
+        const expected = { one: { foo1: randomId1 }, two: { foo2: randomId1 } };
 
         try {
           Maddox.compare.subset(actual, expected);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          Maddox.compare.equal(err.message, "Failed the subset validation. The subset was not found in the superset.");
-          Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
-          Maddox.compare.truthy(err.stack.indexOf("expected") !== -1, "Should have expected in debug params");
+          Maddox.compare.equal(err.message, 'Failed the subset validation. The subset was not found in the superset.');
+          Maddox.compare.truthy(err.stack.indexOf('actual') !== -1, 'Should have actual in debug params');
+          Maddox.compare.truthy(err.stack.indexOf('expected') !== -1, 'Should have expected in debug params');
         }
       });
 
-      it("should fail subset comparison and use the provided message for the error.", () => {
+      it('should fail subset comparison and use the provided message for the error.', () => {
         const randomId1 = random.uniqueId();
         const randomId2 = random.uniqueId();
         const message = random.uniqueId();
 
-        const actual = {one: {foo1: randomId1}, two: {foo2: randomId2}};
-        const expected = {one: {foo1: randomId1}, two: {foo2: randomId1}};
+        const actual = { one: { foo1: randomId1 }, two: { foo2: randomId2 } };
+        const expected = { one: { foo1: randomId1 }, two: { foo2: randomId1 } };
 
         try {
           Maddox.compare.subset(actual, expected, message);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           Maddox.compare.equal(err.message, message);
-          Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
-          Maddox.compare.truthy(err.stack.indexOf("expected") !== -1, "Should have expected in debug params");
+          Maddox.compare.truthy(err.stack.indexOf('actual') !== -1, 'Should have actual in debug params');
+          Maddox.compare.truthy(err.stack.indexOf('expected') !== -1, 'Should have expected in debug params');
         }
       });
 
-      it("should fail subset comparison when expected is not a substring of the actual.", () => {
+      it('should fail subset comparison when expected is not a substring of the actual.', () => {
         const randomId1 = random.uniqueId();
         const randomId2 = random.uniqueId();
         const message = random.uniqueId();
@@ -728,48 +727,48 @@ describe("Given the comparison module", function () {
         const expected = randomId2;
 
         try {
-          Maddox.compare.shouldBeSubset({actual, expected, message});
+          Maddox.compare.shouldBeSubset({ actual, expected, message });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           Maddox.compare.equal(err.message, message);
-          Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
-          Maddox.compare.truthy(err.stack.indexOf("expected") !== -1, "Should have expected in debug params");
+          Maddox.compare.truthy(err.stack.indexOf('actual') !== -1, 'Should have actual in debug params');
+          Maddox.compare.truthy(err.stack.indexOf('expected') !== -1, 'Should have expected in debug params');
         }
       });
 
-      it("should fail subset comparison when comparing an object to a string.", () => {
+      it('should fail subset comparison when comparing an object to a string.', () => {
         const randomId1 = random.uniqueId();
         const randomId2 = random.uniqueId();
         const message = random.uniqueId();
 
-        const actual = {one: {foo1: randomId1}, two: {foo2: randomId2}};
+        const actual = { one: { foo1: randomId1 }, two: { foo2: randomId2 } };
         const expected = randomId2;
 
         try {
-          Maddox.compare.shouldBeSubset({actual, expected, message});
+          Maddox.compare.shouldBeSubset({ actual, expected, message });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           Maddox.compare.equal(err.message, message);
-          Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
-          Maddox.compare.truthy(err.stack.indexOf("expected") !== -1, "Should have expected in debug params");
+          Maddox.compare.truthy(err.stack.indexOf('actual') !== -1, 'Should have actual in debug params');
+          Maddox.compare.truthy(err.stack.indexOf('expected') !== -1, 'Should have expected in debug params');
         }
       });
 
-      it("should fail subset comparison when comparing a string to an object.", () => {
+      it('should fail subset comparison when comparing a string to an object.', () => {
         const randomId1 = random.uniqueId();
         const randomId2 = random.uniqueId();
         const message = random.uniqueId();
 
         const actual = randomId2;
-        const expected = {one: {foo1: randomId1}, two: {foo2: randomId2}};
+        const expected = { one: { foo1: randomId1 }, two: { foo2: randomId2 } };
 
         try {
-          Maddox.compare.shouldBeSubset({actual, expected, message});
+          Maddox.compare.shouldBeSubset({ actual, expected, message });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           Maddox.compare.equal(err.message, message);
-          Maddox.compare.truthy(err.stack.indexOf("actual") !== -1, "Should have actual in debug params");
-          Maddox.compare.truthy(err.stack.indexOf("expected") !== -1, "Should have expected in debug params");
+          Maddox.compare.truthy(err.stack.indexOf('actual') !== -1, 'Should have actual in debug params');
+          Maddox.compare.truthy(err.stack.indexOf('expected') !== -1, 'Should have expected in debug params');
         }
       });
     });
