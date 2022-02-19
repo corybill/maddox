@@ -61,7 +61,7 @@
     "fs-extra": "5.x",
     "is-subset": "0.x",
     "lodash.clonedeep": "^4.5.0",
-    "mocha": "7.x",
+    "mocha": "^9.2.1",
     "preconditions": "3.x",
     "simple-statistics": "5.x",
     "sinon": "4.x",
