@@ -58,7 +58,6 @@
     "deep-diff": "^1.0.2",
     "deep-object-diff": "^1.1.0",
     "errr": "2.x",
-    "eslint": "^8.9.0",
     "fs-extra": "5.x",
     "is-subset": "0.x",
     "lodash.clonedeep": "^4.5.0",
@@ -72,6 +71,7 @@
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "4.x",
     "chance": "1.x",
+    "eslint": "^8.9.0",
     "semver": "5.x",
     "uuid": "1.x"
   }
