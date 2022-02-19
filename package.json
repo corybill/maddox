@@ -61,7 +61,7 @@
     "fs-extra": "5.x",
     "is-subset": "0.x",
     "lodash.clonedeep": "^4.5.0",
-    "mocha": "7.x",
+    "mocha": "^9.2.1",
     "preconditions": "3.x",
     "simple-statistics": "5.x",
     "sinon": "4.x",
@@ -71,7 +71,7 @@
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "4.x",
     "chance": "1.x",
-    "eslint": "6.x",
+    "eslint": "^8.9.0",
     "semver": "5.x",
     "uuid": "1.x"
   }
