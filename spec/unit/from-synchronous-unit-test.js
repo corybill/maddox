@@ -3,7 +3,7 @@ import random from '../random.js';
 import Controller from '../testable/modules/test-module/from-synchronous-controller.js';
 import testConstants from '../test-constants.js';
 import StatelessEs6Proxy from '../testable/proxies/stateless-es6-proxy.js';
-import uuid from 'uuid';
+import uuid from '../testable/modules/test-module/uuid-wrapper.js';
 
 const Scenario = Maddox.functional.FromSynchronousScenario;
 

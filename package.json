@@ -62,7 +62,7 @@
     "fs-extra": "^5.0.0",
     "is-subset": "0.x",
     "lodash": "^4.18.1",
-    "mocha": "^9.2.2",
+    "mocha": "^11.7.5",
     "preconditions": "3.x",
     "simple-statistics": "5.x",
     "sinon": "^13.0.2",
@@ -75,10 +75,13 @@
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.6.0",
     "prettier": "^3.8.3",
-    "semver": "^5.7.2",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
-    "uuid": "^1.4.2"
+    "uuid": "^11.1.0"
+  },
+  "overrides": {
+    "diff": "^9.0.0",
+    "serialize-javascript": "^7.0.5"
   },
   "module": "dist/index.js",
   "exports": {

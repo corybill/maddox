@@ -1,5 +1,5 @@
 import Preconditions from 'preconditions';
-import uuid from 'uuid';
+import uuid from './uuid-wrapper.js';
 import testConstants from '../../../test-constants.js';
 import StatefulFactoryProxy from '../../proxies/stateful-factory-proxy.js';
 import StatefulSingletonProxy from '../../proxies/stateful-singleton-proxy.js';
