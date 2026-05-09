@@ -1,15 +1,14 @@
-
-const Maddox = require('../../lib/index'), // require("maddox");
-  random = require('../random'),
-  constants = require('../../lib/constants'),
-  Controller = require('../testable/modules/test-module/from-http-req-controller'),
-  SpecialScenariosController = require('../testable/modules/test-module/special-scenarios-controller'),
-  testConstants = require('../test-constants'),
-  StatefulFactoryProxy = require('../testable/proxies/stateful-factory-proxy'),
-  StatefulSingletonProxy = require('../testable/proxies/stateful-singleton-proxy'),
-  StatelessEs6Proxy = require('../testable/proxies/stateless-es6-proxy'),
-  StatelessPreEs6SingletonProxy = require('../testable/proxies/stateless-pre-es6-singleton-proxy'),
-  StatelessPreEs6StaticProxy = require('../testable/proxies/stateless-pre-es6-static-proxy');
+import Maddox from '../../lib/index.js'; // require("maddox");
+import random from '../random.js';
+import constants from '../../lib/constants.js';
+import Controller from '../testable/modules/test-module/from-http-req-controller.js';
+import SpecialScenariosController from '../testable/modules/test-module/special-scenarios-controller.js';
+import testConstants from '../test-constants.js';
+import StatefulFactoryProxy from '../testable/proxies/stateful-factory-proxy.js';
+import StatefulSingletonProxy from '../testable/proxies/stateful-singleton-proxy.js';
+import StatelessEs6Proxy from '../testable/proxies/stateless-es6-proxy.js';
+import StatelessPreEs6SingletonProxy from '../testable/proxies/stateless-pre-es6-singleton-proxy.js';
+import StatelessPreEs6StaticProxy from '../testable/proxies/stateless-pre-es6-static-proxy.js';
 
 const Scenario = Maddox.functional.HttpReqScenario;
 
@@ -17,7 +16,6 @@ describe('Given a Scenario', function () {
   let testContext;
 
   describe('when without external dependencies, it', function () {
-
     beforeEach(function () {
       testContext = {};
 
@@ -40,10 +38,12 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -136,16 +136,22 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -371,7 +377,11 @@ describe('Given a Scenario', function () {
       testContext.setupGetLastName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [new Error(testContext.expectedErrorMessage)];
       };
       testContext.setupExpected = function () {
@@ -414,7 +424,8 @@ describe('Given a Scenario', function () {
         .shouldBeCalledWith('proxyInstance', 'getLastName', testContext.getLastNameParams)
         .doesErrorWithCallback('proxyInstance', 'getLastName', testContext.getLastNameResult)
 
-        .test(done).catch((err) => {
+        .test(done)
+        .catch((err) => {
           done(err);
         });
     });
@@ -423,7 +434,11 @@ describe('Given a Scenario', function () {
       testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getMiddleNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getMiddleNameResult = new Error(testContext.expectedErrorMessage);
       };
       testContext.setupExpected = function () {
@@ -463,7 +478,8 @@ describe('Given a Scenario', function () {
         .shouldBeCalledWith('proxyInstance', 'getMiddleName', testContext.getMiddleNameParams)
         .doesError('proxyInstance', 'getMiddleName', testContext.getMiddleNameResult)
 
-        .test(done).catch((err) => {
+        .test(done)
+        .catch((err) => {
           done(err);
         });
     });
@@ -506,16 +522,22 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -741,7 +763,11 @@ describe('Given a Scenario', function () {
       testContext.setupGetLastName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [new Error(testContext.expectedErrorMessage)];
       };
       testContext.setupExpected = function () {
@@ -791,7 +817,11 @@ describe('Given a Scenario', function () {
       testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getMiddleNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getMiddleNameResult = new Error(testContext.expectedErrorMessage);
       };
       testContext.setupExpected = function () {
@@ -872,16 +902,22 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -1090,7 +1126,11 @@ describe('Given a Scenario', function () {
       testContext.setupGetLastName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [new Error(testContext.expectedErrorMessage)];
       };
       testContext.setupExpected = function () {
@@ -1136,7 +1176,11 @@ describe('Given a Scenario', function () {
       testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getMiddleNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getMiddleNameResult = new Error(testContext.expectedErrorMessage);
       };
       testContext.setupExpected = function () {
@@ -1213,16 +1257,22 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -1431,7 +1481,11 @@ describe('Given a Scenario', function () {
       testContext.setupGetLastName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [new Error(testContext.expectedErrorMessage)];
       };
       testContext.setupExpected = function () {
@@ -1477,7 +1531,11 @@ describe('Given a Scenario', function () {
       testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getMiddleNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getMiddleNameResult = new Error(testContext.expectedErrorMessage);
       };
       testContext.setupExpected = function () {
@@ -1554,16 +1612,22 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -1772,7 +1836,11 @@ describe('Given a Scenario', function () {
       testContext.setupGetLastName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [new Error(testContext.expectedErrorMessage)];
       };
       testContext.setupExpected = function () {
@@ -1818,7 +1886,11 @@ describe('Given a Scenario', function () {
       testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getMiddleNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getMiddleNameResult = new Error(testContext.expectedErrorMessage);
       };
       testContext.setupExpected = function () {
@@ -1895,7 +1967,11 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
@@ -1911,7 +1987,11 @@ describe('Given a Scenario', function () {
       testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getMiddleNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getMiddleNameResult = new Error(testContext.expectedErrorMessage);
       };
 
@@ -1945,7 +2025,8 @@ describe('Given a Scenario', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.stack.split(testContext.expectedResponse).length, expected: 2 });
             done();
@@ -1959,7 +2040,11 @@ describe('Given a Scenario', function () {
       testContext.setupGetMiddleName = function () {
         testContext.expectedErrorMessage = `Proxy Error (${random.uniqueId()}): Some Proxy Error.`;
 
-        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getMiddleNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getMiddleNameResult = new Error(testContext.expectedErrorMessage);
       };
 
@@ -1995,7 +2080,8 @@ describe('Given a Scenario', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.stack.split(testContext.expectedResponse).length, expected: 1 });
             done();
@@ -2030,7 +2116,10 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetFirstName = function () {
-        testContext.getFirstNameParams = [testContext.httpRequest.params.personId, testContext.httpRequest.query.homeState];
+        testContext.getFirstNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.httpRequest.query.homeState
+        ];
         testContext.getFirstName1Result = random.firstName();
         testContext.getFirstName2Result = random.firstName();
         testContext.getFirstName3Result = random.firstName();
@@ -2048,24 +2137,38 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName1Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName1Result
+        ];
         testContext.getLastName1Result = [undefined, random.lastName()];
 
-        testContext.getLastName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleName2Result];
+        testContext.getLastName2Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleName2Result
+        ];
         testContext.getLastName2Result = [undefined, random.lastName()];
 
-        testContext.getLastName3Params = [testContext.httpRequest.params.personId, testContext.getFirstName3Result, testContext.getMiddleName3Result];
+        testContext.getLastName3Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName3Result,
+          testContext.getMiddleName3Result
+        ];
         testContext.getLastName3Result = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName1: testContext.getLastName1Result[1],
-          lastName2: testContext.getLastName2Result[1],
-          lastName3: testContext.getLastName3Result[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName1: testContext.getLastName1Result[1],
+            lastName2: testContext.getLastName2Result[1],
+            lastName3: testContext.getLastName3Result[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -2130,13 +2233,25 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName1Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName1Result
+        ];
         testContext.getLastName1Result = [undefined, random.lastName()];
 
-        testContext.getLastName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName2Result];
+        testContext.getLastName2Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName2Result
+        ];
         testContext.getLastName2Result = [undefined, random.lastName()];
 
-        testContext.getLastName3Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName3Result];
+        testContext.getLastName3Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName3Result
+        ];
         testContext.getLastName3Result = [undefined, random.lastName()];
       };
 
@@ -2196,24 +2311,38 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName1Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName1Result
+        ];
         testContext.getLastName1Result = [undefined, random.lastName()];
 
-        testContext.getLastName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName2Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName1Result
+        ];
         testContext.getLastName2Result = [undefined, random.lastName()];
 
-        testContext.getLastName3Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName3Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName1Result
+        ];
         testContext.getLastName3Result = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName1: testContext.getLastName1Result[1],
-          lastName2: testContext.getLastName1Result[1],
-          lastName3: testContext.getLastName1Result[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName1: testContext.getLastName1Result[1],
+            lastName2: testContext.getLastName1Result[1],
+            lastName3: testContext.getLastName1Result[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -2260,18 +2389,24 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName1Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName1Result
+        ];
         testContext.getLastName1Result = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName1: testContext.getLastName1Result[1],
-          lastName2: testContext.getLastName1Result[1],
-          lastName3: testContext.getLastName1Result[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName1: testContext.getLastName1Result[1],
+            lastName2: testContext.getLastName1Result[1],
+            lastName3: testContext.getLastName1Result[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -2353,24 +2488,38 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName1Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName1Result
+        ];
         testContext.getLastName1Result = [undefined, random.lastName()];
 
-        testContext.getLastName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleName2Result];
+        testContext.getLastName2Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleName2Result
+        ];
         testContext.getLastName2Result = [undefined, random.lastName()];
 
-        testContext.getLastName3Params = [testContext.httpRequest.params.personId, testContext.getFirstName3Result, testContext.getMiddleName3Result];
+        testContext.getLastName3Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName3Result,
+          testContext.getMiddleName3Result
+        ];
         testContext.getLastName3Result = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName1: testContext.getLastName1Result[1],
-          lastName2: testContext.getLastName2Result[1],
-          lastName3: testContext.getLastName3Result[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName1: testContext.getLastName1Result[1],
+            lastName2: testContext.getLastName2Result[1],
+            lastName3: testContext.getLastName3Result[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -2435,13 +2584,25 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName1Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName1Result
+        ];
         testContext.getLastName1Result = [undefined, random.lastName()];
 
-        testContext.getLastName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName2Result];
+        testContext.getLastName2Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName2Result
+        ];
         testContext.getLastName2Result = [undefined, random.lastName()];
 
-        testContext.getLastName3Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName3Result];
+        testContext.getLastName3Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName3Result
+        ];
         testContext.getLastName3Result = [undefined, random.lastName()];
       };
 
@@ -2501,24 +2662,38 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName1Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName1Result
+        ];
         testContext.getLastName1Result = [undefined, random.lastName()];
 
-        testContext.getLastName2Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName2Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName1Result
+        ];
         testContext.getLastName2Result = [undefined, random.lastName()];
 
-        testContext.getLastName3Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName3Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName1Result
+        ];
         testContext.getLastName3Result = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName1: testContext.getLastName1Result[1],
-          lastName2: testContext.getLastName1Result[1],
-          lastName3: testContext.getLastName1Result[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName1: testContext.getLastName1Result[1],
+            lastName2: testContext.getLastName1Result[1],
+            lastName3: testContext.getLastName1Result[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -2567,18 +2742,24 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName1Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName1Result
+        ];
         testContext.getLastName1Result = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName1: testContext.getLastName1Result[1],
-          lastName2: testContext.getLastName1Result[1],
-          lastName3: testContext.getLastName1Result[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName1: testContext.getLastName1Result[1],
+            lastName2: testContext.getLastName1Result[1],
+            lastName3: testContext.getLastName1Result[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -2621,18 +2802,24 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastName1Params = [testContext.httpRequest.params.personId, testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName1Params = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result,
+          testContext.getMiddleName1Result
+        ];
         testContext.getLastName1Result = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName1: testContext.getLastName1Result[1],
-          lastName2: testContext.getLastName1Result[1],
-          lastName3: testContext.getLastName1Result[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName1: testContext.getLastName1Result[1],
+            lastName2: testContext.getLastName1Result[1],
+            lastName3: testContext.getLastName1Result[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -2706,16 +2893,22 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -2840,7 +3033,7 @@ describe('Given a Scenario', function () {
         .test(done);
     });
 
-    it('should default finisher function \'iteration\' property to 0.', function (done) {
+    it("should default finisher function 'iteration' property to 0.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -2934,27 +3127,35 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetFirstName = function () {
-        testContext.getFirstName1Params = [{
-          someValue1: 'first'
-        }];
-        testContext.getFirstName2Params = [{
-          someValue1: 'first',
-          someValue2: 'second'
-        }];
-        testContext.getFirstName3Params = [{
-          someValue1: 'first',
-          someValue2: 'second',
-          someValue3: 'third'
-        }];
+        testContext.getFirstName1Params = [
+          {
+            someValue1: 'first'
+          }
+        ];
+        testContext.getFirstName2Params = [
+          {
+            someValue1: 'first',
+            someValue2: 'second'
+          }
+        ];
+        testContext.getFirstName3Params = [
+          {
+            someValue1: 'first',
+            someValue2: 'second',
+            someValue3: 'third'
+          }
+        ];
         testContext.getFirstNameResult = random.firstName();
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          someValue1: 'first',
-          someValue2: 'second',
-          someValue3: 'third'
-        }];
+        testContext.expectedResponse = [
+          {
+            someValue1: 'first',
+            someValue2: 'second',
+            someValue3: 'third'
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -3027,24 +3228,38 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastName1Params = ['WrongAnswer', testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName1Params = [
+          'WrongAnswer',
+          testContext.getFirstName1Result,
+          testContext.getMiddleName1Result
+        ];
         testContext.getLastName1Result = [undefined, random.lastName()];
 
-        testContext.getLastName2Params = ['WrongAnswer', testContext.getFirstName2Result, testContext.getMiddleName2Result];
+        testContext.getLastName2Params = [
+          'WrongAnswer',
+          testContext.getFirstName2Result,
+          testContext.getMiddleName2Result
+        ];
         testContext.getLastName2Result = [undefined, random.lastName()];
 
-        testContext.getLastName3Params = ['WrongAnswer', testContext.getFirstName3Result, testContext.getMiddleName3Result];
+        testContext.getLastName3Params = [
+          'WrongAnswer',
+          testContext.getFirstName3Result,
+          testContext.getMiddleName3Result
+        ];
         testContext.getLastName3Result = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName1: testContext.getLastName1Result[1],
-          lastName2: testContext.getLastName2Result[1],
-          lastName3: testContext.getLastName3Result[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName1: testContext.getLastName1Result[1],
+            lastName2: testContext.getLastName2Result[1],
+            lastName3: testContext.getLastName3Result[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -3134,22 +3349,28 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
     });
 
-    it('should allow all mocked functions to use \'shouldBeCalled\'.', function (done) {
+    it("should allow all mocked functions to use 'shouldBeCalled'.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -3185,7 +3406,7 @@ describe('Given a Scenario', function () {
         .test(done);
     });
 
-    it('should allow \'shouldBeCalled\' to be executed prior to a \'shouldBeCalledWith\'.', function (done) {
+    it("should allow 'shouldBeCalled' to be executed prior to a 'shouldBeCalledWith'.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -3221,7 +3442,7 @@ describe('Given a Scenario', function () {
         .test(done);
     });
 
-    it('should allow \'shouldBeCalledWith\' to be executed prior to a \'shouldBeCalled\'.', function (done) {
+    it("should allow 'shouldBeCalledWith' to be executed prior to a 'shouldBeCalled'.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -3259,15 +3480,18 @@ describe('Given a Scenario', function () {
 
     it('should fail when a mock was expected to be called more than the actual.', function (done) {
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
 
-        testContext.expectedErrorMessage = 'Maddox Runtime Error (3002): Expected the mock proxyInstance.getFirstName to be called 3 time(s), but it was actually called 2 time(s).';
+        testContext.expectedErrorMessage =
+          'Maddox Runtime Error (3002): Expected the mock proxyInstance.getFirstName to be called 3 time(s), but it was actually called 2 time(s).';
       };
 
       testContext.setupTest();
@@ -3307,7 +3531,8 @@ describe('Given a Scenario', function () {
         .perf()
         .test(() => {
           Maddox.compare.shouldBeUnreachable();
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.equal(err.message, testContext.expectedErrorMessage);
             done();
@@ -3319,15 +3544,18 @@ describe('Given a Scenario', function () {
 
     it('should fail when a mock function was not called.', function (done) {
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
 
-        testContext.expectedErrorMessage = 'Maddox Runtime Error (3002): Expected the mock proxyInstance.dummyFunction to be called 1 time(s), but it was actually called 0 time(s).';
+        testContext.expectedErrorMessage =
+          'Maddox Runtime Error (3002): Expected the mock proxyInstance.dummyFunction to be called 1 time(s), but it was actually called 0 time(s).';
       };
 
       testContext.setupTest();
@@ -3367,7 +3595,8 @@ describe('Given a Scenario', function () {
 
         .test(() => {
           Maddox.compare.shouldBeUnreachable();
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.equal(err.message, testContext.expectedErrorMessage);
             done();
@@ -3379,15 +3608,18 @@ describe('Given a Scenario', function () {
 
     it('should fail when a http response mock function was not called.', function (done) {
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
 
-        testContext.expectedErrorMessage = 'Maddox Runtime Error (3002): Expected the mock HttpResponseMock.SomeUnknownFunction to be called 1 time(s), but it was actually called 0 time(s).';
+        testContext.expectedErrorMessage =
+          'Maddox Runtime Error (3002): Expected the mock HttpResponseMock.SomeUnknownFunction to be called 1 time(s), but it was actually called 0 time(s).';
       };
 
       testContext.setupTest();
@@ -3425,7 +3657,8 @@ describe('Given a Scenario', function () {
 
         .test(() => {
           Maddox.compare.shouldBeUnreachable();
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.equal(err.message, testContext.expectedErrorMessage);
             done();
@@ -3478,24 +3711,38 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastName1Params = ['WrongAnswer', testContext.getFirstName1Result, testContext.getMiddleName1Result];
+        testContext.getLastName1Params = [
+          'WrongAnswer',
+          testContext.getFirstName1Result,
+          testContext.getMiddleName1Result
+        ];
         testContext.getLastName1Result = [undefined, random.lastName()];
 
-        testContext.getLastName2Params = ['WrongAnswer', testContext.getFirstName2Result, testContext.getMiddleName2Result];
+        testContext.getLastName2Params = [
+          'WrongAnswer',
+          testContext.getFirstName2Result,
+          testContext.getMiddleName2Result
+        ];
         testContext.getLastName2Result = [undefined, random.lastName()];
 
-        testContext.getLastName3Params = ['WrongAnswer', testContext.getFirstName3Result, testContext.getMiddleName3Result];
+        testContext.getLastName3Params = [
+          'WrongAnswer',
+          testContext.getFirstName3Result,
+          testContext.getMiddleName3Result
+        ];
         testContext.getLastName3Result = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName1: testContext.getLastName1Result[1],
-          lastName2: testContext.getLastName2Result[1],
-          lastName3: testContext.getLastName3Result[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName1: testContext.getLastName1Result[1],
+            lastName2: testContext.getLastName2Result[1],
+            lastName3: testContext.getLastName3Result[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -3585,16 +3832,22 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -3684,7 +3937,11 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, constants.IgnoreParam, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          constants.IgnoreParam,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
@@ -3722,7 +3979,6 @@ describe('Given a Scenario', function () {
         .perf()
         .test(done);
     });
-
   });
 
   describe('when using shouldBeCallWithSubset params, it', function () {
@@ -3765,16 +4021,22 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -3886,13 +4148,17 @@ describe('Given a Scenario', function () {
       };
 
       testContext.setupGetFirstName = function () {
-        const params1 = [{
-          someId: testContext.httpRequest.params.personId[0].someId
-        }];
+        const params1 = [
+          {
+            someId: testContext.httpRequest.params.personId[0].someId
+          }
+        ];
 
-        const params2 = [{
-          anotherId: testContext.httpRequest.params.personId[0].anotherId
-        }];
+        const params2 = [
+          {
+            anotherId: testContext.httpRequest.params.personId[0].anotherId
+          }
+        ];
 
         testContext.getFirstName1Params = [params1];
         testContext.getFirstName1Result = random.firstName();
@@ -3938,9 +4204,11 @@ describe('Given a Scenario', function () {
 
     it('should pass all tests when using subset comparisons for res.send.', function (done) {
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          homeState: testContext.httpRequest.query.homeState
-        }];
+        testContext.expectedResponse = [
+          {
+            homeState: testContext.httpRequest.query.homeState
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -3982,16 +4250,21 @@ describe('Given a Scenario', function () {
 
     it('should pass all tests when doing a subset comparison for two strings, when one is a subset of the other.', function (done) {
       testContext.setupGetMiddleName = function () {
-        testContext.getMiddleNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result.substring(1, 3)];
+        testContext.getMiddleNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result.substring(1, 3)
+        ];
         testContext.getMiddleNameResult = random.firstName();
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedErrorMessage = `Maddox Comparison Error (3003): Failed expectation for the second param in mock proxyInstance.getMiddleName, the first time the mock was called ::::: expected '${testContext.getFirstName2Result}' to deeply equal 'SomeWrongValue'`;
 

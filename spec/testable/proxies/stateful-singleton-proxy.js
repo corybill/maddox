@@ -1,24 +1,21 @@
-
 let _instance_;
 
 // NOTE: We recommend having stateless proxies if at all possible!
 class StatefulSingletonProxy {
-
-  getFirstName(personId) { // eslint-disable-line
+  getFirstName(personId) {
     Promise.resolve('Cory');
   }
 
-  getMiddleName(personId, firstName) { // eslint-disable-line
+  getMiddleName(personId, firstName) {
     return 'Bill';
   }
 
-  getLastName(personId, firstName, middleName, callback) { // eslint-disable-line
+  getLastName(personId, firstName, middleName, callback) {
     callback('Parrish');
   }
-
 }
 
-module.exports = {
+export default {
   getInstance: function () {
     if (!_instance_) {
       _instance_ = new StatefulSingletonProxy();

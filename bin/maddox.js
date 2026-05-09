@@ -1,43 +1,71 @@
-#!/usr/bin/env node
-
-"use strict";
+#!/usr/bin/env node'use strict';
 
 /* eslint-disable */
 
-const Mocha = require("mocha"),
-  Promise = require("bluebird"),
-  ArgParse = require("argparse"),
-  fs = require("fs-extra"),
-  path = require("path");
+import Mocha from 'mocha';
 
-const SimpleStatistics = require("simple-statistics");
+import ArgParse from 'argparse';
+import fs from 'fs-extra';
+import path from 'path';
+import SimpleStatistics from 'simple-statistics';
 
 const ZScore2 = 2;
-const MaddoxCliVersion = "1.0.0";
+const MaddoxCliVersion = '1.0.0';
 
 class State {
+  setArguments(args) {
+    this._arguments_ = args;
+  }
+  setPerfFile(perfFilePath) {
+    this._perfFilePath_ = perfFilePath;
+  }
+  setPerfDirectory(perfDirectory) {
+    this._perfDirectory_ = perfDirectory;
+  }
+  setMocha(mocha) {
+    this._mocha_ = mocha;
+  }
+  setCurrentResults(currentResults) {
+    this._currentResults_ = currentResults;
+  }
+  setExistingResults(existingResults) {
+    this._existingResults_ = existingResults;
+  }
+  setCombinedResults(combinedResults) {
+    this._combinedResults_ = combinedResults;
+  }
+  setError(error) {
+    this._error_ = error;
+  }
 
-  setArguments(args) {this._arguments_ = args;}
-  setPerfFile(perfFilePath) {this._perfFilePath_ = perfFilePath;}
-  setPerfDirectory(perfDirectory) {this._perfDirectory_ = perfDirectory;}
-  setMocha(mocha) {this._mocha_ = mocha;}
-  setCurrentResults(currentResults) {this._currentResults_ = currentResults;}
-  setExistingResults(existingResults) {this._existingResults_ = existingResults;}
-  setCombinedResults(combinedResults) {this._combinedResults_ = combinedResults;}
-  setError(error) {this._error_ = error;}
-
-  getArguments() {return this._arguments_;}
-  getPerfFilePath() {return this._perfFilePath_;}
-  getPerfDirectoryPath() {return this._perfDirectory_;}
-  getMocha() {return this._mocha_;}
-  getCurrentResults() {return this._currentResults_;}
-  getExistingResults() {return this._existingResults_;}
-  getCombinedResults() {return this._combinedResults_;}
-  getError() {return this._error_;}
+  getArguments() {
+    return this._arguments_;
+  }
+  getPerfFilePath() {
+    return this._perfFilePath_;
+  }
+  getPerfDirectoryPath() {
+    return this._perfDirectory_;
+  }
+  getMocha() {
+    return this._mocha_;
+  }
+  getCurrentResults() {
+    return this._currentResults_;
+  }
+  getExistingResults() {
+    return this._existingResults_;
+  }
+  getCombinedResults() {
+    return this._combinedResults_;
+  }
+  getError() {
+    return this._error_;
+  }
 
   accept(step) {
-    return Promise.try(() => {
-      return step.next(this)
+    return Promise.resolve().then(() => {
+      return step.next(this);
     });
   }
 }
@@ -49,21 +77,57 @@ class PrepareArguments {
       version: MaddoxCliVersion,
       addHelp: true,
       formatterClass: ArgParse.ArgumentDefaultsHelpFormatter,
-      description: "Maddox CLI runs performance tests on Maddox BDD tests that are marked with the .perf() function."
+      description: 'Maddox CLI runs performance tests on Maddox BDD tests that are marked with the .perf() function.'
     });
 
-    parser.addArgument([ "-t", "--TIMEOUT" ], {help: "Defines how long a test has (ms) to finish before timing out (See mocha.js).", defaultValue: 30000, type: "int"});
-    parser.addArgument([ "-u", "--UI" ], {help: "Specify the user-interface (bdd|tdd|qunit|exports) (See mocha.js).", defaultValue: "bdd"});
-    parser.addArgument([ "-p", "--PRINT" ], {help: "When marked, it will print the number of requests per second for each test to the console.", nargs: "0"});
-    parser.addArgument([ "-P", "--PRINT_ALL" ], {help: "When marked, it will print all saved (including historical) statistics to the console.", nargs: "0"});
-    parser.addArgument([ "-m", "--MAX_RESULTS" ], {help: "Only keep this many historical results. Will delete results of the number is less than current count.", defaultValue: 10, type: "int"});
-    parser.addArgument([ "-n", "--DO_NOT_SAVE_RESULTS" ], {help: "Do NOT save results of this run.", nargs: "0"});
-    parser.addArgument([ "-d", "--TEST_DIR" ], {help: "Add the directories that you would like to test.", required: true, nargs: "*"});
-    parser.addArgument([ "-r", "--REMOVE_EXISTING" ], {help: "Remove all existing results.", nargs: "0"});
-    parser.addArgument([ "-s", "--NUM_SAMPLES" ], {help: "Sets the sample size for each individual perf test i.e. each test will be executed this many times in an attempt to normalize results.", defaultValue: 20, type: "int"});
-    parser.addArgument([ "-l", "--SAMPLE_LENGTH" ], {help: "The time length (in millis) to run each individual perf test.", defaultValue: 1000, type: "int"});
-    parser.addArgument([ "-c", "--NUM_CONCURRENT" ], {help: "**CURRENTLY NOT IMPLEMENTED** How many samples to run concurrently. **CURRENTLY NOT IMPLEMENTED**", defaultValue: 20, type: "int"});
-    parser.addArgument([ "-o", "--ONLY_95" ], {help: "Remove all historical results that are not within the current 95th percentile. WARNING: Don't use with small samples sizes or if you have recently changed your code. Doing so will artificially keep the statistics close to the existing mean.", nargs: "0"});
+    parser.addArgument(['-t', '--TIMEOUT'], {
+      help: 'Defines how long a test has (ms) to finish before timing out (See mocha.js).',
+      defaultValue: 30000,
+      type: 'int'
+    });
+    parser.addArgument(['-u', '--UI'], {
+      help: 'Specify the user-interface (bdd|tdd|qunit|exports) (See mocha.js).',
+      defaultValue: 'bdd'
+    });
+    parser.addArgument(['-p', '--PRINT'], {
+      help: 'When marked, it will print the number of requests per second for each test to the console.',
+      nargs: '0'
+    });
+    parser.addArgument(['-P', '--PRINT_ALL'], {
+      help: 'When marked, it will print all saved (including historical) statistics to the console.',
+      nargs: '0'
+    });
+    parser.addArgument(['-m', '--MAX_RESULTS'], {
+      help: 'Only keep this many historical results. Will delete results of the number is less than current count.',
+      defaultValue: 10,
+      type: 'int'
+    });
+    parser.addArgument(['-n', '--DO_NOT_SAVE_RESULTS'], { help: 'Do NOT save results of this run.', nargs: '0' });
+    parser.addArgument(['-d', '--TEST_DIR'], {
+      help: 'Add the directories that you would like to test.',
+      required: true,
+      nargs: '*'
+    });
+    parser.addArgument(['-r', '--REMOVE_EXISTING'], { help: 'Remove all existing results.', nargs: '0' });
+    parser.addArgument(['-s', '--NUM_SAMPLES'], {
+      help: 'Sets the sample size for each individual perf test i.e. each test will be executed this many times in an attempt to normalize results.',
+      defaultValue: 20,
+      type: 'int'
+    });
+    parser.addArgument(['-l', '--SAMPLE_LENGTH'], {
+      help: 'The time length (in millis) to run each individual perf test.',
+      defaultValue: 1000,
+      type: 'int'
+    });
+    parser.addArgument(['-c', '--NUM_CONCURRENT'], {
+      help: '**CURRENTLY NOT IMPLEMENTED** How many samples to run concurrently. **CURRENTLY NOT IMPLEMENTED**',
+      defaultValue: 20,
+      type: 'int'
+    });
+    parser.addArgument(['-o', '--ONLY_95'], {
+      help: "Remove all historical results that are not within the current 95th percentile. WARNING: Don't use with small samples sizes or if you have recently changed your code. Doing so will artificially keep the statistics close to the existing mean.",
+      nargs: '0'
+    });
 
     const args = parser.parseArgs();
 
@@ -98,7 +162,7 @@ class SetPerfFile {
 class CreateMochaInstance {
   static next(state) {
     const args = state.getArguments();
-    const mocha = new Mocha({timeout: args.TIMEOUT, ui: args.UI, slow: args.TIMEOUT});
+    const mocha = new Mocha({ timeout: args.TIMEOUT, ui: args.UI, slow: args.TIMEOUT });
 
     state.setMocha(mocha);
   }
@@ -111,10 +175,10 @@ class AddTestFilesToMocha {
     const providedTestDirs = args.TEST_DIR;
 
     for (const providedTestDir of providedTestDirs) {
-      const actualTestDir = (providedTestDir.startsWith("/")) ? providedTestDir : `${process.cwd()}/${providedTestDir}`;
+      const actualTestDir = providedTestDir.startsWith('/') ? providedTestDir : `${process.cwd()}/${providedTestDir}`;
 
       fs.readdirSync(actualTestDir).forEach((file) => {
-        if (file.endsWith(".js")) {
+        if (file.endsWith('.js')) {
           mocha.addFile(path.join(actualTestDir, file));
         }
       });
@@ -174,8 +238,8 @@ class CombineResults {
     const existingResults = state.getExistingResults();
     const args = state.getArguments();
 
-    let combinedResults = (args.REMOVE_EXISTING !== null) ?
-      Factory.newResultBlock() : JSON.parse(JSON.stringify(existingResults, null, 2));
+    let combinedResults =
+      args.REMOVE_EXISTING !== null ? Factory.newResultBlock() : JSON.parse(JSON.stringify(existingResults, null, 2));
 
     function dropOld(array, maxResults) {
       // Drop old results if we have hit or gone over max results.
@@ -195,7 +259,10 @@ class CombineResults {
         // Add current results.
         combinedResults.allStats[title].statistics.unshift(currentResults[title]);
 
-        combinedResults.allStats[title].statistics = dropOld(combinedResults.allStats[title].statistics, args.MAX_RESULTS);
+        combinedResults.allStats[title].statistics = dropOld(
+          combinedResults.allStats[title].statistics,
+          args.MAX_RESULTS
+        );
       }
 
       return combinedResults;
@@ -211,10 +278,17 @@ class CombineResults {
           return stat.numPerSecond.median;
         });
 
-        combinedResults.minStats[title].totals.mean = SimpleStatistics.mean(combinedResults.minStats[title].numPerSecond);
-        combinedResults.minStats[title].totals.sd = SimpleStatistics.standardDeviation(combinedResults.minStats[title].numPerSecond);
+        combinedResults.minStats[title].totals.mean = SimpleStatistics.mean(
+          combinedResults.minStats[title].numPerSecond
+        );
+        combinedResults.minStats[title].totals.sd = SimpleStatistics.standardDeviation(
+          combinedResults.minStats[title].numPerSecond
+        );
 
-        const cov = Math.round(combinedResults.minStats[title].totals.sd / combinedResults.minStats[title].totals.mean * 100 * 100) / 100;
+        const cov =
+          Math.round(
+            (combinedResults.minStats[title].totals.sd / combinedResults.minStats[title].totals.mean) * 100 * 100
+          ) / 100;
 
         combinedResults.minStats[title].totals.cov = `${cov}%`;
 
@@ -264,7 +338,6 @@ class Only95 {
 
       state.setCombinedResults(combinedResults);
     }
-
   }
 }
 
@@ -289,14 +362,18 @@ class PrintTestResults {
 
     const printedResults = {};
 
-    if (args.PRINT !== null) {printedResults.minStats = combinedResults.minStats;}
+    if (args.PRINT !== null) {
+      printedResults.minStats = combinedResults.minStats;
+    }
 
-    if (args.PRINT_ALL !== null) {printedResults.allStats = combinedResults.allStats;}
+    if (args.PRINT_ALL !== null) {
+      printedResults.allStats = combinedResults.allStats;
+    }
 
     if (args.PRINT !== null || args.PRINT_ALL !== null) {
-      console.log("********** Start Printed Results **********");
+      console.log('********** Start Printed Results **********');
       console.log(JSON.stringify(printedResults, null, 2));
-      console.log("********** End Printed Results **********");
+      console.log('********** End Printed Results **********');
       console.log();
     }
   }
@@ -304,7 +381,7 @@ class PrintTestResults {
 
 class SuccessResponse {
   static next() {
-    console.log("Finished Successfully");
+    console.log('Finished Successfully');
   }
 }
 
@@ -329,14 +406,14 @@ class Factory {
   static newStatsBlock() {
     return {
       statistics: []
-    }
+    };
   }
 
   static newMinStatsBlock() {
     return {
       numPerSecond: [],
       totals: {}
-    }
+    };
   }
 }
 
@@ -344,7 +421,8 @@ class Runner {
   static run() {
     const state = new State();
 
-    state.accept(PrepareArguments)
+    state
+      .accept(PrepareArguments)
       .then(() => state.accept(SetProcessValues))
       .then(() => state.accept(SetPerfFile))
       .then(() => state.accept(CreateMochaInstance))
@@ -358,9 +436,9 @@ class Runner {
       .then(() => state.accept(PrintTestResults))
       .then(() => state.accept(SuccessResponse))
       .catch((err) => {
-        err = err || new Error("Unknown Error. Was there a timeout?");
+        err = err || new Error('Unknown Error. Was there a timeout?');
         state.setError(err);
-        state.accept(FailureResponse)
+        state.accept(FailureResponse);
       });
   }
 }

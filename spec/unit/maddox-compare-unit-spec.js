@@ -1,8 +1,6 @@
-
-const chai = require('chai');
-
-const Maddox = require('../../lib/index');
-const random = require('../random');
+import chai from 'chai';
+import Maddox from '../../lib/index.js';
+import random from '../random.js';
 
 const expect = chai.expect;
 
@@ -86,7 +84,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           try {
-            expect(err.message).to.be.ok; // eslint-disable-line
+            expect(err.message).to.be.ok;
             done();
           } catch (mochaErr) {
             done(mochaErr);
@@ -102,7 +100,7 @@ describe('Given the comparison module', function () {
 
         try {
           Maddox.compare.equal(testContext.lhs, testContext.rhs);
-          expect("I should be here.").to.be.ok; // eslint-disable-line
+          expect('I should be here.').to.be.ok;
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
@@ -180,7 +178,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
           try {
-            expect(err.message).to.be.ok; // eslint-disable-line
+            expect(err.message).to.be.ok;
             done();
           } catch (mochaErr) {
             done(mochaErr);
@@ -196,7 +194,7 @@ describe('Given the comparison module', function () {
 
         try {
           Maddox.compare.shouldEqual({ actual: testContext.lhs, expected: testContext.rhs });
-          expect("I should be here.").to.be.ok; // eslint-disable-line
+          expect('I should be here.').to.be.ok;
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
@@ -204,7 +202,6 @@ describe('Given the comparison module', function () {
     });
 
     describe('truthy, it', function () {
-
       it('should add the full object print out of actual and expected when the noDebug flag is NOT set.', function () {
         try {
           Maddox.compare.truthy(false, undefined, { noDebug: false });
@@ -235,7 +232,7 @@ describe('Given the comparison module', function () {
       it('should pass when shouldBeTruthy comparison is given true value.', function () {
         try {
           Maddox.compare.truthy(true);
-          expect("I should be here.").to.be.ok; // eslint-disable-line
+          expect('I should be here.').to.be.ok;
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
@@ -244,7 +241,7 @@ describe('Given the comparison module', function () {
       it('should pass when shouldBeTruthy comparison is given a defined value.', function () {
         try {
           Maddox.compare.truthy('SomeDefinedValue');
-          expect("I should be here.").to.be.ok; // eslint-disable-line
+          expect('I should be here.').to.be.ok;
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
@@ -255,7 +252,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.truthy(false);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          expect(err).to.be.ok; // eslint-disable-line
+          expect(err).to.be.ok;
         }
       });
 
@@ -264,7 +261,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.truthy(undefined);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          expect(err).to.be.ok; // eslint-disable-line
+          expect(err).to.be.ok;
         }
       });
     });
@@ -305,7 +302,7 @@ describe('Given the comparison module', function () {
       it('should pass when shouldBeFalsy comparison is given false value.', function () {
         try {
           Maddox.compare.falsey(false);
-          expect("I should be here.").to.be.ok; // eslint-disable-line
+          expect('I should be here.').to.be.ok;
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
@@ -314,7 +311,7 @@ describe('Given the comparison module', function () {
       it('should pass when shouldBeFalsy comparison is given an undefined value.', function () {
         try {
           Maddox.compare.falsey(undefined);
-          expect("I should be here.").to.be.ok; // eslint-disable-line
+          expect('I should be here.').to.be.ok;
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
@@ -325,7 +322,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.falsey(true);
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          expect(err).to.be.ok // eslint-disable-line
+          expect(err).to.be.ok;
         }
       });
 
@@ -334,7 +331,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.falsey('SomeDefinedValue');
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          expect(err).to.be.ok // eslint-disable-line
+          expect(err).to.be.ok;
         }
       });
     });
@@ -375,7 +372,7 @@ describe('Given the comparison module', function () {
       it('should pass when shouldBeTruthy comparison is given true value.', function () {
         try {
           Maddox.compare.shouldBeTruthy({ value: true });
-          expect("I should be here.").to.be.ok; // eslint-disable-line
+          expect('I should be here.').to.be.ok;
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
@@ -384,7 +381,7 @@ describe('Given the comparison module', function () {
       it('should pass when shouldBeTruthy comparison is given a defined value.', function () {
         try {
           Maddox.compare.shouldBeTruthy({ value: 'SomeDefinedValue' });
-          expect("I should be here.").to.be.ok; // eslint-disable-line
+          expect('I should be here.').to.be.ok;
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
@@ -395,7 +392,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.shouldBeTruthy({ value: false });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          expect(err).to.be.ok // eslint-disable-line
+          expect(err).to.be.ok;
         }
       });
 
@@ -404,7 +401,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.shouldBeTruthy({ value: undefined });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          expect(err).to.be.ok // eslint-disable-line
+          expect(err).to.be.ok;
         }
       });
     });
@@ -445,7 +442,7 @@ describe('Given the comparison module', function () {
       it('should pass when shouldBeFalsy comparison is given false value.', function () {
         try {
           Maddox.compare.shouldBeFalsey({ value: false });
-          expect("I should be here.").to.be.ok; // eslint-disable-line
+          expect('I should be here.').to.be.ok;
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
@@ -454,7 +451,7 @@ describe('Given the comparison module', function () {
       it('should pass when shouldBeFalsy comparison is given an undefined value.', function () {
         try {
           Maddox.compare.shouldBeFalsey({ value: undefined });
-          expect("I should be here.").to.be.ok; // eslint-disable-line
+          expect('I should be here.').to.be.ok;
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
@@ -465,7 +462,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.shouldBeFalsey({ value: true });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          expect(err).to.be.ok // eslint-disable-line
+          expect(err).to.be.ok;
         }
       });
 
@@ -474,13 +471,12 @@ describe('Given the comparison module', function () {
           Maddox.compare.shouldBeFalsey({ value: 'SomeDefinedValue' });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          expect(err).to.be.ok // eslint-disable-line
+          expect(err).to.be.ok;
         }
       });
     });
 
     describe('shouldBeFalsy, it', function () {
-
       it('should add the full object print out of actual and expected when the noDebug flag is NOT set.', function () {
         try {
           Maddox.compare.shouldBeFalsy({ value: true, noDebug: false });
@@ -516,7 +512,7 @@ describe('Given the comparison module', function () {
       it('should pass when shouldBeFalsy comparison is given false value.', function () {
         try {
           Maddox.compare.shouldBeFalsy({ value: false });
-          expect("I should be here.").to.be.ok; // eslint-disable-line
+          expect('I should be here.').to.be.ok;
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
@@ -525,7 +521,7 @@ describe('Given the comparison module', function () {
       it('should pass when shouldBeFalsy comparison is given an undefined value.', function () {
         try {
           Maddox.compare.shouldBeFalsy({ value: undefined });
-          expect("I should be here.").to.be.ok; // eslint-disable-line
+          expect('I should be here.').to.be.ok;
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
@@ -536,7 +532,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.shouldBeFalsy({ value: true });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          expect(err).to.be.ok // eslint-disable-line
+          expect(err).to.be.ok;
         }
       });
 
@@ -545,13 +541,13 @@ describe('Given the comparison module', function () {
           Maddox.compare.shouldBeFalsy({ value: 'SomeDefinedValue' });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          expect(err).to.be.ok // eslint-disable-line
+          expect(err).to.be.ok;
         }
       });
     });
 
     describe('shouldBeUnreachable, it', function () {
-      it('should throw when using Maddox\'s shouldBeUnreachable function', function () {
+      it("should throw when using Maddox's shouldBeUnreachable function", function () {
         try {
           Maddox.compare.shouldBeUnreachable();
           expect('shouldBeUnreachable should throw an error making it impossible to reach this code').eql(undefined);
@@ -560,7 +556,7 @@ describe('Given the comparison module', function () {
         }
       });
 
-      it('should throw when using Maddox\'s shouldBeUnreachable function with the provided message.', function () {
+      it("should throw when using Maddox's shouldBeUnreachable function with the provided message.", function () {
         const message = random.uniqueId();
 
         try {
@@ -579,7 +575,7 @@ describe('Given the comparison module', function () {
 
         try {
           Maddox.compare.subset(actual, expected);
-          expect("I should be here.").to.be.ok; // eslint-disable-line
+          expect('I should be here.').to.be.ok;
         } catch (err) {
           Maddox.compare.shouldBeUnreachable();
         }
@@ -594,7 +590,7 @@ describe('Given the comparison module', function () {
 
         try {
           Maddox.compare.subset(actual, expected);
-          expect("I should be here.").to.be.ok; // eslint-disable-line
+          expect('I should be here.').to.be.ok;
         } catch (err) {
           Maddox.compare.shouldBeUnreachable(err.stack);
         }
@@ -609,7 +605,7 @@ describe('Given the comparison module', function () {
 
         try {
           Maddox.compare.shouldBeSubset({ actual, expected });
-          expect("I should be here.").to.be.ok; // eslint-disable-line
+          expect('I should be here.').to.be.ok;
         } catch (err) {
           Maddox.compare.shouldBeUnreachable(err.stack);
         }
@@ -623,7 +619,7 @@ describe('Given the comparison module', function () {
 
         try {
           Maddox.compare.shouldBeSubset({ actual, expected });
-          expect("I should be here.").to.be.ok; // eslint-disable-line
+          expect('I should be here.').to.be.ok;
         } catch (err) {
           Maddox.compare.shouldBeUnreachable(err.stack);
         }

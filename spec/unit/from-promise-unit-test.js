@@ -1,9 +1,8 @@
-
-const Maddox = require('../../lib/index'), // require("maddox");
-  random = require('../random'),
-  Controller = require('../testable/modules/test-module/from-promise-controller'),
-  testConstants = require('../test-constants'),
-  StatelessEs6Proxy = require('../testable/proxies/stateless-es6-proxy');
+import Maddox from '../../lib/index.js'; // require("maddox");
+import random from '../random.js';
+import Controller from '../testable/modules/test-module/from-promise-controller.js';
+import testConstants from '../test-constants.js';
+import StatelessEs6Proxy from '../testable/proxies/stateless-es6-proxy.js';
 
 const Scenario = Maddox.functional.FromPromiseScenario;
 
@@ -47,7 +46,11 @@ describe('Given the FromPromiseScenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
@@ -102,7 +105,8 @@ describe('Given the FromPromiseScenario', function () {
 
     it('should not test mocks or call testable function when maddox throws a error.', function (done) {
       testContext.setupExpected = () => {
-        testContext.expectedResponse = 'Maddox Runtime Error (3001): Attempted to get mocked data for the second call to proxyInstance.getFirstName, but it wasn\'t created in the scenario.  You are missing a \'doesReturn / doesError\' call.';
+        testContext.expectedResponse =
+          "Maddox Runtime Error (3001): Attempted to get mocked data for the second call to proxyInstance.getFirstName, but it wasn't created in the scenario.  You are missing a 'doesReturn / doesError' call.";
       };
 
       testContext.setupTest();
@@ -125,7 +129,8 @@ describe('Given the FromPromiseScenario', function () {
 
         .test(function () {
           done(new Error('Should not reach here'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedResponse });
             done();
@@ -220,9 +225,13 @@ describe('Given the FromPromiseScenario', function () {
 
         .test(function () {
           done(new Error('Should not reach here'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
-            Maddox.compare.truthy(err.stack.indexOf(testConstants.ForceTestFailure) >= 0, 'Should have the message of the error thrown from the service.');
+            Maddox.compare.truthy(
+              err.stack.indexOf(testConstants.ForceTestFailure) >= 0,
+              'Should have the message of the error thrown from the service.'
+            );
             done();
           } catch (testErr) {
             done(testErr);
@@ -270,7 +279,6 @@ describe('Given the FromPromiseScenario', function () {
             done(testError);
           }
         });
-
     });
   });
 
@@ -311,7 +319,11 @@ describe('Given the FromPromiseScenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
@@ -360,7 +372,6 @@ describe('Given the FromPromiseScenario', function () {
             done(testError);
           }
         });
-
     });
 
     it('should not test mocks that come after finisher function.', function (done) {
@@ -403,8 +414,6 @@ describe('Given the FromPromiseScenario', function () {
             done(testError);
           }
         });
-
     });
   });
-
 });

@@ -1,13 +1,12 @@
-
-const Maddox = require('../../lib/index'), // require("maddox");
-  HttpReqController = require('../testable/modules/test-module/from-http-req-controller'),
-  FromCallbackController = require('../testable/modules/test-module/from-callback-controller'),
-  FromPromiseController = require('../testable/modules/test-module/from-promise-controller'),
-  FromSynchronousController = require('../testable/modules/test-module/from-synchronous-controller'),
-  SpecialScenariosController = require('../testable/modules/test-module/special-scenarios-controller'),
-  StatelessEs6Proxy = require('../testable/proxies/stateless-es6-proxy'),
-  constants = require('../../lib/constants'),
-  random = require('../random');
+import Maddox from '../../lib/index.js'; // require("maddox");
+import HttpReqController from '../testable/modules/test-module/from-http-req-controller.js';
+import FromCallbackController from '../testable/modules/test-module/from-callback-controller.js';
+import FromPromiseController from '../testable/modules/test-module/from-promise-controller.js';
+import FromSynchronousController from '../testable/modules/test-module/from-synchronous-controller.js';
+import SpecialScenariosController from '../testable/modules/test-module/special-scenarios-controller.js';
+import StatelessEs6Proxy from '../testable/proxies/stateless-es6-proxy.js';
+import constants from '../../lib/constants.js';
+import random from '../random.js';
 
 const Scenario = Maddox.functional.HttpReqScenario,
   FromPromiseScenario = Maddox.functional.FromPromiseScenario,
@@ -54,16 +53,22 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -75,20 +80,18 @@ describe('Given Scenarios', function () {
         testContext.inputParams = 'Some type that is not of type Array.';
       };
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1000): When calling \'withInputParams\', the parameter must be of type Array.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1000): When calling 'withInputParams', the parameter must be of type Array.";
       };
 
       testContext.setupInputParams();
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .withInputParams(testContext.inputParamsArray);
-
+        new Scenario(this).withInputParams(testContext.inputParamsArray);
       } catch (err) {
         Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
       }
-
     });
 
     // HttpRequestArray 1001
@@ -98,33 +101,31 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1001): When calling \'withHttpRequest\', the parameter must be of type Array.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1001): When calling 'withHttpRequest', the parameter must be of type Array.";
       };
 
       testContext.setupInputParams();
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .withHttpRequest(testContext.httpRequestParams);
-
+        new Scenario(this).withHttpRequest(testContext.httpRequestParams);
       } catch (err) {
         Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
       }
-
     });
 
     // MockThisFunctionMockString 1002
     it('should throw when the first parameter in mockThisFunction is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1002): When calling \'mockThisFunction\', the first parameter must be of type String representing the mock key.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1002): When calling 'mockThisFunction', the first parameter must be of type String representing the mock key.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .mockThisFunction({}, 'getFirstName', StatelessEs6Proxy);
+        new Scenario(this).mockThisFunction({}, 'getFirstName', StatelessEs6Proxy);
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -135,14 +136,14 @@ describe('Given Scenarios', function () {
     // MockThisFunctionString 1003
     it('should throw when the second parameter in mockThisFunction is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1003): When calling \'mockThisFunction\', the second parameter must be of type String representing the function to mock.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1003): When calling 'mockThisFunction', the second parameter must be of type String representing the function to mock.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .mockThisFunction('StatelessEs6Proxy', function () {}, StatelessEs6Proxy);
+        new Scenario(this).mockThisFunction('StatelessEs6Proxy', function () {}, StatelessEs6Proxy);
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -157,15 +158,15 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1004): When calling \'mockThisFunction\', the third parameter must be of type Object containing the function that you\'d like to mock.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1004): When calling 'mockThisFunction', the third parameter must be of type Object containing the function that you'd like to mock.";
       };
 
       testContext.setupTest();
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .mockThisFunction('StatelessEs6Proxy', 'getFirstName', testContext.stringInput);
+        new Scenario(this).mockThisFunction('StatelessEs6Proxy', 'getFirstName', testContext.stringInput);
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -181,15 +182,15 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1005): When calling \'withEntryPoint\', the first parameter must be of type object representing the object that contains the EntryPointString (i.e. function) that will be called to kick off the test.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1005): When calling 'withEntryPoint', the first parameter must be of type object representing the object that contains the EntryPointString (i.e. function) that will be called to kick off the test.";
       };
 
       testContext.setupTest();
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction);
+        new Scenario(this).withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction);
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -205,15 +206,15 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1006): When calling \'withEntryPoint\', the second parameter must be of type string representing the function that will be called to kick off the test.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1006): When calling 'withEntryPoint', the second parameter must be of type string representing the function that will be called to kick off the test.";
       };
 
       testContext.setupTest();
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction);
+        new Scenario(this).withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction);
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -222,22 +223,22 @@ describe('Given Scenarios', function () {
     });
 
     // EntryPointFunction 1007
-    it('should throw when \'withEntryPoint\' is given a function to execute doesn\'t exist in the given object.', function () {
+    it("should throw when 'withEntryPoint' is given a function to execute doesn't exist in the given object.", function () {
       testContext.setupTest = function () {
         testContext.entryPointObject = HttpReqController;
         testContext.entryPointFunction = 'someFunctionNotInObject';
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1007): When calling \'withEntryPoint\', the second param must be the name of a function in the first param object.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1007): When calling 'withEntryPoint', the second param must be the name of a function in the first param object.";
       };
 
       testContext.setupTest();
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction);
+        new Scenario(this).withEntryPoint(testContext.entryPointObject, testContext.entryPointFunction);
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -248,7 +249,8 @@ describe('Given Scenarios', function () {
     // ShouldBeCalledWithKeyString 1008
     it('should throw when the first parameter in shouldBeCalledWith is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1008): When calling \'shouldBeCalledWith\', the first parameter must be of type String representing the mock key.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1008): When calling 'shouldBeCalledWith', the first parameter must be of type String representing the mock key.";
       };
 
       testContext.setupErrorMessage();
@@ -267,7 +269,8 @@ describe('Given Scenarios', function () {
     // ShouldBeCalledWithFunctionString 1009
     it('should throw when the second parameter in shouldBeCalledWith is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1009): When calling \'shouldBeCalledWith\', the second parameter must be of type String representing the function that was mocked.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1009): When calling 'shouldBeCalledWith', the second parameter must be of type String representing the function that was mocked.";
       };
 
       testContext.setupErrorMessage();
@@ -290,7 +293,8 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1010): When calling \'shouldBeCalledWith\', the third parameter must be of type Array containing the expected parameters.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1010): When calling 'shouldBeCalledWith', the third parameter must be of type Array containing the expected parameters.";
       };
 
       testContext.setupTest();
@@ -310,14 +314,14 @@ describe('Given Scenarios', function () {
     // DoesReturnMockName 1011
     it('should throw when the first parameter in doesReturn is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1011): When calling \'doesReturn\', the first parameter must be of type String representing the mock key.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1011): When calling 'doesReturn', the first parameter must be of type String representing the mock key.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesReturn({}, 'shouldEqual', {});
+        new Scenario(this).doesReturn({}, 'shouldEqual', {});
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -328,14 +332,14 @@ describe('Given Scenarios', function () {
     // DoesReturnFuncName 1012
     it('should throw when the second parameter in doesReturn is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1012): When calling \'doesReturn\', the second parameter must be of type String representing the function to mock.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1012): When calling 'doesReturn', the second parameter must be of type String representing the function to mock.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesReturn('StatelessEs6Proxy', function () {}, {});
+        new Scenario(this).doesReturn('StatelessEs6Proxy', function () {}, {});
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -346,14 +350,14 @@ describe('Given Scenarios', function () {
     // DoesReturnPromiseMockName 1013
     it('should throw when the first parameter in doesReturnWithPromise is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1013): When calling \'doesReturnWithPromise\', the first parameter must be of type String representing the mock key.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1013): When calling 'doesReturnWithPromise', the first parameter must be of type String representing the mock key.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesReturnWithPromise({}, 'shouldEqual', {});
+        new Scenario(this).doesReturnWithPromise({}, 'shouldEqual', {});
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -364,14 +368,14 @@ describe('Given Scenarios', function () {
     // DoesReturnPromiseFuncName 1014
     it('should throw when the second parameter in doesReturnWithPromise is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1014): When calling \'doesReturnWithPromise\', the second parameter must be of type String representing the function to mock.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1014): When calling 'doesReturnWithPromise', the second parameter must be of type String representing the function to mock.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesReturnWithPromise('StatelessEs6Proxy', function () {}, {});
+        new Scenario(this).doesReturnWithPromise('StatelessEs6Proxy', function () {}, {});
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -382,14 +386,14 @@ describe('Given Scenarios', function () {
     // DoesReturnCallbackMockName 1015
     it('should throw when the first parameter in doesReturnWithCallback is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1015): When calling \'doesReturnWithCallback\', the first parameter must be of type String representing the mock key.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1015): When calling 'doesReturnWithCallback', the first parameter must be of type String representing the mock key.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesReturnWithCallback({}, 'shouldEqual', {});
+        new Scenario(this).doesReturnWithCallback({}, 'shouldEqual', {});
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -400,14 +404,14 @@ describe('Given Scenarios', function () {
     // DoesReturnCallbackFuncName 1016
     it('should throw when the second parameter in doesReturnWithCallback is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1016): When calling \'doesReturnWithCallback\', the second parameter must be of type String representing the function to mock.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1016): When calling 'doesReturnWithCallback', the second parameter must be of type String representing the function to mock.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesReturnWithCallback('StatelessEs6Proxy', function () {}, {});
+        new Scenario(this).doesReturnWithCallback('StatelessEs6Proxy', function () {}, {});
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -418,14 +422,14 @@ describe('Given Scenarios', function () {
     // DoesErrorMockName 1017
     it('should throw when the first parameter in doesError is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1017): When calling \'doesError\', the first parameter must be of type String representing the mock key.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1017): When calling 'doesError', the first parameter must be of type String representing the mock key.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesError({}, 'shouldEqual', {});
+        new Scenario(this).doesError({}, 'shouldEqual', {});
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -436,14 +440,14 @@ describe('Given Scenarios', function () {
     // DoesErrorFuncName 1018
     it('should throw when the second parameter in doesError is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1018): When calling \'doesError\', the second parameter must be of type String representing the function to mock.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1018): When calling 'doesError', the second parameter must be of type String representing the function to mock.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesError('StatelessEs6Proxy', function () {}, {});
+        new Scenario(this).doesError('StatelessEs6Proxy', function () {}, {});
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -454,14 +458,14 @@ describe('Given Scenarios', function () {
     // DoesErrorPromiseMockName 1019
     it('should throw when the first parameter in doesErrorWithPromise is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1019): When calling \'doesErrorWithPromise\', the first parameter must be of type String representing the mock key.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1019): When calling 'doesErrorWithPromise', the first parameter must be of type String representing the mock key.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesErrorWithPromise({}, 'shouldEqual', {});
+        new Scenario(this).doesErrorWithPromise({}, 'shouldEqual', {});
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -472,14 +476,14 @@ describe('Given Scenarios', function () {
     // DoesErrorPromiseFuncName 1020
     it('should throw when the second parameter in doesErrorWithPromise is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1020): When calling \'doesErrorWithPromise\', the second parameter must be of type String representing the function to mock.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1020): When calling 'doesErrorWithPromise', the second parameter must be of type String representing the function to mock.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesErrorWithPromise('StatelessEs6Proxy', function () {}, {});
+        new Scenario(this).doesErrorWithPromise('StatelessEs6Proxy', function () {}, {});
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -490,14 +494,14 @@ describe('Given Scenarios', function () {
     // DoesErrorCallbackMockName 1021
     it('should throw when the first parameter in doesErrorWithCallback is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1021): When calling \'doesErrorWithCallback\', the first parameter must be of type String representing the mock key.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1021): When calling 'doesErrorWithCallback', the first parameter must be of type String representing the mock key.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesErrorWithCallback({}, 'shouldEqual', {});
+        new Scenario(this).doesErrorWithCallback({}, 'shouldEqual', {});
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -508,14 +512,14 @@ describe('Given Scenarios', function () {
     // DoesErrorCallbackFuncName 1022
     it('should throw when the second parameter in doesErrorWithCallback is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1022): When calling \'doesErrorWithCallback\', the second parameter must be of type String representing the function to mock.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1022): When calling 'doesErrorWithCallback', the second parameter must be of type String representing the function to mock.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesErrorWithCallback('StatelessEs6Proxy', function () {}, {});
+        new Scenario(this).doesErrorWithCallback('StatelessEs6Proxy', function () {}, {});
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -526,7 +530,8 @@ describe('Given Scenarios', function () {
     // MissingTestCallback 1023
     it('should throw when HTTPReqScenario test is not given a function to execute upon completing the test.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1023): Every test must pass in a callback to execute when the test is complete.';
+        testContext.expectedErrorMessage =
+          'Maddox Scenario Build Error (1023): Every test must pass in a callback to execute when the test is complete.';
       };
 
       testContext.setupErrorMessage();
@@ -548,7 +553,8 @@ describe('Given Scenarios', function () {
         testContext.proxyInstance = StatelessEs6Proxy;
       };
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1023): Every test must pass in a callback to execute when the test is complete.';
+        testContext.expectedErrorMessage =
+          'Maddox Scenario Build Error (1023): Every test must pass in a callback to execute when the test is complete.';
       };
 
       testContext.setupErrorMessage();
@@ -570,7 +576,8 @@ describe('Given Scenarios', function () {
         testContext.proxyInstance = StatelessEs6Proxy;
       };
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1023): Every test must pass in a callback to execute when the test is complete.';
+        testContext.expectedErrorMessage =
+          'Maddox Scenario Build Error (1023): Every test must pass in a callback to execute when the test is complete.';
       };
 
       testContext.setupErrorMessage();
@@ -592,7 +599,8 @@ describe('Given Scenarios', function () {
         testContext.proxyInstance = StatelessEs6Proxy;
       };
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1023): Every test must pass in a callback to execute when the test is complete.';
+        testContext.expectedErrorMessage =
+          'Maddox Scenario Build Error (1023): Every test must pass in a callback to execute when the test is complete.';
       };
 
       testContext.setupErrorMessage();
@@ -609,7 +617,8 @@ describe('Given Scenarios', function () {
     // MissingEntryPoint 1024
     it('should throw when HTTPReqScenario test is not given a valid entry point.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1024): You must define a valid entry point before executing the test.';
+        testContext.expectedErrorMessage =
+          'Maddox Scenario Build Error (1024): You must define a valid entry point before executing the test.';
       };
 
       testContext.setupErrorMessage();
@@ -631,7 +640,8 @@ describe('Given Scenarios', function () {
         testContext.proxyInstance = StatelessEs6Proxy;
       };
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1024): You must define a valid entry point before executing the test.';
+        testContext.expectedErrorMessage =
+          'Maddox Scenario Build Error (1024): You must define a valid entry point before executing the test.';
       };
 
       testContext.setupErrorMessage();
@@ -653,7 +663,8 @@ describe('Given Scenarios', function () {
         testContext.proxyInstance = StatelessEs6Proxy;
       };
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1024): You must define a valid entry point before executing the test.';
+        testContext.expectedErrorMessage =
+          'Maddox Scenario Build Error (1024): You must define a valid entry point before executing the test.';
       };
 
       testContext.setupErrorMessage();
@@ -675,7 +686,8 @@ describe('Given Scenarios', function () {
         testContext.proxyInstance = StatelessEs6Proxy;
       };
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1024): You must define a valid entry point before executing the test.';
+        testContext.expectedErrorMessage =
+          'Maddox Scenario Build Error (1024): You must define a valid entry point before executing the test.';
       };
 
       testContext.setupErrorMessage();
@@ -692,14 +704,14 @@ describe('Given Scenarios', function () {
     // DoesReturnCallbackDataToReturn 1025
     it('should throw when the third parameter in doesReturnWithCallback is not of type Array.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1025): When calling \'doesReturnWithCallback\', the third parameter must be of type Array containing the callback\'s parameters.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1025): When calling 'doesReturnWithCallback', the third parameter must be of type Array containing the callback's parameters.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesReturnWithCallback('StatelessEs6Proxy', 'getFirstName', 'foo');
+        new Scenario(this).doesReturnWithCallback('StatelessEs6Proxy', 'getFirstName', 'foo');
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -710,14 +722,14 @@ describe('Given Scenarios', function () {
     // DoesAlwaysReturnCallbackDataToReturn 1026
     it('should throw when the third parameter in doesAlwaysReturnWithCallback is not of type Array.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1026): When calling \'doesAlwaysReturnWithCallback\', the third parameter must be of type Array containing the callback\'s parameters.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1026): When calling 'doesAlwaysReturnWithCallback', the third parameter must be of type Array containing the callback's parameters.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesAlwaysReturnWithCallback('StatelessEs6Proxy', 'getFirstName', 'foo');
+        new Scenario(this).doesAlwaysReturnWithCallback('StatelessEs6Proxy', 'getFirstName', 'foo');
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -728,14 +740,14 @@ describe('Given Scenarios', function () {
     // DoesErrorCallbackDataToReturn 1027
     it('should throw when the third parameter in doesErrorWithCallback is not of type Array.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1027): When calling \'doesErrorWithCallback\', the third parameter must be of type Array containing the callback\'s parameters.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1027): When calling 'doesErrorWithCallback', the third parameter must be of type Array containing the callback's parameters.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesErrorWithCallback('StatelessEs6Proxy', 'getFirstName', 'foo');
+        new Scenario(this).doesErrorWithCallback('StatelessEs6Proxy', 'getFirstName', 'foo');
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -744,16 +756,16 @@ describe('Given Scenarios', function () {
     });
 
     // MissingMochaTestContext 1028
-    it('should throw when a performance test is being executed, and the \'this\' context was not provided in the Scenario constructor.', function () {
+    it("should throw when a performance test is being executed, and the 'this' context was not provided in the Scenario constructor.", function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1028): When running a performance test, the \'this\' context must be provided in the scenario constructor.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1028): When running a performance test, the 'this' context must be provided in the scenario constructor.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario()
-          .perf();
+        new Scenario().perf();
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -762,17 +774,17 @@ describe('Given Scenarios', function () {
     });
 
     // HeaderNameShouldBeString 1030
-    it('should throw when headerName is undefined when using the \'resShouldContainHeader\' function.', function () {
+    it("should throw when headerName is undefined when using the 'resShouldContainHeader' function.", function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1030): When using \'resShouldContainHeader\', the first parameter must be of type string that is equal to the header name.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1030): When using 'resShouldContainHeader', the first parameter must be of type string that is equal to the header name.";
       };
 
       testContext.setupTest();
       testContext.setupErrorMessage();
 
       try {
-        new Scenario()
-          .resShouldContainHeader(undefined, 'someValue');
+        new Scenario().resShouldContainHeader(undefined, 'someValue');
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -781,17 +793,17 @@ describe('Given Scenarios', function () {
     });
 
     // HeaderValueShouldBeString 1031
-    it('should throw when headerValue is undefined when using the \'resShouldContainHeader\' function.', function () {
+    it("should throw when headerValue is undefined when using the 'resShouldContainHeader' function.", function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1031): When using \'resShouldContainHeader\', the second parameter must be of type string that is equal to the header value.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1031): When using 'resShouldContainHeader', the second parameter must be of type string that is equal to the header value.";
       };
 
       testContext.setupTest();
       testContext.setupErrorMessage();
 
       try {
-        new Scenario()
-          .resShouldContainHeader('someValue', undefined);
+        new Scenario().resShouldContainHeader('someValue', undefined);
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -802,7 +814,8 @@ describe('Given Scenarios', function () {
     // DoesReturnDataToReturn 1032
     it('should throw when the third parameter in doesReturn is undefined.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1032): When calling \'doesReturn\', the third parameter must a defined value or Maddox.constants.EmptyResult.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1032): When calling 'doesReturn', the third parameter must a defined value or Maddox.constants.EmptyResult.";
       };
 
       testContext.setupErrorMessage();
@@ -821,7 +834,8 @@ describe('Given Scenarios', function () {
     // DoesReturnPromiseDataToReturn 1033
     it('should throw when the third parameter in doesReturnWithPromise is undefined.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1033): When calling \'doesReturnWithPromise\', the third parameter must a defined value or Maddox.constants.EmptyResult.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1033): When calling 'doesReturnWithPromise', the third parameter must a defined value or Maddox.constants.EmptyResult.";
       };
 
       testContext.setupErrorMessage();
@@ -840,7 +854,8 @@ describe('Given Scenarios', function () {
     // DoesErrorDataToReturn 1034
     it('should throw when the third parameter in doesError is undefined.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1034): When calling \'doesError\', the third parameter must a defined value or Maddox.constants.EmptyResult.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1034): When calling 'doesError', the third parameter must a defined value or Maddox.constants.EmptyResult.";
       };
 
       testContext.setupErrorMessage();
@@ -859,7 +874,8 @@ describe('Given Scenarios', function () {
     // DoesErrorPromiseDataToReturn 1035
     it('should throw when the third parameter in doesErrorWithPromise is undefined.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1035): When calling \'doesErrorWithPromise\', the third parameter must a defined value or Maddox.constants.EmptyResult.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1035): When calling 'doesErrorWithPromise', the third parameter must a defined value or Maddox.constants.EmptyResult.";
       };
 
       testContext.setupErrorMessage();
@@ -878,7 +894,8 @@ describe('Given Scenarios', function () {
     // ShouldBeCalledKeyString 1036
     it('should throw when the first parameter in shouldBeCalled is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1036): When calling \'shouldBeCalled\', the first parameter must be of type String representing the mock key.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1036): When calling 'shouldBeCalled', the first parameter must be of type String representing the mock key.";
       };
 
       testContext.setupErrorMessage();
@@ -897,7 +914,8 @@ describe('Given Scenarios', function () {
     // ShouldBeCalledFunctionString 1037
     it('should throw when the second parameter in shouldBeCalled is not of type String.', function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (1037): When calling \'shouldBeCalled\', the second parameter must be of type String representing the function that was mocked.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (1037): When calling 'shouldBeCalled', the second parameter must be of type String representing the function that was mocked.";
       };
 
       testContext.setupErrorMessage();
@@ -951,32 +969,42 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
     });
 
     // MissingMockThisFunction 2000  && NOT DoesReturnCallbackDataToReturn 1025
-    it('should ignore when the third parameter in doesReturnWithCallback is an empty object and it should throw because the function wasn\'t mocked.', function () {
+    it("should ignore when the third parameter in doesReturnWithCallback is an empty object and it should throw because the function wasn't mocked.", function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.getFirstName, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.getFirstName, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesReturnWithCallback('StatelessEs6Proxy', 'getFirstName', Maddox.constants.EmptyParameters);
+        new Scenario(this).doesReturnWithCallback(
+          'StatelessEs6Proxy',
+          'getFirstName',
+          Maddox.constants.EmptyParameters
+        );
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -985,16 +1013,20 @@ describe('Given Scenarios', function () {
     });
 
     // MissingMockThisFunction 2000  && NOT DoesAlwaysReturnCallbackDataToReturn 1026
-    it('should ignore when the third parameter in doesAlwaysReturnWithCallback is an empty object and it should throw because the function wasn\'t mocked.', function () {
+    it("should ignore when the third parameter in doesAlwaysReturnWithCallback is an empty object and it should throw because the function wasn't mocked.", function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.getFirstName, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.getFirstName, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesAlwaysReturnWithCallback('StatelessEs6Proxy', 'getFirstName', Maddox.constants.EmptyParameters);
+        new Scenario(this).doesAlwaysReturnWithCallback(
+          'StatelessEs6Proxy',
+          'getFirstName',
+          Maddox.constants.EmptyParameters
+        );
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -1003,16 +1035,16 @@ describe('Given Scenarios', function () {
     });
 
     // MissingMockThisFunction 2000  && NOT DoesErrorCallbackDataToReturn 1027
-    it('should ignore when the third parameter in doesErrorWithCallback is an empty object and it should throw because the function wasn\'t mocked.', function () {
+    it("should ignore when the third parameter in doesErrorWithCallback is an empty object and it should throw because the function wasn't mocked.", function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.getFirstName, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.getFirstName, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesErrorWithCallback('StatelessEs6Proxy', 'getFirstName', Maddox.constants.EmptyParameters);
+        new Scenario(this).doesErrorWithCallback('StatelessEs6Proxy', 'getFirstName', Maddox.constants.EmptyParameters);
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -1025,14 +1057,18 @@ describe('Given Scenarios', function () {
       testContext.setupErrorMessage = function () {
         testContext.mockName = 'StatelessEs6Proxy';
         testContext.funcName = 'someNotMockedFunction';
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .shouldBeCalledWith(testContext.mockName, testContext.funcName, Maddox.constants.EmptyParameters);
+        new Scenario(this).shouldBeCalledWith(
+          testContext.mockName,
+          testContext.funcName,
+          Maddox.constants.EmptyParameters
+        );
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -1045,7 +1081,8 @@ describe('Given Scenarios', function () {
       testContext.setupErrorMessage = function () {
         testContext.mockName = 'StatelessEs6Proxy';
         testContext.funcName = 'someNotMockedFunction';
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
@@ -1066,14 +1103,14 @@ describe('Given Scenarios', function () {
       testContext.setupErrorMessage = function () {
         testContext.mockName = 'StatelessEs6Proxy';
         testContext.funcName = 'someNotMockedFunction';
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesReturn(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
+        new Scenario(this).doesReturn(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -1086,7 +1123,8 @@ describe('Given Scenarios', function () {
       testContext.setupErrorMessage = function () {
         testContext.mockName = 'StatelessEs6Proxy';
         testContext.funcName = 'someNotMockedFunction';
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
@@ -1107,14 +1145,18 @@ describe('Given Scenarios', function () {
       testContext.setupErrorMessage = function () {
         testContext.mockName = 'StatelessEs6Proxy';
         testContext.funcName = 'someNotMockedFunction';
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesReturnWithPromise(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
+        new Scenario(this).doesReturnWithPromise(
+          testContext.mockName,
+          testContext.funcName,
+          Maddox.constants.EmptyResult
+        );
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -1127,7 +1169,8 @@ describe('Given Scenarios', function () {
       testContext.setupErrorMessage = function () {
         testContext.mockName = 'StatelessEs6Proxy';
         testContext.funcName = 'someNotMockedFunction';
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
@@ -1148,14 +1191,18 @@ describe('Given Scenarios', function () {
       testContext.setupErrorMessage = function () {
         testContext.mockName = 'StatelessEs6Proxy';
         testContext.funcName = 'someNotMockedFunction';
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesReturnWithCallback(testContext.mockName, testContext.funcName, Maddox.constants.EmptyParameters);
+        new Scenario(this).doesReturnWithCallback(
+          testContext.mockName,
+          testContext.funcName,
+          Maddox.constants.EmptyParameters
+        );
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -1168,7 +1215,8 @@ describe('Given Scenarios', function () {
       testContext.setupErrorMessage = function () {
         testContext.mockName = 'StatelessEs6Proxy';
         testContext.funcName = 'someNotMockedFunction';
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
@@ -1189,14 +1237,14 @@ describe('Given Scenarios', function () {
       testContext.setupErrorMessage = function () {
         testContext.mockName = 'StatelessEs6Proxy';
         testContext.funcName = 'someNotMockedFunction';
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesError(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
+        new Scenario(this).doesError(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -1209,7 +1257,8 @@ describe('Given Scenarios', function () {
       testContext.setupErrorMessage = function () {
         testContext.mockName = 'StatelessEs6Proxy';
         testContext.funcName = 'someNotMockedFunction';
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
@@ -1230,14 +1279,18 @@ describe('Given Scenarios', function () {
       testContext.setupErrorMessage = function () {
         testContext.mockName = 'StatelessEs6Proxy';
         testContext.funcName = 'someNotMockedFunction';
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesErrorWithPromise(testContext.mockName, testContext.funcName, Maddox.constants.EmptyResult);
+        new Scenario(this).doesErrorWithPromise(
+          testContext.mockName,
+          testContext.funcName,
+          Maddox.constants.EmptyResult
+        );
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -1250,7 +1303,8 @@ describe('Given Scenarios', function () {
       testContext.setupErrorMessage = function () {
         testContext.mockName = 'StatelessEs6Proxy';
         testContext.funcName = 'someNotMockedFunction';
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
@@ -1271,14 +1325,18 @@ describe('Given Scenarios', function () {
       testContext.setupErrorMessage = function () {
         testContext.mockName = 'StatelessEs6Proxy';
         testContext.funcName = 'someNotMockedFunction';
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .doesErrorWithCallback(testContext.mockName, testContext.funcName, Maddox.constants.EmptyParameters);
+        new Scenario(this).doesErrorWithCallback(
+          testContext.mockName,
+          testContext.funcName,
+          Maddox.constants.EmptyParameters
+        );
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -1287,11 +1345,12 @@ describe('Given Scenarios', function () {
     });
 
     // MissingMockThisFunction 2000
-    it('should throw when \'doesErrorWithCallback\' is given a mocked function that has yet to be initialized.', function () {
+    it("should throw when 'doesErrorWithCallback' is given a mocked function that has yet to be initialized.", function () {
       testContext.setupErrorMessage = function () {
         testContext.mockName = 'StatelessEs6Proxy';
         testContext.funcName = 'someNotMockedFunction';
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using \'mockThisFunction\' before declaring return values.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (2000): You must declare the mock StatelessEs6Proxy.someNotMockedFunction, using 'mockThisFunction' before declaring return values.";
       };
 
       testContext.setupErrorMessage();
@@ -1308,8 +1367,7 @@ describe('Given Scenarios', function () {
     });
 
     // FunctionNotInMock 2001
-    it('should throw when \'mockThisFunction\' is given a function to mock doesn\'t exist in the given object.', function () {
-
+    it("should throw when 'mockThisFunction' is given a function to mock doesn't exist in the given object.", function () {
       testContext.setupErrorMessage = function () {
         testContext.mockName = 'StatelessEs6Proxy';
         testContext.funcName = random.word();
@@ -1320,8 +1378,7 @@ describe('Given Scenarios', function () {
       testContext.setupErrorMessage();
 
       try {
-        new Scenario(this)
-          .mockThisFunction(testContext.mockName, testContext.funcName, StatelessEs6Proxy);
+        new Scenario(this).mockThisFunction(testContext.mockName, testContext.funcName, StatelessEs6Proxy);
 
         Maddox.compare.shouldBeUnreachable();
       } catch (err) {
@@ -1334,7 +1391,8 @@ describe('Given Scenarios', function () {
       testContext.setupErrorMessage = function () {
         testContext.mockName = 'StatelessEs6Proxy';
         testContext.funcName = 'getFirstName';
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (2002): Attempted to mock StatelessEs6Proxy.getFirstName, but it was already mocked.';
+        testContext.expectedErrorMessage =
+          'Maddox Scenario Build Error (2002): Attempted to mock StatelessEs6Proxy.getFirstName, but it was already mocked.';
       };
 
       testContext.setupTest();
@@ -1350,7 +1408,6 @@ describe('Given Scenarios', function () {
         Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
       }
     });
-
   });
 
   // 3000
@@ -1390,25 +1447,32 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
     });
 
     // MissingCallback 3000
-    it('should throw when last parameter is not callback, when using \'*WithCallback\' and actually expecting a promise.', function (done) {
+    it("should throw when last parameter is not callback, when using '*WithCallback' and actually expecting a promise.", function (done) {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Runtime Error (3000): When using \'doesReturnWithCallback\' or \'doesErrorWithCallback\' for StatelessEs6Proxy.getFirstName the last parameter in the function must be the callback function.';
+        testContext.expectedErrorMessage =
+          "Maddox Runtime Error (3000): When using 'doesReturnWithCallback' or 'doesErrorWithCallback' for StatelessEs6Proxy.getFirstName the last parameter in the function must be the callback function.";
       };
 
       testContext.setupTest();
@@ -1436,7 +1500,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -1447,9 +1512,10 @@ describe('Given Scenarios', function () {
     });
 
     // MissingCallback 3000
-    it('should throw when last parameter is not callback, when using \'*WithCallback\' and actually expecting a synchronous call.', function (done) {
+    it("should throw when last parameter is not callback, when using '*WithCallback' and actually expecting a synchronous call.", function (done) {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Runtime Error (3000): When using \'doesReturnWithCallback\' or \'doesErrorWithCallback\' for StatelessEs6Proxy.getMiddleName the last parameter in the function must be the callback function.';
+        testContext.expectedErrorMessage =
+          "Maddox Runtime Error (3000): When using 'doesReturnWithCallback' or 'doesErrorWithCallback' for StatelessEs6Proxy.getMiddleName the last parameter in the function must be the callback function.";
       };
 
       testContext.setupTest();
@@ -1483,7 +1549,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -1496,7 +1563,8 @@ describe('Given Scenarios', function () {
     // MissingMockedData 3001
     it('should throw when first call to mock was not defined in test.', function (done) {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Runtime Error (3001): Attempted to get mocked data for the first call to StatelessEs6Proxy.getFirstName, but it wasn\'t created in the scenario.  You are missing a \'doesReturn / doesError\' call.';
+        testContext.expectedErrorMessage =
+          "Maddox Runtime Error (3001): Attempted to get mocked data for the first call to StatelessEs6Proxy.getFirstName, but it wasn't created in the scenario.  You are missing a 'doesReturn / doesError' call.";
       };
 
       testContext.setupTest();
@@ -1524,7 +1592,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -1537,7 +1606,8 @@ describe('Given Scenarios', function () {
     // MissingMockedData 3001
     it('should throw when second call to mock was not defined in test.', function (done) {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Runtime Error (3001): Attempted to get mocked data for the second call to StatelessEs6Proxy.getFirstName, but it wasn\'t created in the scenario.  You are missing a \'doesReturn / doesError\' call.';
+        testContext.expectedErrorMessage =
+          "Maddox Runtime Error (3001): Attempted to get mocked data for the second call to StatelessEs6Proxy.getFirstName, but it wasn't created in the scenario.  You are missing a 'doesReturn / doesError' call.";
       };
 
       testContext.setupTest();
@@ -1568,7 +1638,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -1581,7 +1652,8 @@ describe('Given Scenarios', function () {
     // MockCalledWrongNumberOfTimes 3002
     it('should throw when a mock is never called but the test expected it to be called.', function (done) {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Runtime Error (3002): Expected the mock StatelessEs6Proxy.dummyFunction to be called 1 time(s), but it was actually called 0 time(s).';
+        testContext.expectedErrorMessage =
+          'Maddox Runtime Error (3002): Expected the mock StatelessEs6Proxy.dummyFunction to be called 1 time(s), but it was actually called 0 time(s).';
       };
 
       testContext.setupTest();
@@ -1622,7 +1694,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -1635,7 +1708,8 @@ describe('Given Scenarios', function () {
     // MockCalledWrongNumberOfTimes 3002
     it('should throw when mock is called LESS times than expected in the test.', function (done) {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Runtime Error (3002): Expected the mock StatelessEs6Proxy.getFirstName to be called 3 time(s), but it was actually called 2 time(s).';
+        testContext.expectedErrorMessage =
+          'Maddox Runtime Error (3002): Expected the mock StatelessEs6Proxy.getFirstName to be called 3 time(s), but it was actually called 2 time(s).';
       };
 
       testContext.setupTest();
@@ -1675,7 +1749,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -1734,7 +1809,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -1751,7 +1827,10 @@ describe('Given Scenarios', function () {
         testContext.getFirstName1Result = random.firstName();
 
         testContext.wrongParamValue = random.uniqueId();
-        testContext.getFirstName2ParamsActual = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
+        testContext.getFirstName2ParamsActual = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result
+        ];
         testContext.getFirstName2ParamsExpected = [testContext.wrongParamValue, testContext.getFirstName1Result];
 
         testContext.getFirstName2Result = random.firstName();
@@ -1794,7 +1873,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -1811,8 +1891,14 @@ describe('Given Scenarios', function () {
         testContext.getFirstName1Result = random.firstName();
 
         testContext.wrongParamValue = random.uniqueId();
-        testContext.getFirstName2ParamsActual = [testContext.httpRequest.params.personId, testContext.getFirstName1Result];
-        testContext.getFirstName2ParamsExpected = [testContext.httpRequest.params.personId, testContext.wrongParamValue];
+        testContext.getFirstName2ParamsActual = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName1Result
+        ];
+        testContext.getFirstName2ParamsExpected = [
+          testContext.httpRequest.params.personId,
+          testContext.wrongParamValue
+        ];
 
         testContext.getFirstName2Result = random.firstName();
       };
@@ -1854,7 +1940,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -1869,23 +1956,28 @@ describe('Given Scenarios', function () {
       testContext.setupExpected = function () {
         testContext.wrongParamValue = 'SOME WRONG VALUE';
 
-        testContext.actualResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.actualResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.wrongParamValue
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.wrongParamValue
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Comparison Error (3003): Failed expectation for the first param in mock HttpResponseMock.send (i.e. res.send), the first time the mock was called ::::: expected { Object (personId, homeState, ...) } to deeply equal { Object (personId, homeState, ...) }';
+        testContext.expectedErrorMessage =
+          'Maddox Comparison Error (3003): Failed expectation for the first param in mock HttpResponseMock.send (i.e. res.send), the first time the mock was called ::::: expected { …(3) } to deeply equal { …(3) }';
       };
 
       testContext.setupTest();
@@ -1922,7 +2014,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -1955,15 +2048,18 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          firstName: random.uniqueId()
-        }];
+        testContext.expectedResponse = [
+          {
+            firstName: random.uniqueId()
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Runtime Error (3004): Expected the first call to HttpResponseMock.send to have 1 param(s), but it was actually called with 0 param(s).';
+        testContext.expectedErrorMessage =
+          'Maddox Runtime Error (3004): Expected the first call to HttpResponseMock.send to have 1 param(s), but it was actually called with 0 param(s).';
       };
 
       testContext.setupTest();
@@ -1997,7 +2093,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -2015,9 +2112,11 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupGetFirstName = function () {
-        testContext.getFirstNameParams = [{
-          firstName: random.uniqueId()
-        }];
+        testContext.getFirstNameParams = [
+          {
+            firstName: random.uniqueId()
+          }
+        ];
         testContext.getFirstNameResult = random.firstName();
       };
 
@@ -2038,7 +2137,8 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Runtime Error (3004): Expected the first call to StatelessEs6Proxy.getFirstName to have 1 param(s), but it was actually called with 0 param(s).';
+        testContext.expectedErrorMessage =
+          'Maddox Runtime Error (3004): Expected the first call to StatelessEs6Proxy.getFirstName to have 1 param(s), but it was actually called with 0 param(s).';
       };
 
       testContext.setupTest();
@@ -2072,7 +2172,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -2095,9 +2196,11 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupGetMiddleName = function () {
-        testContext.getMiddleNameParams = [{
-          firstName: random.uniqueId()
-        }];
+        testContext.getMiddleNameParams = [
+          {
+            firstName: random.uniqueId()
+          }
+        ];
         testContext.getMiddleNameResult = random.firstName();
       };
 
@@ -2113,7 +2216,8 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Runtime Error (3004): Expected the first call to StatelessEs6Proxy.getMiddleName to have 1 param(s), but it was actually called with 0 param(s).';
+        testContext.expectedErrorMessage =
+          'Maddox Runtime Error (3004): Expected the first call to StatelessEs6Proxy.getMiddleName to have 1 param(s), but it was actually called with 0 param(s).';
       };
 
       testContext.setupTest();
@@ -2147,7 +2251,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -2165,7 +2270,8 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Runtime Error (3005): When using the \'FromPromiseScenario\', the result of the tested code must be a promise following Promise/A+.';
+        testContext.expectedErrorMessage =
+          "Maddox Runtime Error (3005): When using the 'FromPromiseScenario', the result of the tested code must be a promise following Promise/A+.";
       };
 
       testContext.setupTest();
@@ -2195,7 +2301,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -2213,7 +2320,8 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Runtime Error (3005): When using the \'FromPromiseScenario\', the result of the tested code must be a promise following Promise/A+.';
+        testContext.expectedErrorMessage =
+          "Maddox Runtime Error (3005): When using the 'FromPromiseScenario', the result of the tested code must be a promise following Promise/A+.";
       };
 
       testContext.setupTest();
@@ -2243,7 +2351,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -2261,7 +2370,8 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Runtime Error (3006): When using the \'FromSynchronousScenario\', the result of the tested code can NOT be a promise. See \'FromPromiseScenario\' if you want to test a function returning a promise.';
+        testContext.expectedErrorMessage =
+          "Maddox Runtime Error (3006): When using the 'FromSynchronousScenario', the result of the tested code can NOT be a promise. See 'FromPromiseScenario' if you want to test a function returning a promise.";
       };
 
       testContext.setupTest();
@@ -2291,7 +2401,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -2309,7 +2420,8 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Runtime Error (3006): When using the \'FromSynchronousScenario\', the result of the tested code can NOT be a promise. See \'FromPromiseScenario\' if you want to test a function returning a promise.';
+        testContext.expectedErrorMessage =
+          "Maddox Runtime Error (3006): When using the 'FromSynchronousScenario', the result of the tested code can NOT be a promise. See 'FromPromiseScenario' if you want to test a function returning a promise.";
       };
 
       testContext.setupTest();
@@ -2339,7 +2451,8 @@ describe('Given Scenarios', function () {
 
         .test(function () {
           done(new Error('Should not reach here.'));
-        }).catch((err) => {
+        })
+        .catch((err) => {
           try {
             Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
             done();
@@ -2348,7 +2461,6 @@ describe('Given Scenarios', function () {
           }
         });
     });
-
   });
 
   // 4000
@@ -2388,25 +2500,32 @@ describe('Given Scenarios', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
     });
 
     // ResShouldBeCalledWithFunctionString 4000
-    it('should throw when the first parameter in \'resShouldBeCalledWith\' is not of type String.', function () {
+    it("should throw when the first parameter in 'resShouldBeCalledWith' is not of type String.", function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (4001): When calling \'resShouldBeCalledWith\', the second parameter must be of type Array containing the expected parameters.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (4001): When calling 'resShouldBeCalledWith', the second parameter must be of type Array containing the expected parameters.";
       };
 
       testContext.setupErrorMessage();
@@ -2423,13 +2542,14 @@ describe('Given Scenarios', function () {
     });
 
     // ResShouldBeCalledWithParamsArray 4001
-    it('should throw when the second parameter in \'resShouldBeCalledWith\' is not of type Array.', function () {
+    it("should throw when the second parameter in 'resShouldBeCalledWith' is not of type Array.", function () {
       testContext.setupTest = function () {
         testContext.shouldBeCalledWithInput = 'Some type that is not of type Array.';
       };
 
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (4001): When calling \'resShouldBeCalledWith\', the second parameter must be of type Array containing the expected parameters.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (4001): When calling 'resShouldBeCalledWith', the second parameter must be of type Array containing the expected parameters.";
       };
 
       testContext.setupTest();
@@ -2448,9 +2568,9 @@ describe('Given Scenarios', function () {
 
     // ExactlyOneResponseFinisher 4002
     it('should throw when a HTTP Response Finisher function is declared more than once.', function () {
-
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (4002): Exactly one HTTP Response Finisher can be used per scenario. When a HTTP Response Finisher function is called, the testable code phase will end, and the validation phase will begin. Please see below for a list of HTTP Response Finishers.';
+        testContext.expectedErrorMessage =
+          'Maddox Scenario Build Error (4002): Exactly one HTTP Response Finisher can be used per scenario. When a HTTP Response Finisher function is called, the testable code phase will end, and the validation phase will begin. Please see below for a list of HTTP Response Finishers.';
       };
 
       testContext.setupTest();
@@ -2473,7 +2593,8 @@ describe('Given Scenarios', function () {
           .resShouldBeCalledWith('send', testContext.expectedResponse)
           .resShouldBeCalledWith('json', testContext.expectedResponse);
       } catch (err) {
-        let possibleFinisherFunctions = '"responseFinishers": [\n' +
+        let possibleFinisherFunctions =
+          '"responseFinishers": [\n' +
           '    "send",\n' +
           '    "json",\n' +
           '    "jsonp",\n' +
@@ -2487,14 +2608,13 @@ describe('Given Scenarios', function () {
         Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
         Maddox.compare.shouldEqual({ actual: err.stack.split(possibleFinisherFunctions).length, expected: 2 });
       }
-
     });
 
     // ExactlyOneResponseFinisher 4002
     it('should throw when a HTTP Response Finisher function is NOT declared at all.', function () {
-
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (4002): Exactly one HTTP Response Finisher can be used per scenario. When a HTTP Response Finisher function is called, the testable code phase will end, and the validation phase will begin. Please see below for a list of HTTP Response Finishers.';
+        testContext.expectedErrorMessage =
+          'Maddox Scenario Build Error (4002): Exactly one HTTP Response Finisher can be used per scenario. When a HTTP Response Finisher function is called, the testable code phase will end, and the validation phase will begin. Please see below for a list of HTTP Response Finishers.';
       };
 
       testContext.setupTest();
@@ -2516,7 +2636,8 @@ describe('Given Scenarios', function () {
 
           .test(function () {});
       } catch (err) {
-        let possibleFinisherFunctions = '"responseFinishers": [\n' +
+        let possibleFinisherFunctions =
+          '"responseFinishers": [\n' +
           '    "send",\n' +
           '    "json",\n' +
           '    "jsonp",\n' +
@@ -2530,14 +2651,13 @@ describe('Given Scenarios', function () {
         Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
         Maddox.compare.shouldEqual({ actual: err.stack.split(possibleFinisherFunctions).length, expected: 2 });
       }
-
     });
 
     // HttpReqUndefined 4003
-    it('should throw when the user has not set the HTTP Request object using the \'withHttpRequest\' function.', function () {
-
+    it("should throw when the user has not set the HTTP Request object using the 'withHttpRequest' function.", function () {
       testContext.setupErrorMessage = function () {
-        testContext.expectedErrorMessage = 'Maddox Scenario Build Error (4003): Before executing a test, you must provide input parameters using the \'withInputParams\' or \'withHttpRequest\' functions.';
+        testContext.expectedErrorMessage =
+          "Maddox Scenario Build Error (4003): Before executing a test, you must provide input parameters using the 'withInputParams' or 'withHttpRequest' functions.";
       };
 
       testContext.setupTest();
@@ -2560,12 +2680,10 @@ describe('Given Scenarios', function () {
       } catch (err) {
         Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
       }
-
     });
 
     // HttpReqUndefined 4003
-    it('should add the \'TestFailure\' message when user does not catch their own comparison errors.', function (done) {
-
+    it("should add the 'TestFailure' message when user does not catch their own comparison errors.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -2608,9 +2726,7 @@ describe('Given Scenarios', function () {
           } catch (testErr) {
             done(testErr);
           }
-
         });
     });
   });
 });
-

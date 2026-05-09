@@ -29,6 +29,8 @@ https://maddox.readme.io/docs/i-should-be-using-maddox-because
 1. If at all possible, your proxy layer should utilize a stateless pattern as it is easier to write and debug tests.  See ./spec/testable/proxies for examples.
 
 ## How To Use Maddox
+Maddox is published as a dual-package (CommonJS and ESM). When developing locally in this repository, you should run `npm run build` before pack/publish so that the ESM `dist/` artifacts are available.
+
 The best way to learn is to see it in action.
 
 1. Testing a Service - ./spec/unit/http-req-unit-test

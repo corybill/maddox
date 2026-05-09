@@ -1,9 +1,8 @@
-
-const Chance = require('chance');
+import Chance from 'chance';
 
 let chance = new Chance();
 
-module.exports = {
+export default {
   uniqueId: function () {
     return chance.hash({ length: 24 });
   },

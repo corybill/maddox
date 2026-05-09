@@ -1,9 +1,8 @@
-
-const Maddox = require('../../lib/index'), // require("maddox");
-  random = require('../random'),
-  Controller = require('../testable/modules/test-module/from-http-req-controller'),
-  testConstants = require('../test-constants'),
-  StatefulSingletonProxy = require('../testable/proxies/stateful-singleton-proxy');
+import Maddox from '../../lib/index.js'; // require("maddox");
+import random from '../random.js';
+import Controller from '../testable/modules/test-module/from-http-req-controller.js';
+import testConstants from '../test-constants.js';
+import StatefulSingletonProxy from '../testable/proxies/stateful-singleton-proxy.js';
 
 const Scenario = Maddox.functional.HttpReqScenario;
 
@@ -47,16 +46,22 @@ describe('Given the HttpReqScenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1]
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1]
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -142,7 +147,6 @@ describe('Given the HttpReqScenario', function () {
 
         .test(done);
     });
-
   });
 
   describe('when initiating an async process and using a finisher function, it', function () {
@@ -182,14 +186,20 @@ describe('Given the HttpReqScenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
       testContext.setupExpected = function () {
-        testContext.expectedResponse = [{
-          result: 'OK'
-        }];
+        testContext.expectedResponse = [
+          {
+            result: 'OK'
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -273,7 +283,11 @@ describe('Given the HttpReqScenario', function () {
       };
 
       testContext.setupGetLastName = function () {
-        testContext.getLastNameParams = [testContext.httpRequest.params.personId, testContext.getFirstName2Result, testContext.getMiddleNameResult];
+        testContext.getLastNameParams = [
+          testContext.httpRequest.params.personId,
+          testContext.getFirstName2Result,
+          testContext.getMiddleNameResult
+        ];
         testContext.getLastNameResult = [undefined, random.lastName()];
       };
 
@@ -294,19 +308,21 @@ describe('Given the HttpReqScenario', function () {
         testContext.someResParams2 = [testContext.getLastNameResult[1]];
         testContext.someResResponse2 = random.uniqueId();
 
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1],
-          someHeaderResponse1: testContext.someResResponse1,
-          someHeaderResponse2: testContext.someResResponse2
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1],
+            someHeaderResponse1: testContext.someResResponse1,
+            someHeaderResponse2: testContext.someResResponse2
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
     });
 
-    it('should use \'resShouldContainerHeader\' and \'resDoesReturn\'.', function (done) {
+    it("should use 'resShouldContainerHeader' and 'resDoesReturn'.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();
@@ -357,20 +373,22 @@ describe('Given the HttpReqScenario', function () {
         .test(done);
     });
 
-    it('should use \'resDoesAlwaysReturn\' and \'resShouldAlwaysBeCalledWith\'.', function (done) {
+    it("should use 'resDoesAlwaysReturn' and 'resShouldAlwaysBeCalledWith'.", function (done) {
       testContext.setupExpected = function () {
         testContext.someResParams1 = [testContext.getLastNameResult[1]];
         testContext.someResResponse1 = random.uniqueId();
         testContext.someResParams2 = [testContext.getLastNameResult[1]];
         testContext.someResResponse2 = random.uniqueId();
 
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1],
-          someHeaderResponse1: testContext.someResResponse1,
-          someHeaderResponse2: testContext.someResResponse1
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1],
+            someHeaderResponse1: testContext.someResResponse1,
+            someHeaderResponse2: testContext.someResResponse1
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -422,20 +440,22 @@ describe('Given the HttpReqScenario', function () {
         .test(done);
     });
 
-    it('should use \'resDoesAlwaysReturn\' by itself.', function (done) {
+    it("should use 'resDoesAlwaysReturn' by itself.", function (done) {
       testContext.setupExpected = function () {
         testContext.someResParams1 = [testContext.getLastNameResult[1]];
         testContext.someResResponse1 = random.uniqueId();
         testContext.someResParams2 = [testContext.getLastNameResult[1]];
         testContext.someResResponse2 = random.uniqueId();
 
-        testContext.expectedResponse = [{
-          personId: testContext.httpRequest.params.personId,
-          homeState: testContext.httpRequest.query.homeState,
-          lastName: testContext.getLastNameResult[1],
-          someHeaderResponse1: testContext.someResResponse1,
-          someHeaderResponse2: testContext.someResResponse1
-        }];
+        testContext.expectedResponse = [
+          {
+            personId: testContext.httpRequest.params.personId,
+            homeState: testContext.httpRequest.query.homeState,
+            lastName: testContext.getLastNameResult[1],
+            someHeaderResponse1: testContext.someResResponse1,
+            someHeaderResponse2: testContext.someResResponse1
+          }
+        ];
 
         testContext.expectedStatusCode = [200];
       };
@@ -489,7 +509,7 @@ describe('Given the HttpReqScenario', function () {
         .test(done);
     });
 
-    it('should use \'resShouldAlwaysBeCalledWith\' by itself.', function (done) {
+    it("should use 'resShouldAlwaysBeCalledWith' by itself.", function (done) {
       testContext.setupTest();
       testContext.setupHttpRequest();
       testContext.setupGetFirstName();

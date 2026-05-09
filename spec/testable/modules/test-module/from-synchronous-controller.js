@@ -1,18 +1,15 @@
-const Preconditions = require('preconditions'),
-  BluebirdPromise = require('bluebird'),
-  uuid = require('uuid');
-
-const testConstants = require('../../../test-constants'),
-  StatefulFactoryProxy = require('../../proxies/stateful-factory-proxy'),
-  StatefulSingletonProxy = require('../../proxies/stateful-singleton-proxy'),
-  StatelessEs6Proxy = require('../../proxies/stateless-es6-proxy'),
-  StatelessPreEs6SingletonProxy = require('../../proxies/stateless-pre-es6-singleton-proxy'),
-  StatelessPreEs6StaticProxy = require('../../proxies/stateless-pre-es6-static-proxy');
+import Preconditions from 'preconditions';
+import uuid from 'uuid';
+import testConstants from '../../../test-constants.js';
+import StatefulFactoryProxy from '../../proxies/stateful-factory-proxy.js';
+import StatefulSingletonProxy from '../../proxies/stateful-singleton-proxy.js';
+import StatelessEs6Proxy from '../../proxies/stateless-es6-proxy.js';
+import StatelessPreEs6SingletonProxy from '../../proxies/stateless-pre-es6-singleton-proxy.js';
+import StatelessPreEs6StaticProxy from '../../proxies/stateless-pre-es6-static-proxy.js';
 
 const preconditions = Preconditions.singleton();
 
 class Controller {
-
   static noProxies(urlParams, queryParams) {
     preconditions.shouldBeDefined(urlParams.personId, testConstants.MissingPersonIdParam);
 
@@ -115,7 +112,7 @@ class Controller {
   }
 
   static returnBluebirdPromise() {
-    return BluebirdPromise.resolve();
+    return Promise.resolve();
   }
 
   static returnNativePromise() {
@@ -123,4 +120,4 @@ class Controller {
   }
 }
 
-module.exports = Controller;
+export default Controller;

@@ -1,8 +1,6 @@
-
-const Service = require('./test-module-service');
+import Service from './test-module-service.js';
 
 class Controller {
-
   static noProxies(req) {
     return Service.executeWithNoProxies(req.params, req.query);
   }
@@ -44,4 +42,4 @@ class Controller {
   }
 }
 
-module.exports = Controller;
+export default Controller;
