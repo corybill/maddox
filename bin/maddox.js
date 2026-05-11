@@ -103,9 +103,15 @@ class PrepareArguments {
     });
     parser.addArgument(['-n', '--DO_NOT_SAVE_RESULTS'], { help: 'Do NOT save results of this run.', action: 'store_true' });
     parser.addArgument(['-d', '--TEST_DIR'], {
-      help: 'Add the directories that you would like to test.',
-      required: true,
+      help:
+        'Directories to run perf tests from. If omitted, you may pass the same paths as positional arguments (same as Maddox v3).',
+      required: false,
+      defaultValue: [],
       nargs: '*'
+    });
+    parser.addArgument('positional_test_dirs', {
+      nargs: '*',
+      help: 'Test directories (v3-style); ignored when -d/--TEST_DIR is provided.'
     });
     parser.addArgument(['-r', '--REMOVE_EXISTING'], { help: 'Remove all existing results.', action: 'store_true' });
     parser.addArgument(['-s', '--NUM_SAMPLES'], {
@@ -129,6 +135,14 @@ class PrepareArguments {
     });
 
     const args = parser.parseArgs();
+
+    const flagDirs = args.TEST_DIR || [];
+    const positionalDirs = args.positional_test_dirs || [];
+    const mergedTestDirs = flagDirs.length > 0 ? flagDirs : positionalDirs;
+    if (mergedTestDirs.length === 0) {
+      parser.error('the following arguments are required: -d/--TEST_DIR or at least one test directory path');
+    }
+    args.TEST_DIR = mergedTestDirs;
 
     state.setArguments(args);
   }
