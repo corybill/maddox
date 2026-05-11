@@ -42,11 +42,23 @@ These are the input params into the function that you would like to test. The in
 ******************************************************
 
 ## shouldBeCalledWith(mockName, funcName, params)
-Defines an expectation for a mocked function. i.e. after your test is complete, Maddox will compare the actual parameters the mock was called with to the defined exepected parameters from this function.  If a mocked function (from 'mockThisFunction') is called once, then 'shouldBeCalledWith' should be defined once for that mocked function. If a mocked function is called 'n' times, then 'shouldBeCalledWith' should be defined 'n' times for that mocked function. 
+Defines an expectation for a mocked function. i.e. after your test is complete, Maddox will compare the actual parameters the mock was called with to the defined expected parameters from this function.  If a mocked function (from 'mockThisFunction') is called once, then 'shouldBeCalledWith' should be defined once for that mocked function. If a mocked function is called 'n' times, then 'shouldBeCalledWith' should be defined 'n' times for that mocked function. 
 
 Ordering matters when defining these expectations. If your function is called 3 times, Maddox will compare the first set of actual parameters to the first set of defined expected parameters and so on. 
 
 If your function takes a callback you should NOT add this to the params array. The callback will be automatically validated during execution when you use 'doesReturnWithCallback'. 
+
+* **mockName** *{String}* - This is the key for the mock. It should match the key from 'mockThisFunction'.
+* **funcName** *{String}* - The name of the function to be mocked. Should match the name from 'mockThisFunction'.
+* **params** *{Array}* - An array of expected parameters. First parameter of the function goes in index 0 and the nth parameter of the function goes into index n.
+* **returns** *{Scenario}*
+
+******************************************************
+
+## shouldBeCalledWithSubset(mockName, funcName, params)
+A variant of 'shouldBeCalledWith' that defines a mocked function. If a parameter value is an array or a json object, then the provided parameters must be a subset of the actual arguments that were passed into the function. If any of the provided parameters are of any other type, then they must be an identical match. 
+
+Two arrays or two objects that are identical will pass the subset validation. 
 
 * **mockName** *{String}* - This is the key for the mock. It should match the key from 'mockThisFunction'.
 * **funcName** *{String}* - The name of the function to be mocked. Should match the name from 'mockThisFunction'.
@@ -56,11 +68,16 @@ If your function takes a callback you should NOT add this to the params array. T
 ******************************************************
 
 ## shouldBeCalled(mockName, funcName)
-Defines an expectation for a mocked function. i.e. after your test is complete, Maddox will compare the actual parameters the mock was called with to the defined exepected parameters from this function.  If a mocked function (from 'mockThisFunction') is called once, then 'shouldBeCalledWith' should be defined once for that mocked function. If a mocked function is called 'n' times, then 'shouldBeCalledWith' should be defined 'n' times for that mocked function. 
+A variant of 'shouldBeCalledWith' that defines a mocked function should be called, but does not validate any of the parameters it was called with. It will only validate the the mock was called. 
 
-Ordering matters when defining these expectations. If your function is called 3 times, Maddox will compare the first set of actual parameters to the first set of defined expected parameters and so on. 
+* **mockName** *{String}* - This is the key for the mock. It should match the key from 'mockThisFunction'.
+* **funcName** *{String}* - The name of the function to be mocked. Should match the name from 'mockThisFunction'.
+* **returns** *{Scenario}*
 
-If your function takes a callback you should NOT add this to the params array. The callback will be automatically validated during execution when you use 'doesReturnWithCallback'. 
+******************************************************
+
+## shouldAlwaysBeCalledWith(mockName, funcName, params)
+A variant of 'shouldBeCalledWith' that defines a mocked function should be called with the same expected parameters on every call to the mock. 
 
 * **mockName** *{String}* - This is the key for the mock. It should match the key from 'mockThisFunction'.
 * **funcName** *{String}* - The name of the function to be mocked. Should match the name from 'mockThisFunction'.
@@ -69,8 +86,8 @@ If your function takes a callback you should NOT add this to the params array. T
 
 ******************************************************
 
-## shouldAlwaysBeCalledWith(mockName, funcName, params)
-A variant of 'shouldBeCalledWith' that defines a mocked function should be called with the same expected parameters on every call to the mock. 
+## shouldAlwaysBeCalledWithSubset(mockName, funcName, params)
+A variant of 'shouldBeCalledWith' that defines a mocked function should be called with the same expected parameters on every call to the mock.  If a parameter value is an array or a json object, then the provided parameters must be a subset of the actual arguments that were passed into the function. If any of the provided parameters are of any other type, then they must be an identical match. 
 
 * **mockName** *{String}* - This is the key for the mock. It should match the key from 'mockThisFunction'.
 * **funcName** *{String}* - The name of the function to be mocked. Should match the name from 'mockThisFunction'.
@@ -233,6 +250,23 @@ This function is synonymous with the 'shouldBeCalledWith' function except here w
 
 * **funcName** *{String}* - The name of the function to be mocked on the HttpResponse object.
 * **params** *{Object}* - An object representing an HttpRequest object.
+* **returns** *{HttpReqScenario}*
+
+******************************************************
+
+## resShouldBeCalledWithSubset(funcName, params)
+A variant of 'shouldBeCalledWith' that defines a mocked function on the response object that should be called with the a superset of the expected parameters on a call to the Response Mock. 
+
+* **funcName** *{String}* - The name of the function to be mocked. Should match the name from 'mockThisFunction'.
+* **params** *{Array}* - An array of expected parameters that are a subset of the actual parameters. First parameter of the function goes in index 0 and the nth parameter of the function goes into index n.
+* **returns** *{HttpReqScenario}*
+
+******************************************************
+
+## resShouldBeCalled(funcName)
+A variant of 'shouldBeCalledWith' that defines a mocked function on the response object. This check does not validate any parameters, it just validates that the function is called. 
+
+* **funcName** *{String}* - The name of the function to be mocked. Should match the name from 'mockThisFunction'.
 * **returns** *{HttpReqScenario}*
 
 ******************************************************

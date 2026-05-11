@@ -8,7 +8,11 @@
  * this script will be in ./documentation.txt.
  */
 
-const fs = require("fs");
+import fs from "node:fs";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 class Text {
   static identify(line) {return line.startsWith("* ");}

@@ -1,5 +1,4 @@
-#!/usr/bin/env node'use strict';
-
+#!/usr/bin/env node
 /* eslint-disable */
 
 import Mocha from 'mocha';
@@ -91,24 +90,24 @@ class PrepareArguments {
     });
     parser.addArgument(['-p', '--PRINT'], {
       help: 'When marked, it will print the number of requests per second for each test to the console.',
-      nargs: '0'
+      action: 'store_true'
     });
     parser.addArgument(['-P', '--PRINT_ALL'], {
       help: 'When marked, it will print all saved (including historical) statistics to the console.',
-      nargs: '0'
+      action: 'store_true'
     });
     parser.addArgument(['-m', '--MAX_RESULTS'], {
       help: 'Only keep this many historical results. Will delete results of the number is less than current count.',
       defaultValue: 10,
       type: 'int'
     });
-    parser.addArgument(['-n', '--DO_NOT_SAVE_RESULTS'], { help: 'Do NOT save results of this run.', nargs: '0' });
+    parser.addArgument(['-n', '--DO_NOT_SAVE_RESULTS'], { help: 'Do NOT save results of this run.', action: 'store_true' });
     parser.addArgument(['-d', '--TEST_DIR'], {
       help: 'Add the directories that you would like to test.',
       required: true,
       nargs: '*'
     });
-    parser.addArgument(['-r', '--REMOVE_EXISTING'], { help: 'Remove all existing results.', nargs: '0' });
+    parser.addArgument(['-r', '--REMOVE_EXISTING'], { help: 'Remove all existing results.', action: 'store_true' });
     parser.addArgument(['-s', '--NUM_SAMPLES'], {
       help: 'Sets the sample size for each individual perf test i.e. each test will be executed this many times in an attempt to normalize results.',
       defaultValue: 20,
@@ -126,7 +125,7 @@ class PrepareArguments {
     });
     parser.addArgument(['-o', '--ONLY_95'], {
       help: "Remove all historical results that are not within the current 95th percentile. WARNING: Don't use with small samples sizes or if you have recently changed your code. Doing so will artificially keep the statistics close to the existing mean.",
-      nargs: '0'
+      action: 'store_true'
     });
 
     const args = parser.parseArgs();
@@ -238,8 +237,9 @@ class CombineResults {
     const existingResults = state.getExistingResults();
     const args = state.getArguments();
 
-    let combinedResults =
-      args.REMOVE_EXISTING !== null ? Factory.newResultBlock() : JSON.parse(JSON.stringify(existingResults, null, 2));
+    let combinedResults = args.REMOVE_EXISTING
+      ? Factory.newResultBlock()
+      : JSON.parse(JSON.stringify(existingResults, null, 2));
 
     function dropOld(array, maxResults) {
       // Drop old results if we have hit or gone over max results.
@@ -310,7 +310,7 @@ class Only95 {
     const args = state.getArguments();
     const combinedResults = state.getCombinedResults();
 
-    if (args.ONLY_95 !== null) {
+    if (args.ONLY_95) {
       for (const title in combinedResults.minStats) {
         const filteredMin = [];
         const filteredAll = [];
@@ -347,7 +347,7 @@ class SaveResults {
     const args = state.getArguments();
     const perfFilePath = state.getPerfFilePath();
 
-    if (args.DO_NOT_SAVE_RESULTS === null) {
+    if (!args.DO_NOT_SAVE_RESULTS) {
       fs.writeJsonSync(perfFilePath, combinedResults);
 
       console.log(`Successfully saved combined results to ${perfFilePath}`);
@@ -362,15 +362,15 @@ class PrintTestResults {
 
     const printedResults = {};
 
-    if (args.PRINT !== null) {
+    if (args.PRINT) {
       printedResults.minStats = combinedResults.minStats;
     }
 
-    if (args.PRINT_ALL !== null) {
+    if (args.PRINT_ALL) {
       printedResults.allStats = combinedResults.allStats;
     }
 
-    if (args.PRINT !== null || args.PRINT_ALL !== null) {
+    if (args.PRINT || args.PRINT_ALL) {
       console.log('********** Start Printed Results **********');
       console.log(JSON.stringify(printedResults, null, 2));
       console.log('********** End Printed Results **********');
