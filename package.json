@@ -7,7 +7,7 @@
     "build": "bash scripts/build.sh",
     "test": "npm run ut && npm run lint",
     "perf": "maddox -Pp -d ./spec/unit",
-    "ut": "_mocha ./spec/unit",
+    "ut": "_mocha ./spec/unit --require ./spec/support/jsdom-register.js",
     "coverage": "./bin/maddox-cov.js",
     "lint": "eslint ./spec/ ./lib",
     "lint-fix": "eslint ./spec/ ./lib --fix",
@@ -53,6 +53,13 @@
       "name": "Daniel Kim"
     }
   ],
+  "peerDependencies": {
+    "@testing-library/react": ">=14.0.0",
+    "@testing-library/user-event": ">=14.0.0",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0",
+    "react-router": ">=7.0.0"
+  },
   "dependencies": {
     "chai": "^4.5.0",
     "core-util-is": "1.x",
@@ -70,11 +77,17 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "chance": "^1.1.13",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.6.0",
+    "jsdom": "^26.1.0",
     "prettier": "^3.8.3",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-router": "^7.15.0",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
     "uuid": "^11.1.0"

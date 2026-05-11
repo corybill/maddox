@@ -55,7 +55,8 @@ var scenarioTypes = {
   FromCallbackScenario: "FromCallbackScenario",
   FromPromiseScenario: "FromPromiseScenario",
   FromSynchronousScenario: "FromSynchronousScenario",
-  HttpReqScenario: "HttpReqScenario"
+  HttpReqScenario: "HttpReqScenario",
+  FrameworkRouteScenario: "FrameworkRouteScenario"
 };
 var errorTypes = {
   MaddoxBuildError: {
@@ -339,6 +340,56 @@ var errorMessages = {
   HttpReqUndefined: {
     code: 4003,
     message: "Before executing a test, you must provide input parameters using the 'withInputParams' or 'withHttpRequest' functions.",
+    type: errorTypes.MaddoxBuildError
+  },
+  FrameworkRouteMissingRoutes: {
+    code: 4005,
+    message: "Before executing a FrameworkRouteScenario test, you must call 'addStub' at least once (each stub needs mockName, path, and module.default).",
+    type: errorTypes.MaddoxBuildError
+  },
+  FrameworkRouteModuleDefault: {
+    code: 4006,
+    message: "When calling 'addStub', 'module' must define a 'default' export (the route Component) for use with createRoutesStub.",
+    type: errorTypes.MaddoxBuildError
+  },
+  FrameworkRouteModuleObject: {
+    code: 4007,
+    message: "When calling 'addStub', the descriptor must include a 'module' object.",
+    type: errorTypes.MaddoxBuildError
+  },
+  FrameworkRoutePathString: {
+    code: 4008,
+    message: "When calling 'addStub', the descriptor must include a string 'path' for the stub route.",
+    type: errorTypes.MaddoxBuildError
+  },
+  FrameworkRouteAddStubMockName: {
+    code: 4013,
+    message: "When calling 'addStub', the descriptor must include a string 'mockName' (used for Maddox mock keys).",
+    type: errorTypes.MaddoxBuildError
+  },
+  FrameworkRouteAddStubDescriptor: {
+    code: 4014,
+    message: "When calling 'addStub', the first parameter must be an object with mockName, path, and module.",
+    type: errorTypes.MaddoxBuildError
+  },
+  FrameworkRouteInitialEntriesArray: {
+    code: 4009,
+    message: "When calling 'withInitialEntries', the parameter must be a non-empty array (e.g. ['/']).",
+    type: errorTypes.MaddoxBuildError
+  },
+  FrameworkRouteNextStepFunction: {
+    code: 4010,
+    message: "When calling 'next', the parameter must be a function (prefer async) that receives Testing Library context.",
+    type: errorTypes.MaddoxBuildError
+  },
+  FrameworkRouteRenderCallback: {
+    code: 4011,
+    message: "When calling 'render' with an argument, it must be a function (Stub, createElement) => ReactElement. Call render() with no arguments to use the default element from withInitialEntries.",
+    type: errorTypes.MaddoxBuildError
+  },
+  FrameworkRouteRenderReturn: {
+    code: 4012,
+    message: "The function passed to 'render' must return a React element (e.g. createElement(Stub, { initialEntries: ['/'] })).",
     type: errorTypes.MaddoxBuildError
   },
   TestFailure: {
@@ -2159,19 +2210,201 @@ var FromSynchronousScenario = class extends scenario_default {
 };
 var from_synchronous_scenario_default = FromSynchronousScenario;
 
+// lib/scenarios/framework-route-scenario.js
+import Preconditions7 from "preconditions";
+var preconditions7 = Preconditions7.errr();
+var FrameworkRouteScenario = class extends scenario_default {
+  constructor(testContext) {
+    super(testContext);
+    this._scenarioType_ = constants_default.scenarioTypes.FrameworkRouteScenario;
+    this._routeDescriptors_ = [];
+    this._initialEntries_ = ["/"];
+    this._nextSteps_ = [];
+    this._stubAppContext_ = void 0;
+    this._renderCallback_ = null;
+  }
+  /**
+   * Register one stub route for `createRoutesStub` and auto-mock `loader` / `action` on `module` when present.
+   * Each `mockName` must be unique across `addStub` calls (Maddox mock keys).
+   *
+   * @param {{ mockName: string, path: string, module: { default: unknown, loader?: Function, action?: Function }, id?: string, children?: unknown[] }} descriptor
+   * @returns {FrameworkRouteScenario}
+   */
+  addStub(descriptor) {
+    preconditions7.shouldBeObject(descriptor, error_factory_default.build(constants_default.errorMessages.FrameworkRouteAddStubDescriptor)).debug({ descriptor }).test();
+    const mockName = descriptor.mockName;
+    const path = descriptor.path;
+    const module = descriptor.module;
+    preconditions7.shouldBeDefined(mockName, error_factory_default.build(constants_default.errorMessages.FrameworkRouteAddStubMockName)).debug({ descriptor }).test();
+    preconditions7.shouldBeString(mockName, error_factory_default.build(constants_default.errorMessages.FrameworkRouteAddStubMockName)).debug({ descriptor }).test();
+    preconditions7.shouldBeDefined(path, error_factory_default.build(constants_default.errorMessages.FrameworkRoutePathString)).debug({ descriptor }).test();
+    preconditions7.shouldBeString(path, error_factory_default.build(constants_default.errorMessages.FrameworkRoutePathString)).debug({ descriptor }).test();
+    preconditions7.shouldBeDefined(module, error_factory_default.build(constants_default.errorMessages.FrameworkRouteModuleObject)).debug({ descriptor }).test();
+    preconditions7.shouldBeObject(module, error_factory_default.build(constants_default.errorMessages.FrameworkRouteModuleObject)).debug({ descriptor }).test();
+    preconditions7.shouldBeDefined(module.default, error_factory_default.build(constants_default.errorMessages.FrameworkRouteModuleDefault)).debug({ descriptor }).test();
+    if (typeof module.loader === "function") {
+      this.mockThisFunction(mockName, "loader", module);
+    }
+    if (typeof module.action === "function") {
+      this.mockThisFunction(mockName, "action", module);
+    }
+    this._routeDescriptors_.push({
+      path,
+      module,
+      id: descriptor.id,
+      children: descriptor.children
+    });
+    return this;
+  }
+  /**
+   * @param {unknown[]} entries History entries for the stub (strings or location objects).
+   * @returns {FrameworkRouteScenario}
+   */
+  withInitialEntries(entries) {
+    preconditions7.shouldBeArray(entries, error_factory_default.build(constants_default.errorMessages.FrameworkRouteInitialEntriesArray)).debug({ entries }).test();
+    preconditions7.checkArgument(entries.length > 0, error_factory_default.build(constants_default.errorMessages.FrameworkRouteInitialEntriesArray)).debug({ entries }).test();
+    this._initialEntries_ = entries;
+    return this;
+  }
+  /**
+   * Optional second argument to `createRoutesStub` (`AppLoadContext` / router context provider).
+   * @param {unknown} context
+   * @returns {FrameworkRouteScenario}
+   */
+  withStubAppContext(context) {
+    this._stubAppContext_ = context;
+    return this;
+  }
+  /**
+   * @param {(ctx: { screen: object, waitFor: Function, render: Function, cleanup: Function, userEvent: object }) => void | Promise<void>} stepFn
+   * @returns {FrameworkRouteScenario}
+   */
+  next(stepFn) {
+    preconditions7.shouldBeFunction(stepFn, error_factory_default.build(constants_default.errorMessages.FrameworkRouteNextStepFunction)).debug({ stepFn }).test();
+    this._nextSteps_.push(stepFn);
+    return this;
+  }
+  /**
+   * Controls what Testing Library `render` receives.
+   *
+   * - `render()` — reset to the default: `createElement(Stub, { initialEntries })` using `withInitialEntries`.
+   * - `render((Stub, createElement) => element)` — your function receives the stub component from `createRoutesStub`
+   *   and React's `createElement`; return a React element (in JSX tests: `return <Stub initialEntries={["/login"]} />`).
+   *   Maddox passes that return value to `@testing-library/react`'s `render`.
+   *
+   * @param {(stub: object, createElement: Function) => object} [renderFn]
+   * @returns {FrameworkRouteScenario}
+   */
+  render(renderFn) {
+    if (renderFn === void 0) {
+      this._renderCallback_ = null;
+      return this;
+    }
+    preconditions7.shouldBeFunction(renderFn, error_factory_default.build(constants_default.errorMessages.FrameworkRouteRenderCallback)).debug({ renderFn }).test();
+    this._renderCallback_ = renderFn;
+    return this;
+  }
+  async _runStubTestBody_() {
+    let rtlCleanup = null;
+    try {
+      const [{ createRoutesStub }, rtl, react, userEventMod] = await Promise.all([
+        import("react-router"),
+        import("@testing-library/react"),
+        import("react"),
+        import("@testing-library/user-event")
+      ]);
+      const { render, screen, waitFor, cleanup } = rtl;
+      const { createElement } = react;
+      const userEvent = userEventMod.default;
+      const routes = this._routeDescriptors_.map((d) => {
+        const route = { path: d.path, Component: d.module.default };
+        if (typeof d.module.loader === "function") {
+          route.loader = d.module.loader;
+        }
+        if (typeof d.module.action === "function") {
+          route.action = d.module.action;
+        }
+        if (d.id) {
+          route.id = d.id;
+        }
+        if (d.children) {
+          route.children = d.children;
+        }
+        return route;
+      });
+      const Stub = createRoutesStub(routes, this._stubAppContext_);
+      let stubEl;
+      if (typeof this._renderCallback_ === "function") {
+        stubEl = this._renderCallback_(Stub, createElement);
+      } else {
+        stubEl = createElement(Stub, {
+          initialEntries: this._initialEntries_
+        });
+      }
+      preconditions7.shouldBeDefined(stubEl, error_factory_default.build(constants_default.errorMessages.FrameworkRouteRenderReturn)).debug({ stubEl }).test();
+      render(stubEl);
+      rtlCleanup = cleanup;
+      const ctx = {
+        screen,
+        waitFor,
+        render,
+        cleanup,
+        userEvent: userEvent.setup()
+      };
+      for (const step of this._nextSteps_) {
+        await Promise.resolve(step(ctx));
+      }
+    } finally {
+      if (typeof rtlCleanup === "function") {
+        rtlCleanup();
+      }
+    }
+  }
+  _setTestRunnable_() {
+    this._testRunnable_ = () => {
+      return this._runStubTestBody_().catch((err) => {
+        this._getMock_().setMaddoxRuntimeError(err);
+        return Promise.reject(err);
+      });
+    };
+  }
+  _setPerfRunnable_() {
+    this._perfRunnable_ = (sampleDone) => {
+      this._resetScenario_();
+      this._runStubTestBody_().then(
+        () => {
+          sampleDone();
+        },
+        () => {
+          sampleDone();
+        }
+      );
+    };
+  }
+  _validateScenario_(testable) {
+    preconditions7.shouldBeFunction(testable, error_factory_default.build(constants_default.errorMessages.MissingTestCallback)).debug({ testable }).test();
+    preconditions7.checkArgument(this._routeDescriptors_.length > 0, error_factory_default.build(constants_default.errorMessages.FrameworkRouteMissingRoutes)).debug({ routeDescriptors: this._routeDescriptors_ }).test();
+  }
+};
+var framework_route_scenario_default = FrameworkRouteScenario;
+
 // lib/index.js
 var index_default = {
   functional: {
     HttpReqScenario: http_req_scenario_default,
     FromPromiseScenario: from_promise_scenario_default,
     FromCallbackScenario: from_callback_scenario_default,
-    FromSynchronousScenario: from_synchronous_scenario_default
+    FromSynchronousScenario: from_synchronous_scenario_default,
+    FrameworkRouteScenario: framework_route_scenario_default,
+    RemixScenario: framework_route_scenario_default
   },
   scenarios: {
     HttpReqScenario: http_req_scenario_default,
     FromPromiseScenario: from_promise_scenario_default,
     FromCallbackScenario: from_callback_scenario_default,
-    FromSynchronousScenario: from_synchronous_scenario_default
+    FromSynchronousScenario: from_synchronous_scenario_default,
+    FrameworkRouteScenario: framework_route_scenario_default,
+    RemixScenario: framework_route_scenario_default
   },
   constants: {
     EmptyParameters: [],
