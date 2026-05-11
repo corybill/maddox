@@ -417,14 +417,29 @@ var errorMessages = {
     message: "When calling 'next', the parameter must be a function (prefer async) that receives Testing Library context.",
     type: errorTypes.MaddoxBuildError
   },
-  FrameworkRouteRenderCallback: {
+  FrameworkRouteWrapperCallback: {
     code: 4011,
-    message: "When calling 'render' with an argument, it must be a function (Stub, createElement) => ReactElement. Call render() with no arguments to use the default element from withInitialEntries.",
+    message: "When calling 'withWrapper', the parameter must be a function (children) => ReactElement that returns a React element wrapping the framework-built Stub element.",
     type: errorTypes.MaddoxBuildError
   },
-  FrameworkRouteRenderReturn: {
+  FrameworkRouteWrapperReturn: {
     code: 4012,
-    message: "The function passed to 'render' must return a React element (e.g. createElement(Stub, { initialEntries: ['/'] })).",
+    message: "The function passed to 'withWrapper' must return a React element (e.g. createElement(MyProvider, null, children)).",
+    type: errorTypes.MaddoxBuildError
+  },
+  FrameworkRouteMissingRender: {
+    code: 4015,
+    message: "FrameworkRouteScenario requires an explicit '.render()' call in the chain before '.test()'. Place '.render()' after all configuration (addStub, mockThisFunction, shouldBeCalledWith, doesReturn*, withInitialEntries, withWrapper) and before any '.next(...)' interaction steps.",
+    type: errorTypes.MaddoxBuildError
+  },
+  FrameworkRouteNextBeforeRender: {
+    code: 4016,
+    message: "'.next(...)' callbacks act on the rendered DOM, so they cannot be chained before '.render()'. Move the '.next(...)' call below '.render()'.",
+    type: errorTypes.MaddoxBuildError
+  },
+  FrameworkRouteConfigAfterRender: {
+    code: 4017,
+    message: "Scenario configuration ('addStub', 'mockThisFunction', 'shouldBeCalledWith', 'doesReturn*', 'withInitialEntries', 'withWrapper', 'withStubAppContext') takes effect during '.render()' and cannot be chained after '.render()'. Move this configuration call above '.render()'.",
     type: errorTypes.MaddoxBuildError
   },
   TestFailure: {
@@ -1403,6 +1418,7 @@ var Scenario = class {
     preconditions2.shouldBeString(mockName, error_factory_default.build(constants_default.errorMessages.MockThisFunctionMockString)).debug({ mockName, funcName }).test();
     preconditions2.shouldBeString(funcName, error_factory_default.build(constants_default.errorMessages.MockThisFunctionString)).debug({ mockName, funcName }).test();
     preconditions2.shouldBeObject(object, error_factory_default.build(constants_default.errorMessages.MockThisFunctionObject)).debug({ mockName, funcName, object }).test();
+    console.log("mockThisFunction", mockName, funcName, object);
     this._mock_.mockThisFunction(mockName, funcName, object);
     return this;
   }
@@ -2254,18 +2270,31 @@ var FrameworkRouteScenario = class extends scenario_default {
     this._scenarioType_ = constants_default.scenarioTypes.FrameworkRouteScenario;
     this._routeDescriptors_ = [];
     this._initialEntries_ = ["/"];
-    this._nextSteps_ = [];
     this._stubAppContext_ = void 0;
-    this._renderCallback_ = null;
+    this._wrapperCallback_ = null;
+    this._steps_ = [];
+    this._renderCalled_ = false;
+  }
+  // Guardrail: configuration methods (anything that affects what render does) cannot be chained
+  // after `.render()`. Surfaces a clear build error instead of silently no-op-ing.
+  _assertConfigBeforeRender_(methodName) {
+    preconditions7.checkArgument(
+      this._renderCalled_ === false,
+      error_factory_default.build(constants_default.errorMessages.FrameworkRouteConfigAfterRender)
+    ).debug({ methodName }).test();
   }
   /**
-   * Register one stub route for `createRoutesStub` and auto-mock `loader` / `action` on `module` when present.
-   * Each `mockName` must be unique across `addStub` calls (Maddox mock keys).
+   * Register one stub route for `createRoutesStub`. The route's real `loader` / `action`
+   * (if present on `module`) run during the scenario unless you explicitly opt in to
+   * mocking them by calling `mockThisFunction(mockName, 'loader', module)` /
+   * `mockThisFunction(mockName, 'action', module)` yourself. Each `mockName` must be
+   * unique across `addStub` calls (Maddox mock keys).
    *
    * @param {{ mockName: string, path: string, module: { default: unknown, loader?: Function, action?: Function }, id?: string, children?: unknown[] }} descriptor
    * @returns {FrameworkRouteScenario}
    */
   addStub(descriptor) {
+    this._assertConfigBeforeRender_("addStub");
     preconditions7.shouldBeObject(descriptor, error_factory_default.build(constants_default.errorMessages.FrameworkRouteAddStubDescriptor)).debug({ descriptor }).test();
     const mockName = descriptor.mockName;
     const path = descriptor.path;
@@ -2277,13 +2306,8 @@ var FrameworkRouteScenario = class extends scenario_default {
     preconditions7.shouldBeDefined(module2, error_factory_default.build(constants_default.errorMessages.FrameworkRouteModuleObject)).debug({ descriptor }).test();
     preconditions7.shouldBeObject(module2, error_factory_default.build(constants_default.errorMessages.FrameworkRouteModuleObject)).debug({ descriptor }).test();
     preconditions7.shouldBeDefined(module2.default, error_factory_default.build(constants_default.errorMessages.FrameworkRouteModuleDefault)).debug({ descriptor }).test();
-    if (typeof module2.loader === "function") {
-      this.mockThisFunction(mockName, "loader", module2);
-    }
-    if (typeof module2.action === "function") {
-      this.mockThisFunction(mockName, "action", module2);
-    }
     this._routeDescriptors_.push({
+      mockName,
       path,
       module: module2,
       id: descriptor.id,
@@ -2296,6 +2320,7 @@ var FrameworkRouteScenario = class extends scenario_default {
    * @returns {FrameworkRouteScenario}
    */
   withInitialEntries(entries) {
+    this._assertConfigBeforeRender_("withInitialEntries");
     preconditions7.shouldBeArray(entries, error_factory_default.build(constants_default.errorMessages.FrameworkRouteInitialEntriesArray)).debug({ entries }).test();
     preconditions7.checkArgument(entries.length > 0, error_factory_default.build(constants_default.errorMessages.FrameworkRouteInitialEntriesArray)).debug({ entries }).test();
     this._initialEntries_ = entries;
@@ -2307,40 +2332,140 @@ var FrameworkRouteScenario = class extends scenario_default {
    * @returns {FrameworkRouteScenario}
    */
   withStubAppContext(context) {
+    this._assertConfigBeforeRender_("withStubAppContext");
     this._stubAppContext_ = context;
     return this;
   }
   /**
+   * Wrap the framework-built `<Stub initialEntries={...} />` element in React context providers
+   * (Theme, Redux, QueryClient, Auth, i18n, etc.) before Testing Library renders it.
+   *
+   * The callback receives `children` — the already-built React element for the `Stub` — and
+   * must return a new React element that wraps `children`. In a JSX-enabled project:
+   *
+   *   .withWrapper((children) => <ThemeProvider>{children}</ThemeProvider>)
+   *
+   * In plain JS:
+   *
+   *   import { createElement } from 'react';
+   *   .withWrapper((children) => createElement(ThemeProvider, null, children))
+   *
+   * @param {(children: object) => object} wrapperFn
+   * @returns {FrameworkRouteScenario}
+   */
+  withWrapper(wrapperFn) {
+    this._assertConfigBeforeRender_("withWrapper");
+    preconditions7.shouldBeFunction(wrapperFn, error_factory_default.build(constants_default.errorMessages.FrameworkRouteWrapperCallback)).debug({ wrapperFn }).test();
+    this._wrapperCallback_ = wrapperFn;
+    return this;
+  }
+  /**
+   * Explicit render boundary. Mark the position in the chain where the component mounts;
+   * everything above is configuration, everything below acts on the rendered DOM.
+   *
+   * @returns {FrameworkRouteScenario}
+   */
+  render() {
+    this._renderCalled_ = true;
+    this._steps_.push({ kind: "render" });
+    return this;
+  }
+  /**
+   * Post-render interaction step. The callback receives Testing Library's `screen`, `waitFor`,
+   * `render`, `cleanup`, and a `userEvent.setup()` instance. Must be chained AFTER `.render()`.
+   *
    * @param {(ctx: { screen: object, waitFor: Function, render: Function, cleanup: Function, userEvent: object }) => void | Promise<void>} stepFn
    * @returns {FrameworkRouteScenario}
    */
   next(stepFn) {
+    preconditions7.checkArgument(
+      this._renderCalled_ === true,
+      error_factory_default.build(constants_default.errorMessages.FrameworkRouteNextBeforeRender)
+    ).test();
     preconditions7.shouldBeFunction(stepFn, error_factory_default.build(constants_default.errorMessages.FrameworkRouteNextStepFunction)).debug({ stepFn }).test();
-    this._nextSteps_.push(stepFn);
+    this._steps_.push({ kind: "next", fn: stepFn });
     return this;
   }
-  /**
-   * Controls what Testing Library `render` receives.
-   *
-   * - `render()` — reset to the default: `createElement(Stub, { initialEntries })` using `withInitialEntries`.
-   * - `render((Stub, createElement) => element)` — your function receives the stub component from `createRoutesStub`
-   *   and React's `createElement`; return a React element (in JSX tests: `return <Stub initialEntries={["/login"]} />`).
-   *   Maddox passes that return value to `@testing-library/react`'s `render`.
-   *
-   * @param {(stub: object, createElement: Function) => object} [renderFn]
-   * @returns {FrameworkRouteScenario}
-   */
-  render(renderFn) {
-    if (renderFn === void 0) {
-      this._renderCallback_ = null;
-      return this;
-    }
-    preconditions7.shouldBeFunction(renderFn, error_factory_default.build(constants_default.errorMessages.FrameworkRouteRenderCallback)).debug({ renderFn }).test();
-    this._renderCallback_ = renderFn;
-    return this;
+  // ---------------------------------------------------------------------------
+  // Inherited Scenario mock-configuration methods.
+  //
+  // Each one is overridden purely to enforce the "before render" guardrail and then forward to
+  // the base implementation. Behavior is otherwise unchanged.
+  // ---------------------------------------------------------------------------
+  mockThisFunction(mockName, funcName, object) {
+    this._assertConfigBeforeRender_("mockThisFunction");
+    return super.mockThisFunction(mockName, funcName, object);
   }
+  withTestFinisherFunction(mockName, funcName, iteration) {
+    this._assertConfigBeforeRender_("withTestFinisherFunction");
+    return super.withTestFinisherFunction(mockName, funcName, iteration);
+  }
+  shouldBeCalledWith(mockName, funcName, params) {
+    this._assertConfigBeforeRender_("shouldBeCalledWith");
+    return super.shouldBeCalledWith(mockName, funcName, params);
+  }
+  shouldBeCalledWithSubset(mockName, funcName, params) {
+    this._assertConfigBeforeRender_("shouldBeCalledWithSubset");
+    return super.shouldBeCalledWithSubset(mockName, funcName, params);
+  }
+  shouldBeCalled(mockName, funcName) {
+    this._assertConfigBeforeRender_("shouldBeCalled");
+    return super.shouldBeCalled(mockName, funcName);
+  }
+  shouldAlwaysBeCalledWith(mockName, funcName, params) {
+    this._assertConfigBeforeRender_("shouldAlwaysBeCalledWith");
+    return super.shouldAlwaysBeCalledWith(mockName, funcName, params);
+  }
+  shouldAlwaysBeCalledWithSubset(mockName, funcName, params) {
+    this._assertConfigBeforeRender_("shouldAlwaysBeCalledWithSubset");
+    return super.shouldAlwaysBeCalledWithSubset(mockName, funcName, params);
+  }
+  shouldAlwaysBeIgnored(mockName, funcName) {
+    this._assertConfigBeforeRender_("shouldAlwaysBeIgnored");
+    return super.shouldAlwaysBeIgnored(mockName, funcName);
+  }
+  doesReturn(mockName, funcName, dataToReturn) {
+    this._assertConfigBeforeRender_("doesReturn");
+    return super.doesReturn(mockName, funcName, dataToReturn);
+  }
+  doesAlwaysReturn(mockName, funcName, dataToReturn) {
+    this._assertConfigBeforeRender_("doesAlwaysReturn");
+    return super.doesAlwaysReturn(mockName, funcName, dataToReturn);
+  }
+  doesReturnWithPromise(mockName, funcName, dataToReturn) {
+    this._assertConfigBeforeRender_("doesReturnWithPromise");
+    return super.doesReturnWithPromise(mockName, funcName, dataToReturn);
+  }
+  doesAlwaysReturnWithPromise(mockName, funcName, dataToReturn) {
+    this._assertConfigBeforeRender_("doesAlwaysReturnWithPromise");
+    return super.doesAlwaysReturnWithPromise(mockName, funcName, dataToReturn);
+  }
+  doesReturnWithCallback(mockName, funcName, dataToReturn) {
+    this._assertConfigBeforeRender_("doesReturnWithCallback");
+    return super.doesReturnWithCallback(mockName, funcName, dataToReturn);
+  }
+  doesAlwaysReturnWithCallback(mockName, funcName, dataToReturn) {
+    this._assertConfigBeforeRender_("doesAlwaysReturnWithCallback");
+    return super.doesAlwaysReturnWithCallback(mockName, funcName, dataToReturn);
+  }
+  doesError(mockName, funcName, dataToReturn) {
+    this._assertConfigBeforeRender_("doesError");
+    return super.doesError(mockName, funcName, dataToReturn);
+  }
+  doesErrorWithPromise(mockName, funcName, dataToReturn) {
+    this._assertConfigBeforeRender_("doesErrorWithPromise");
+    return super.doesErrorWithPromise(mockName, funcName, dataToReturn);
+  }
+  doesErrorWithCallback(mockName, funcName, dataToReturn) {
+    this._assertConfigBeforeRender_("doesErrorWithCallback");
+    return super.doesErrorWithCallback(mockName, funcName, dataToReturn);
+  }
+  // ---------------------------------------------------------------------------
+  // Execution
+  // ---------------------------------------------------------------------------
   async _runStubTestBody_() {
     let rtlCleanup = null;
+    const invocations = [];
     try {
       const [{ createRoutesStub }, rtl, react, userEventMod] = await Promise.all([
         import("react-router"),
@@ -2354,10 +2479,10 @@ var FrameworkRouteScenario = class extends scenario_default {
       const routes = this._routeDescriptors_.map((d) => {
         const route = { path: d.path, Component: d.module.default };
         if (typeof d.module.loader === "function") {
-          route.loader = d.module.loader;
+          route.loader = this._wrapForCapture_(d.mockName, "loader", d.module.loader, invocations);
         }
         if (typeof d.module.action === "function") {
-          route.action = d.module.action;
+          route.action = this._wrapForCapture_(d.mockName, "action", d.module.action, invocations);
         }
         if (d.id) {
           route.id = d.id;
@@ -2368,17 +2493,6 @@ var FrameworkRouteScenario = class extends scenario_default {
         return route;
       });
       const Stub = createRoutesStub(routes, this._stubAppContext_);
-      let stubEl;
-      if (typeof this._renderCallback_ === "function") {
-        stubEl = this._renderCallback_(Stub, createElement);
-      } else {
-        stubEl = createElement(Stub, {
-          initialEntries: this._initialEntries_
-        });
-      }
-      preconditions7.shouldBeDefined(stubEl, error_factory_default.build(constants_default.errorMessages.FrameworkRouteRenderReturn)).debug({ stubEl }).test();
-      render(stubEl);
-      rtlCleanup = cleanup;
       const ctx = {
         screen,
         waitFor,
@@ -2386,14 +2500,40 @@ var FrameworkRouteScenario = class extends scenario_default {
         cleanup,
         userEvent: userEvent.setup()
       };
-      for (const step of this._nextSteps_) {
-        await Promise.resolve(step(ctx));
+      for (const step of this._steps_) {
+        if (step.kind === "render") {
+          const stubEl = createElement(Stub, { initialEntries: this._initialEntries_ });
+          let elementToRender = stubEl;
+          if (typeof this._wrapperCallback_ === "function") {
+            elementToRender = this._wrapperCallback_(stubEl);
+            preconditions7.shouldBeDefined(
+              elementToRender,
+              error_factory_default.build(constants_default.errorMessages.FrameworkRouteWrapperReturn)
+            ).debug({ elementToRender }).test();
+          }
+          render(elementToRender);
+          rtlCleanup = cleanup;
+        } else {
+          await Promise.resolve(step.fn(ctx));
+        }
       }
     } finally {
       if (typeof rtlCleanup === "function") {
         rtlCleanup();
       }
     }
+    return invocations;
+  }
+  // Wraps a route's loader/action so each invocation is recorded in `invocations` in the order
+  // it was called (capture-on-invoke), with `value` filled in once the wrapped function resolves.
+  _wrapForCapture_(mockName, kind, originalFn, invocations) {
+    return async function maddoxCaptureWrapper(...args) {
+      const entry = { mockName, kind, value: void 0 };
+      invocations.push(entry);
+      const result = await originalFn.apply(this, args);
+      entry.value = result;
+      return result;
+    };
   }
   _setTestRunnable_() {
     this._testRunnable_ = () => {
@@ -2418,7 +2558,14 @@ var FrameworkRouteScenario = class extends scenario_default {
   }
   _validateScenario_(testable) {
     preconditions7.shouldBeFunction(testable, error_factory_default.build(constants_default.errorMessages.MissingTestCallback)).debug({ testable }).test();
-    preconditions7.checkArgument(this._routeDescriptors_.length > 0, error_factory_default.build(constants_default.errorMessages.FrameworkRouteMissingRoutes)).debug({ routeDescriptors: this._routeDescriptors_ }).test();
+    preconditions7.checkArgument(
+      this._routeDescriptors_.length > 0,
+      error_factory_default.build(constants_default.errorMessages.FrameworkRouteMissingRoutes)
+    ).debug({ routeDescriptors: this._routeDescriptors_ }).test();
+    preconditions7.checkArgument(
+      this._renderCalled_ === true,
+      error_factory_default.build(constants_default.errorMessages.FrameworkRouteMissingRender)
+    ).test();
   }
 };
 var framework_route_scenario_default = FrameworkRouteScenario;
