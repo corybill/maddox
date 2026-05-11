@@ -1,0 +1,49 @@
+{
+  "name": "@scenario-testing/react-router",
+  "version": "0.1.0",
+  "description": "Scenario-style testing helpers for React Router 7 (Framework-oriented stubs).",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@scenario-testing/core": "*"
+  },
+  "peerDependencies": {
+    "@testing-library/react": ">=14",
+    "@testing-library/user-event": ">=14",
+    "react": ">=18",
+    "react-dom": ">=18",
+    "react-router": "^7.10.0",
+    "vitest": "^3.0.0"
+  },
+  "devDependencies": {
+    "@scenario-testing/rr7-framework-fixture": "*",
+    "@vitejs/plugin-react": "^5.0.4",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "happy-dom": "^17.4.4",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router": "7.15.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  },
+  "license": "ISC"
+}

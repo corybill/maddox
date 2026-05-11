@@ -1,0 +1,14 @@
+{
+  "name": "scenario-testing-workspaces",
+  "private": true,
+  "description": "Nested workspace for @scenario-testing packages (install from this directory).",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace=@scenario-testing/core --if-present && npm run build --workspace=@scenario-testing/react-router --if-present",
+    "test": "npm run test --workspace=@scenario-testing/core && npm run test --workspace=@scenario-testing/react-router",
+    "typecheck": "npm run typecheck --workspace=@scenario-testing/rr7-framework-fixture --if-present"
+  }
+}
