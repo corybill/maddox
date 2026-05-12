@@ -1383,7 +1383,6 @@ var Scenario = class {
     preconditions2.shouldBeString(mockName, error_factory_default.build(constants_default.errorMessages.MockThisFunctionMockString)).debug({ mockName, funcName }).test();
     preconditions2.shouldBeString(funcName, error_factory_default.build(constants_default.errorMessages.MockThisFunctionString)).debug({ mockName, funcName }).test();
     preconditions2.shouldBeObject(object, error_factory_default.build(constants_default.errorMessages.MockThisFunctionObject)).debug({ mockName, funcName, object }).test();
-    console.log("mockThisFunction", mockName, funcName, object);
     this._mock_.mockThisFunction(mockName, funcName, object);
     return this;
   }
