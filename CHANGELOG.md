@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **`preconditions` ^4.0.4** — fixes invalid **`static constructor()`** class syntax so bundlers (e.g. Rollup/Vite) can parse the package.
+
 ## [5.0.0] - 2026-05-15
 
 ### Added
