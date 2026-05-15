@@ -1,6 +1,7 @@
 import chai from 'chai';
 import Maddox from '../../lib/index.js';
 import random from '../random.js';
+import { formatDebugParams } from 'errr';
 
 const expect = chai.expect;
 
@@ -43,7 +44,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.equal(true, false, undefined, { noDebug: false });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          const expectedResponse = `Debug Params: {\n  "actual": true,\n  "expected": false\n}`;
+          const expectedResponse = formatDebugParams({ actual: true, expected: false });
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }
@@ -54,12 +55,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.equal(true, false, undefined, { noDebug: true });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          const debugParams = {
-            actual: true,
-            expected: false
-          };
-
-          const expectedResponse = `Debug Params: {\n  "actual": true,\n  "expected": false\n}`;
+          const expectedResponse = formatDebugParams({ actual: true, expected: false });
 
           expect(err.stack.split(expectedResponse).length).eql(1);
         }
@@ -142,7 +138,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.shouldEqual({ actual: true, expected: false, noDebug: false });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          const expectedResponse = `Debug Params: {\n  "actual": true,\n  "expected": false\n}`;
+          const expectedResponse = formatDebugParams({ actual: true, expected: false });
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }
@@ -153,7 +149,7 @@ describe('Given the comparison module', function () {
           Maddox.compare.shouldEqual({ actual: true, expected: false, noDebug: true });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          const expectedResponse = `Debug Params: {\n  "actual": true,\n  "expected": false\n}`;
+          const expectedResponse = formatDebugParams({ actual: true, expected: false });
 
           expect(err.stack.split(expectedResponse).length).eql(1);
         }
@@ -207,7 +203,10 @@ describe('Given the comparison module', function () {
           Maddox.compare.truthy(false, undefined, { noDebug: false });
           Maddox.compare.shouldBeUnreachable();
         } catch (err) {
-          const expectedResponse = `Debug Params: {\n  "actual": false,\n  "expected": "Some Truthy Value."\n}`;
+          const expectedResponse = formatDebugParams({
+            actual: false,
+            expected: 'Some Truthy Value.'
+          });
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }
@@ -223,7 +222,7 @@ describe('Given the comparison module', function () {
             expected: 'Some Truthy Value.'
           };
 
-          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = formatDebugParams(debugParams);
 
           expect(err.stack.split(expectedResponse).length).eql(1);
         }
@@ -277,7 +276,7 @@ describe('Given the comparison module', function () {
             expected: 'Some Falsey Value.'
           };
 
-          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = formatDebugParams(debugParams);
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }
@@ -293,7 +292,7 @@ describe('Given the comparison module', function () {
             expected: 'Some Falsey Value.'
           };
 
-          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = formatDebugParams(debugParams);
 
           expect(err.stack.split(expectedResponse).length).eql(1);
         }
@@ -347,7 +346,7 @@ describe('Given the comparison module', function () {
             expected: 'Some Truthy Value.'
           };
 
-          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = formatDebugParams(debugParams);
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }
@@ -363,7 +362,7 @@ describe('Given the comparison module', function () {
             expected: 'Some Truthy Value.'
           };
 
-          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = formatDebugParams(debugParams);
 
           expect(err.stack.split(expectedResponse).length).eql(1);
         }
@@ -417,7 +416,7 @@ describe('Given the comparison module', function () {
             expected: 'Some Falsey Value.'
           };
 
-          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = formatDebugParams(debugParams);
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }
@@ -433,7 +432,7 @@ describe('Given the comparison module', function () {
             expected: 'Some Falsey Value.'
           };
 
-          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = formatDebugParams(debugParams);
 
           expect(err.stack.split(expectedResponse).length).eql(1);
         }
@@ -487,7 +486,7 @@ describe('Given the comparison module', function () {
             expected: 'Some Falsey Value.'
           };
 
-          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = formatDebugParams(debugParams);
 
           expect(err.stack.split(expectedResponse).length).eql(2);
         }
@@ -503,7 +502,7 @@ describe('Given the comparison module', function () {
             expected: 'Some Falsey Value.'
           };
 
-          const expectedResponse = 'Debug Params: ' + JSON.stringify(debugParams, null, 2);
+          const expectedResponse = formatDebugParams(debugParams);
 
           expect(err.stack.split(expectedResponse).length).eql(1);
         }

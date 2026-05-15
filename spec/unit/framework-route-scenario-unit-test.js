@@ -108,6 +108,131 @@ describe('Given FrameworkRouteScenario (React Router v7 createRoutesStub)', func
       .catch((e) => done(e));
   });
 
+  describe('HydrateFallback', function () {
+    const CUSTOM_HYDRATE_TEST_ID = 'maddox-custom-hydrate-fallback';
+
+    function CustomHydrateFallback() {
+      return createElement('span', { 'data-testid': CUSTOM_HYDRATE_TEST_ID }, 'hydrating');
+    }
+
+    function slowLoader() {
+      return new Promise((resolve) => {
+        setTimeout(() => resolve({ lastName: 'Slow' }), 75);
+      });
+    }
+
+    it('should apply the default HydrateFallback when none is provided on the stub', function (done) {
+      const slowRoute = {
+        default: PersonView,
+        loader: slowLoader
+      };
+
+      new Scenario(this)
+        .addStub({ mockName: 'HomeRoute', path: '/', module: slowRoute })
+        .render()
+        .next(async ({ screen, waitFor }) => {
+          Maddox.compare.equal(screen.queryByTestId(CUSTOM_HYDRATE_TEST_ID), null);
+          await waitFor(async () => {
+            await screen.findByText('LastName: Slow');
+          });
+        })
+        .test((err) => {
+          Maddox.compare.equal(err, undefined);
+          done();
+        })
+        .catch((e) => done(e));
+    });
+
+    it('should use a custom HydrateFallback from the stub descriptor instead of the default', function (done) {
+      const slowRoute = {
+        default: PersonView,
+        loader: slowLoader
+      };
+
+      new Scenario(this)
+        .addStub({
+          mockName: 'HomeRoute',
+          path: '/',
+          module: slowRoute,
+          HydrateFallback: CustomHydrateFallback
+        })
+        .render()
+        .next(async ({ screen, waitFor }) => {
+          await waitFor(() => {
+            Maddox.compare.truthy(screen.getByTestId(CUSTOM_HYDRATE_TEST_ID));
+          });
+          await waitFor(async () => {
+            await screen.findByText('LastName: Slow');
+          });
+        })
+        .test((err) => {
+          Maddox.compare.equal(err, undefined);
+          done();
+        })
+        .catch((e) => done(e));
+    });
+
+    it('should use HydrateFallback from the route module when the descriptor does not set one', function (done) {
+      const slowRoute = {
+        default: PersonView,
+        loader: slowLoader,
+        HydrateFallback: CustomHydrateFallback
+      };
+
+      new Scenario(this)
+        .addStub({ mockName: 'HomeRoute', path: '/', module: slowRoute })
+        .render()
+        .next(async ({ screen, waitFor }) => {
+          await waitFor(() => {
+            Maddox.compare.truthy(screen.getByTestId(CUSTOM_HYDRATE_TEST_ID));
+          });
+          await waitFor(async () => {
+            await screen.findByText('LastName: Slow');
+          });
+        })
+        .test((err) => {
+          Maddox.compare.equal(err, undefined);
+          done();
+        })
+        .catch((e) => done(e));
+    });
+
+    it('should prefer HydrateFallback on the descriptor over the route module', function (done) {
+      function OtherHydrateFallback() {
+        return createElement('span', { 'data-testid': 'maddox-other-hydrate-fallback' }, 'other');
+      }
+
+      const slowRoute = {
+        default: PersonView,
+        loader: slowLoader,
+        HydrateFallback: OtherHydrateFallback
+      };
+
+      new Scenario(this)
+        .addStub({
+          mockName: 'HomeRoute',
+          path: '/',
+          module: slowRoute,
+          HydrateFallback: CustomHydrateFallback
+        })
+        .render()
+        .next(async ({ screen, waitFor }) => {
+          await waitFor(() => {
+            Maddox.compare.truthy(screen.getByTestId(CUSTOM_HYDRATE_TEST_ID));
+          });
+          Maddox.compare.equal(screen.queryByTestId('maddox-other-hydrate-fallback'), null);
+          await waitFor(async () => {
+            await screen.findByText('LastName: Slow');
+          });
+        })
+        .test((err) => {
+          Maddox.compare.equal(err, undefined);
+          done();
+        })
+        .catch((e) => done(e));
+    });
+  });
+
   it('should wrap the Stub element with withWrapper before rendering', function (done) {
     const calls = { wrapperInvoked: 0, providerRendered: 0 };
 

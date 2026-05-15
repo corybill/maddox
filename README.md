@@ -17,6 +17,10 @@ Architecture (SOA) environment.
 [![view on npm](http://img.shields.io/npm/v/maddox.svg)](https://www.npmjs.org/package/maddox)
 [![npm module downloads](http://img.shields.io/npm/dt/maddox.svg)](https://www.npmjs.org/package/maddox)
 
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for release notes and breaking changes.
+
 ## Why Should You Use Maddox?
 https://maddox.readme.io/docs/i-should-be-using-maddox-because
 
@@ -28,8 +32,32 @@ https://maddox.readme.io/docs/i-should-be-using-maddox-because
 ## Recommendations
 1. If at all possible, your proxy layer should utilize a stateless pattern as it is easier to write and debug tests.  See ./spec/testable/proxies for examples.
 
+## Troubleshooting
+
+### Testing stack debug params
+
+`Maddox.compare.*` and precondition failures embed errr **`Debug Params:`** blocks in **`error.stack`** when **`.debug({ ... })`** runs (comparison path: **`Maddox.compare.equal`** passes **`{ actual, expected }`**; default is debug on—use **`{ noDebug: true }`** on compare to omit it). If your tests assert substrings of **`err.stack`**, build the fragment with **`formatDebugParams`** from **`errr`**—the same formatter errr uses when building stacks.
+
+```javascript
+import { formatDebugParams } from 'errr';
+import Maddox from 'maddox';
+
+const actual = true;
+const expected = false;
+const fragment = formatDebugParams({ actual, expected }); // match compare’s .debug({ actual, expected })
+
+try {
+  Maddox.compare.equal(actual, expected, undefined, { noDebug: false }); // default: omit 4th arg for the same behavior
+} catch (err) {
+  // Fragment appears once when debug is on → split length 2. With { noDebug: true }, use length === 1.
+  // chai: expect(err.stack.split(fragment).length).eql(2);
+}
+```
+
+See the [errr README — “Testing stack debug params”](https://github.com/corybill/errr#testing-stack-debug-params) for the full API (`inspectDebugParams`, `DebugPrefix`, `defaultDebugInspectOptions`).
+
 ## How To Use Maddox
-Maddox is published as a dual-package (CommonJS and ESM). When developing locally in this repository, you should run `npm run build` before pack/publish so that the ESM `dist/` artifacts are available.
+Maddox is published as a dual-package (CommonJS and ESM). **Requires Node.js 20+**. When developing locally in this repository, you should run `npm run build` before pack/publish so that the ESM `dist/` artifacts are available.
 
 The best way to learn is to see it in action.
 

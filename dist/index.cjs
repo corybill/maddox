@@ -1385,6 +1385,12 @@ var handle_error_default = HandleError;
 
 // lib/scenarios/scenario.js
 var preconditions2 = import_preconditions2.default.errr();
+function normalizeCallbackDataToReturn(dataToReturn) {
+  if (dataToReturn && typeof dataToReturn === "object" && !Array.isArray(dataToReturn) && Object.keys(dataToReturn).length === 0) {
+    return [];
+  }
+  return dataToReturn;
+}
 var Scenario = class {
   constructor(testContext) {
     this._tester_ = mocha_proxy_default;
@@ -1704,7 +1710,7 @@ var Scenario = class {
    * @returns {Scenario}
    */
   doesReturnWithCallback(mockName, funcName, dataToReturn) {
-    dataToReturn = Object.is(JSON.stringify(dataToReturn, null, 2), "{}") ? [] : dataToReturn;
+    dataToReturn = normalizeCallbackDataToReturn(dataToReturn);
     preconditions2.shouldBeString(mockName, error_factory_default.build(constants_default.errorMessages.DoesReturnCallbackMockName)).debug({ mockName, funcName }).test();
     preconditions2.shouldBeString(funcName, error_factory_default.build(constants_default.errorMessages.DoesReturnCallbackFuncName)).debug({ mockName, funcName }).test();
     preconditions2.shouldBeArray(dataToReturn, error_factory_default.build(constants_default.errorMessages.DoesReturnCallbackDataToReturn)).debug({ mockName, funcName, dataToReturn }).test();
@@ -1729,7 +1735,7 @@ var Scenario = class {
    * @returns {Scenario}
    */
   doesAlwaysReturnWithCallback(mockName, funcName, dataToReturn) {
-    dataToReturn = Object.is(JSON.stringify(dataToReturn, null, 2), "{}") ? [] : dataToReturn;
+    dataToReturn = normalizeCallbackDataToReturn(dataToReturn);
     preconditions2.shouldBeString(mockName, error_factory_default.build(constants_default.errorMessages.DoesReturnCallbackMockName)).debug({ mockName, funcName }).test();
     preconditions2.shouldBeString(funcName, error_factory_default.build(constants_default.errorMessages.DoesReturnCallbackFuncName)).debug({ mockName, funcName }).test();
     preconditions2.shouldBeArray(dataToReturn, error_factory_default.build(constants_default.errorMessages.DoesAlwaysReturnCallbackDataToReturn)).debug({ mockName, funcName, dataToReturn }).test();
@@ -1794,7 +1800,7 @@ var Scenario = class {
    * @returns {Scenario}
    */
   doesErrorWithCallback(mockName, funcName, dataToReturn) {
-    dataToReturn = Object.is(JSON.stringify(dataToReturn, null, 2), "{}") ? [] : dataToReturn;
+    dataToReturn = normalizeCallbackDataToReturn(dataToReturn);
     preconditions2.shouldBeString(mockName, error_factory_default.build(constants_default.errorMessages.DoesErrorCallbackMockName)).debug({ mockName, funcName }).test();
     preconditions2.shouldBeString(funcName, error_factory_default.build(constants_default.errorMessages.DoesErrorCallbackFuncName)).debug({ mockName, funcName }).test();
     preconditions2.shouldBeArray(dataToReturn, error_factory_default.build(constants_default.errorMessages.DoesErrorCallbackDataToReturn)).debug({ mockName, funcName, dataToReturn }).test();
@@ -2263,6 +2269,9 @@ var from_synchronous_scenario_default = FromSynchronousScenario;
 // lib/scenarios/framework-route-scenario.js
 var import_preconditions7 = __toESM(require("preconditions"), 1);
 var preconditions7 = import_preconditions7.default.errr();
+function maddoxDefaultHydrateFallback() {
+  return null;
+}
 var FrameworkRouteScenario = class extends scenario_default {
   constructor(testContext) {
     super(testContext);
@@ -2289,7 +2298,7 @@ var FrameworkRouteScenario = class extends scenario_default {
    * `mockThisFunction(mockName, 'action', module)` yourself. Each `mockName` must be
    * unique across `addStub` calls (Maddox mock keys).
    *
-   * @param {{ mockName: string, path: string, module: { default: unknown, loader?: Function, action?: Function }, id?: string, children?: unknown[] }} descriptor
+   * @param {{ mockName: string, path: string, module: { default: unknown, loader?: Function, action?: Function, HydrateFallback?: Function }, id?: string, children?: unknown[], HydrateFallback?: Function }} descriptor
    * @returns {FrameworkRouteScenario}
    */
   addStub(descriptor) {
@@ -2310,7 +2319,8 @@ var FrameworkRouteScenario = class extends scenario_default {
       path,
       module: module2,
       id: descriptor.id,
-      children: descriptor.children
+      children: descriptor.children,
+      HydrateFallback: descriptor.HydrateFallback
     });
     return this;
   }
@@ -2477,8 +2487,10 @@ var FrameworkRouteScenario = class extends scenario_default {
       const userEvent = userEventMod.default;
       const routes = this._routeDescriptors_.map((d) => {
         const route = { path: d.path, Component: d.module.default };
+        const hydrateFallback = d.HydrateFallback ?? d.module.HydrateFallback;
         if (typeof d.module.loader === "function") {
           route.loader = this._wrapForCapture_(d.mockName, "loader", d.module.loader, invocations);
+          route.HydrateFallback = hydrateFallback ?? maddoxDefaultHydrateFallback;
         }
         if (typeof d.module.action === "function") {
           route.action = this._wrapForCapture_(d.mockName, "action", d.module.action, invocations);

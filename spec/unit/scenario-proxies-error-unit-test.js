@@ -7,6 +7,7 @@ import SpecialScenariosController from '../testable/modules/test-module/special-
 import StatelessEs6Proxy from '../testable/proxies/stateless-es6-proxy.js';
 import constants from '../../lib/constants.js';
 import random from '../random.js';
+import util from 'node:util';
 
 const Scenario = Maddox.functional.HttpReqScenario,
   FromPromiseScenario = Maddox.functional.FromPromiseScenario,
@@ -2593,17 +2594,10 @@ describe('Given Scenarios', function () {
           .resShouldBeCalledWith('send', testContext.expectedResponse)
           .resShouldBeCalledWith('json', testContext.expectedResponse);
       } catch (err) {
-        let possibleFinisherFunctions =
-          '"responseFinishers": [\n' +
-          '    "send",\n' +
-          '    "json",\n' +
-          '    "jsonp",\n' +
-          '    "redirect",\n' +
-          '    "sendFile",\n' +
-          '    "render",\n' +
-          '    "sendStatus",\n' +
-          '    "end"\n' +
-          '  ]';
+        const possibleFinisherFunctions = util.inspect(
+          { responseFinishers: Object.keys(constants.ResponseEndFunctions) },
+          { depth: 5, compact: false }
+        );
 
         Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
         Maddox.compare.shouldEqual({ actual: err.stack.split(possibleFinisherFunctions).length, expected: 2 });
@@ -2636,17 +2630,10 @@ describe('Given Scenarios', function () {
 
           .test(function () {});
       } catch (err) {
-        let possibleFinisherFunctions =
-          '"responseFinishers": [\n' +
-          '    "send",\n' +
-          '    "json",\n' +
-          '    "jsonp",\n' +
-          '    "redirect",\n' +
-          '    "sendFile",\n' +
-          '    "render",\n' +
-          '    "sendStatus",\n' +
-          '    "end"\n' +
-          '  ]';
+        const possibleFinisherFunctions = util.inspect(
+          { responseFinishers: Object.keys(constants.ResponseEndFunctions) },
+          { depth: 5, compact: false }
+        );
 
         Maddox.compare.shouldEqual({ actual: err.message, expected: testContext.expectedErrorMessage });
         Maddox.compare.shouldEqual({ actual: err.stack.split(possibleFinisherFunctions).length, expected: 2 });

@@ -7,6 +7,7 @@ import ArgParse from 'argparse';
 import fs from 'fs-extra';
 import path from 'path';
 import SimpleStatistics from 'simple-statistics';
+import util from 'node:util';
 
 const ZScore2 = 2;
 const MaddoxCliVersion = '1.0.0';
@@ -253,7 +254,7 @@ class CombineResults {
 
     let combinedResults = args.REMOVE_EXISTING
       ? Factory.newResultBlock()
-      : JSON.parse(JSON.stringify(existingResults, null, 2));
+      : structuredClone(existingResults);
 
     function dropOld(array, maxResults) {
       // Drop old results if we have hit or gone over max results.
@@ -386,7 +387,7 @@ class PrintTestResults {
 
     if (args.PRINT || args.PRINT_ALL) {
       console.log('********** Start Printed Results **********');
-      console.log(JSON.stringify(printedResults, null, 2));
+      console.log(util.inspect(printedResults, { depth: null }));
       console.log('********** End Printed Results **********');
       console.log();
     }

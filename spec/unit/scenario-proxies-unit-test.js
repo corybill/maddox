@@ -1,5 +1,6 @@
 import Maddox from '../../lib/index.js'; // require("maddox");
 import random from '../random.js';
+import { formatDebugParams } from 'errr';
 import constants from '../../lib/constants.js';
 import Controller from '../testable/modules/test-module/from-http-req-controller.js';
 import SpecialScenariosController from '../testable/modules/test-module/special-scenarios-controller.js';
@@ -1979,7 +1980,10 @@ describe('Given a Scenario', function () {
         testContext.intentionalWrongResponse = ['SOME WRONG RESPONSE'];
         testContext.expectedStatusCode = [404];
 
-        testContext.expectedResponse = `Debug Params: {\n  "actual": "${testContext.expectedErrorMessage}",\n  "expected": "${testContext.intentionalWrongResponse[0]}"`;
+        testContext.expectedResponse = formatDebugParams({
+          actual: testContext.expectedErrorMessage,
+          expected: testContext.intentionalWrongResponse[0]
+        });
       };
     });
 
