@@ -16,8 +16,19 @@ globalThis.localStorage = dom.window.localStorage;
 globalThis.sessionStorage = dom.window.sessionStorage;
 globalThis.HTMLElement = dom.window.HTMLElement;
 globalThis.HTMLFormElement = dom.window.HTMLFormElement;
+globalThis.FormData = dom.window.FormData;
+global.FormData = dom.window.FormData; // Set on both global and globalThis
 globalThis.Node = dom.window.Node;
 globalThis.getComputedStyle = dom.window.getComputedStyle.bind(dom.window);
 globalThis.requestAnimationFrame = dom.window.requestAnimationFrame.bind(dom.window);
 globalThis.cancelAnimationFrame = dom.window.cancelAnimationFrame.bind(dom.window);
+
+// Polyfill HTMLFormElement.prototype.requestSubmit for JSDOM
+// JSDOM might have a stub that throws "Not implemented", so we overwrite it.
+dom.window.HTMLFormElement.prototype.requestSubmit = function (submitter) {
+  const event = new dom.window.Event('submit', { bubbles: true, cancelable: true });
+  event.submitter = submitter || null;
+  this.dispatchEvent(event);
+};
+
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;

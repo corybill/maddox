@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.2] - 2026-05-19
+
+### Added
+
+- **`FrameworkRouteScenario.withRequestMiddleware`**: Allows transforming the `Request` object (e.g., adding authentication context or modifying headers) before it reaches route loaders or actions.
+- **`FrameworkRouteScenario.withStubAppContext`**: Support for passing `AppLoadContext` to the router stub, enabling testing of loaders that rely on external context.
+- **`FrameworkRouteScenario.withWrapper`**: Allows wrapping the test component in React providers (Theme, Redux, etc.) before rendering.
+- **Nested Routes Support**: `addStub` descriptors now support a `children` property for testing complex route hierarchies.
+- **ErrorBoundary Support**: Routes now correctly render custom `ErrorBoundary` components defined in the route module or descriptor.
+- **Expanded Test Coverage**: Added comprehensive unit tests for path parameters, form actions, redirects, programmatic navigation, and loader revalidation.
+
+### Fixed
+
+- **Node 20+ / JSDOM Compatibility**: Patched `global.Request` to handle `URLSearchParams` in the request body, resolving the `TypeError: Request constructor: Expected init.body to be an instance of URLSearchParams` error.
+- **JSDOM `requestSubmit` Polyfill**: Added a polyfill for `HTMLFormElement.prototype.requestSubmit` to support standard form submissions in JSDOM environments.
+- **FormData Consistency**: Ensured `global.FormData` and `globalThis.FormData` consistently use the JSDOM implementation during tests to avoid conflicts with Node's native `undici` implementation.
+- **Recursive Route Wrapping**: Fixed an issue where loaders and actions in nested routes were not being correctly captured for mock verification.
+
+## [5.0.1] - 2026-05-19
+
 ### Changed
 
 - **`preconditions` ^4.0.4** — fixes invalid **`static constructor()`** class syntax so bundlers (e.g. Rollup/Vite) can parse the package.
